@@ -1,18 +1,18 @@
 using EventStore.Client;
 
-namespace Todo.Infrastructure;
+namespace Todo.Infrastructure.EventStore;
 
-public class Repository
+public class EventStoreRepository : IRepository
 {
     private readonly EventStoreClient _client;
 
-    public Repository()
+    public EventStoreRepository()
     {
         var settings = EventStoreClientSettings.Create("esdb://localhost:2113?tls=false");
         _client = new EventStoreClient(settings);
     }
 
-    public async Task<IEnumerable<EventDto>> GetEvents(string stream)
+    public async Task<IEnumerable<EventDto>> Get(string stream)
     {
         var result = _client.ReadStreamAsync(Direction.Forwards, stream, StreamPosition.Start);
 
@@ -23,7 +23,7 @@ public class Repository
         return evs;
     }
 
-    public async Task AppendEvents(string stream, IEnumerable<EventDto> events)
+    public async Task Save(string stream, IEnumerable<EventDto> events)
     {
         var eventDatas = events.Select(e => new EventData(
             Uuid.NewUuid(), 

@@ -4,16 +4,16 @@ namespace Todo.Infrastructure;
 
 public class TodoService : ITodoService
 {
-    private readonly Repository _repository;
+    private readonly IRepository _repository;
 
-    public TodoService(Repository repository)
+    public TodoService(IRepository repository)
     {
         _repository = repository;
     }
 
     public async Task<IEnumerable<TodoModel>> GetAllTodos()
     {
-        var ss = await _repository.GetEvents("todos");
+        var ss = await _repository.Get("todos");
 
         var models = ss.Select(s => new TodoModel(s.Name));
 
@@ -22,6 +22,6 @@ public class TodoService : ITodoService
 
     public async Task SaveTodos(IEnumerable<TodoModel> todos)
     {
-        await _repository.AppendEvents("todos", todos.Select(t => new EventDto(t.Name)));
+        await _repository.Save("todos", todos.Select(t => new EventDto(t.Name)));
     }
 }

@@ -1,0 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+
+namespace Todo.Infrastructure.EntityFramework;
+
+public class TodoDb : DbContext
+{
+    public TodoDb(DbContextOptions<TodoDb> options)
+        : base(options) { }
+
+    public DbSet<Todo> Todos => Set<Todo>();
+}

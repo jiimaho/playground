@@ -5,9 +5,13 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-    
+
     <ItemGroup>
-      <ProjectReference Include="..\Todo.Domain\Todo.Domain.csproj" />
+        <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Todo.Infrastructure\Todo.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
