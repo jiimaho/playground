@@ -1,0 +1,157 @@
+/* 
+81px	
+54px	
+36px	
+24px	
+16px	
+10px	
+7px
+5px 
+*/
+
+/* 
+BACKGROUND COLOR: #212529
+MAIN COLOR: #f03e3e
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #212529;
+  color: white;
+  font-family: "Roboto", sans-serif;
+}
+
+/* HEADER */
+.header {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+.header-title {
+  font-size: 81px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-top: 5px solid #f03e3e;
+  border-bottom: 5px solid #f03e3e;
+  text-align: center;
+}
+
+.header-minor-left,
+.header-minor-right {
+  font-style: italic;
+  font-weight: 100;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.header-minor-left {
+  justify-self: start;
+}
+
+.header-minor-right {
+  justify-self: end;
+}
+
+/* MAIN GRID */
+.disaster-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 1200px;
+  margin: 0 auto;
+  gap: 30px;
+  margin-bottom: 200px;
+}
+
+.divider {
+  grid-column: 1 / -1;
+  /* border-bottom: 1px solid white; */
+}
+
+.divider h2 {
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* CARD */
+.disaster-card {
+  box-shadow: 0 0 10px #fff;
+  border-radius: 10px;
+  padding: 10px;
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.card-country {
+  display: flex;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-country h3 {
+  font-size: 24px;
+}
+
+.card-updated {
+  font-size: 16px;
+  font-weight: 100;
+  opacity: 0.5;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+.card-body {
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card-more-information:link,
+.card-more-information:visited {
+  text-decoration: underline;
+  color: #ff6b6b;
+}
+
+.card-more-information:hover,
+.card-more-information:active {
+  text-decoration: underline;
+}
+
+/* SPECIFICS */
+
+.sweden {
+  /* grid-column: 1 / span 2; */
+}
+
+.greece {
+}
+
+/* FOOTER */
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
+  /* margin-bottom: 50px; */
+  /* border-top: 3px solid #f03e3e;
+  border-bottom: 3px solid #f03e3e; */
+  background-color: #f03e3e;
+  color: #fff;
+  height: 100px;
+  padding: 10px;
+}

@@ -1,0 +1,42 @@
+/* CROSS CUTTING */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.container {
+  display: flex;
+}
+
+.article {
+  flex: 1;
+  height: 300px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.article-blog {
+  background-image: url("images/sc.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.article-linkedin {
+  background-image: url("images/linkedin.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.article-so {
+  background-image: url("images/so.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+}

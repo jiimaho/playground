@@ -1,0 +1,144 @@
+/* CROSS CUTTING */
+
+/* FONT SIZES
+/67.34px	
+/50.52px	
+/37.90px	
+/28.43px	
+/21.33px	
+/16.00px	
+/12.00px	
+/9.00px	
+/6.76px
+*/
+
+/* 
+  MAIN COLOR: #f76707
+  ACCENT: #fff4e6
+  GREY: #343a40 
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: #343a40;
+  border-top: 5px solid #f76707;
+}
+
+a:link,
+a:visited {
+  text-decoration: none;
+}
+
+a:hover,
+a:active {
+  color: orangered;
+  text-decoration: none;
+}
+
+/* CONTAINER */
+.container {
+  width: 800px;
+  margin: 0 auto;
+}
+
+/* HEADER */
+.header {
+  margin-bottom: 100px;
+  color: #f76707;
+}
+
+h1 {
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 50.52px;
+}
+
+h1::before {
+  content: "🌎";
+  font-size: 100px;
+  padding: 10px;
+  display: inline-block;
+}
+
+.menu {
+  border-top: 1px solid #f76707;
+  border-bottom: 1px solid #f76707;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  letter-spacing: 3px;
+}
+
+.menu-link:link,
+.menu-link:visited {
+  display: inline-block; /* To be able to set padding-top and bottom */
+  font-size: 21.33px;
+  /*/37.90px	
+/28.43px	
+/21.33px	 */
+  font-weight: bold;
+  text-transform: uppercase;
+  font-style: italic;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: #f76707;
+}
+
+.menu-link:hover,
+.menu-link:active {
+  color: white;
+  background-color: #f76707;
+}
+
+.menu-item {
+  list-style-type: none;
+}
+
+/* ARTICLE */
+
+h2 {
+  color: #f76707;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 0px;
+  border-bottom: 2px solid #94d82d;
+}
+
+.article-header-img {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 100px;
+}
+
+.information p {
+  font-size: 21.33px;
+  letter-spacing: 0px;
+  line-height: 30px;
+  margin-bottom: 40px;
+}
+
+/* BURGER */
+.burger {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  font-size: 100px;
+}
+
+/* FOOTER */
+
+.container:last-child p {
+  text-align: center;
+}
+
+.container:last-child p::before {
+  content: "";
+  display: block;
+  height: 280px;
+}

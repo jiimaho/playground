@@ -1,0 +1,47 @@
+/* FLEXBOX TESTS */
+.f-container {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.f-container-one {
+  gap: 10px;
+}
+
+.f-container-two {
+  gap: 10px;
+}
+
+.f-container-three {
+  justify-content: space-evenly;
+}
+
+.f-one,
+.f-two,
+.f-three {
+  flex: 1;
+  text-align: center;
+  background-color: rgb(104, 104, 250);
+}
+
+.f-four,
+.f-five {
+  text-align: center;
+  background-color: rgb(158, 158, 251);
+}
+
+.f-four {
+  flex: 2;
+}
+
+.f-five {
+  flex: 1;
+}
+
+.f-six,
+.f-seven,
+.f-eight,
+.f-nine {
+  flex: 0 1 200px;
+  background-color: rgb(223, 223, 251);
+}
