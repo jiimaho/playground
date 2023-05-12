@@ -36,12 +36,20 @@ body {
 }
 
 .header-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 81px;
   font-weight: 700;
   text-transform: uppercase;
   border-top: 5px solid #f03e3e;
   border-bottom: 5px solid #f03e3e;
-  text-align: center;
+}
+
+.header-icon {
+  width: 81px;
+  height: 81px;
+  stroke: #f03e3e;
 }
 
 .header-minor-left,
@@ -78,6 +86,8 @@ body {
 
 .divider h2 {
   font-size: 36px;
+  font-weight: 100;
+  opacity: 0.6;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -120,15 +130,28 @@ body {
   height: 100%;
 }
 
-.card-more-information:link,
-.card-more-information:visited {
-  text-decoration: underline;
+.card-btn:link,
+.card-btn:visited {
+  margin: 0 auto;
+  padding: 5px 10px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   color: #ff6b6b;
+  font-size: 16px;
+  text-align: center;
+  text-transform: uppercase;
 }
 
-.card-more-information:hover,
-.card-more-information:active {
-  text-decoration: underline;
+.card-btn:hover,
+.card-btn:active {
+}
+
+.card-icon {
+  width: 24px;
+  height: 24px;
 }
 
 /* SPECIFICS */
