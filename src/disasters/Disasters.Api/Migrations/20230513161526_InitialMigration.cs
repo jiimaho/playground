@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -14,8 +15,7 @@ namespace Disasters.Api.Migrations
                 name: "Locations",
                 columns: table => new
                 {
-                    LocationId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -27,10 +27,9 @@ namespace Disasters.Api.Migrations
                 name: "Disasters",
                 columns: table => new
                 {
-                    DisasterId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DisasterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LocationId = table.Column<int>(type: "int", nullable: false)
+                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
