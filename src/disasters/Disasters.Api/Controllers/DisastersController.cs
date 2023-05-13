@@ -1,5 +1,6 @@
 using Disasters.Api.Db;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Disasters.Api.Controllers;
 
@@ -17,36 +18,46 @@ public class DisastersController : ControllerBase
     [HttpPost(Name = "AddDisaster")]
     public void Post([FromBody] DisasterRequest disaster)
     {
-        using (var db = new DisastersDbContext())
+        using var db = new DisastersDbContext();
+        var locationId = Guid.NewGuid();
+        var location = new Location
         {
-            var disasterEntity = new Disaster
-            {
-                DisasterId = Guid.NewGuid(),
-                Summary = disaster.Summary
-            };
-            db.Disasters.Add(disasterEntity);
-            db.SaveChanges();
-        }
+            Country = disaster.Location.Country,
+            LocationId = locationId
+        };
+        var disasterEntity = new Disaster
+        {
+            DisasterId = Guid.NewGuid(),
+            Summary = disaster.Summary,
+            LocationId = locationId,
+            Location = location
+        };
+
+        db.Locations.Add(location);
+        db.Disasters.Add(disasterEntity);
+        db.SaveChanges();
     }
 
     [HttpGet(Name = "GetDisasters")]
     public DisastersResponse Get()
     {
-        using (var db = new DisastersDbContext())
-        {
+        using var db = new DisastersDbContext();
+        var disasters = db.Disasters.Where(x => EF.Functions.Like(x.Summary, "%STUFF%")).ToList();
             
-        }
-        
         return new DisastersResponse
         {
-            Disasters = new List<DisasterResponseItem>
-            {
+            Disasters = disasters.Select(x => 
                 new DisasterResponseItem
                 {
-                    Date = DateOnly.FromDateTime(DateTime.UtcNow),
-                    Summary = "Shit in here"
-                }
-            }
+                    Summary = x.Summary,
+                    Occured = x.Occured,
+                    DisasterId = x.DisasterId,
+                    Location = new LocationResponseItem
+                    {
+                        Country = x.Location.Country,
+                        LocationId = x.Location.LocationId
+                    }
+                })
         };
     }
 }

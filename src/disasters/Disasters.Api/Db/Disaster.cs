@@ -6,6 +6,8 @@ public class Disaster
 {
     [Key]
     public Guid DisasterId { get; set; }
+
+    public DateTimeOffset Occured { get; set; }
     public string Summary { get; set; } = "";
     public Guid LocationId { get; set; }
     public virtual Location Location { get; set; }
