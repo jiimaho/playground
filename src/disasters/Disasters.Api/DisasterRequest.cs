@@ -4,5 +4,5 @@ public record DisasterRequest
 {
     public DateTimeOffset Occured { get; set; }
     public string Summary { get; set; } = "";
-    public LocationRequest Location { get; set; } = new LocationRequest();
+    public IEnumerable<LocationRequest> Locations { get; set; } = new List<LocationRequest>();
 }

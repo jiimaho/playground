@@ -10,7 +10,7 @@ public record DisasterResponseItem
     public Guid DisasterId { get; set; }
     public DateTimeOffset Occured { get; set; }
     public string Summary { get; set; } = "";
-    public LocationResponseItem Location { get; set; } = new();
+    public IEnumerable<LocationResponseItem> Locations { get; set; } = new List<LocationResponseItem>();
 }
 
 public record LocationResponseItem

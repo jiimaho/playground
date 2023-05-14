@@ -8,4 +8,6 @@ public class Location
     public Guid LocationId { get; set; }
 
     public string Country { get; set; } = "";
+
+    public virtual List<Disaster> Disasters { get; set; }
 }

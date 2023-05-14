@@ -31,21 +31,20 @@ public class DisastersController : ControllerBase
     public void Post([FromBody] DisasterRequest disaster)
     {
         using var db = new DisastersDbContext();
-        var locationId = Guid.NewGuid();
-        var location = new Location
+        var locations = disaster.Locations.Select(l => new Location
         {
-            Country = disaster.Location.Country,
-            LocationId = locationId
-        };
+            Country = l.Country,
+            LocationId = l.LocationId
+        }).ToList();
+        
         var disasterEntity = new Disaster
         {
             DisasterId = Guid.NewGuid(),
             Summary = disaster.Summary,
-            LocationId = locationId,
-            Location = location
+            Locations = locations
         };
 
-        db.Locations.Add(location);
+        db.Locations.AddRange(locations);
         db.Disasters.Add(disasterEntity);
         db.SaveChanges();
     }
@@ -55,7 +54,7 @@ public class DisastersController : ControllerBase
     {
         using var db = new DisastersDbContext();
         var disasters = db.Disasters
-            .Include(x => x.Location)
+            .Include(x => x.Locations)
             .AsNoTracking()
             .ToList();
         // var disasters = db.Disasters.Where(x => EF.Functions.Like(x.Summary, "%STUFF%")).ToList();
@@ -68,11 +67,11 @@ public class DisastersController : ControllerBase
                     Summary = x.Summary,
                     Occured = x.Occured,
                     DisasterId = x.DisasterId,
-                    Location = new LocationResponseItem
+                    Locations = x.Locations.Select(p => new LocationResponseItem
                     {
-                        Country = x.Location.Country,
-                        LocationId = x.Location.LocationId
-                    }
+                        LocationId = p.LocationId,
+                        Country = p.Country
+                    })
                 })
         };
     }
