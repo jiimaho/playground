@@ -15,6 +15,18 @@ public class DisastersController : ControllerBase
         _logger = logger;
     }
     
+    public record DeleteDisasterRequest(Guid DisasterId);
+    
+    [HttpDelete(Name = "DeleteDisaster")]
+    public void Delete([FromBody] DeleteDisasterRequest request)
+    {
+        using var db = new DisastersDbContext();
+        var disaster = db.Disasters.Find(request.DisasterId);
+        if (disaster == null) return;
+        db.Disasters.Remove(disaster);
+        db.SaveChanges();
+    }
+    
     [HttpPost(Name = "AddDisaster")]
     public void Post([FromBody] DisasterRequest disaster)
     {
@@ -42,7 +54,11 @@ public class DisastersController : ControllerBase
     public DisastersResponse Get()
     {
         using var db = new DisastersDbContext();
-        var disasters = db.Disasters.Where(x => EF.Functions.Like(x.Summary, "%STUFF%")).ToList();
+        var disasters = db.Disasters
+            .Include(x => x.Location)
+            .AsNoTracking()
+            .ToList();
+        // var disasters = db.Disasters.Where(x => EF.Functions.Like(x.Summary, "%STUFF%")).ToList();
             
         return new DisastersResponse
         {
