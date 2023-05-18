@@ -15,6 +15,7 @@ public class DisastersDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<TestView>().HasNoKey().ToView("TestView");
     }
 
     public DbSet<Disaster> Disasters { get; set; }
@@ -22,4 +23,6 @@ public class DisastersDbContext : DbContext
     public DbSet<Location> Locations { get; set; }
 
     public DbSet<DisasterLocation> DisasterLocations { get; set; }
+
+    public DbSet<TestView> TestView { get; set; }
 }

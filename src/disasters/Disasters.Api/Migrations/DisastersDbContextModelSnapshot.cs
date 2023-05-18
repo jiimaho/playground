@@ -37,7 +37,7 @@ namespace Disasters.Api.Migrations
 
                     b.HasKey("DisasterId");
 
-                    b.ToTable("Disasters");
+                    b.ToTable("Disasters", (string)null);
                 });
 
             modelBuilder.Entity("Disasters.Api.Db.DisasterLocation", b =>
@@ -58,7 +58,7 @@ namespace Disasters.Api.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("DisasterLocations");
+                    b.ToTable("DisasterLocations", (string)null);
                 });
 
             modelBuilder.Entity("Disasters.Api.Db.Location", b =>
@@ -73,7 +73,7 @@ namespace Disasters.Api.Migrations
 
                     b.HasKey("LocationId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("Disasters.Api.Db.DisasterLocation", b =>
