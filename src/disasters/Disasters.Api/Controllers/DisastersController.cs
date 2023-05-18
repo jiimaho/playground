@@ -28,19 +28,21 @@ public class DisastersController : ControllerBase
     }
     
     [HttpPost(Name = "AddDisaster")]
-    public void Post([FromBody] DisasterRequest disaster)
+    public void Post([FromBody] DisasterRequest request, ISystemClock clock)
     {
         using var db = new DisastersDbContext();
         
         var disasterEntity = new Disaster
         {
             DisasterId = Guid.NewGuid(),
-            Summary = disaster.Summary
+            Occured = request.Occured,
+            Summary = request.Summary
         };
 
-        var locations = disaster.Locations.Select(p => new DisasterLocation
+        var locations = request.Locations.Select(p => new DisasterLocation
         {
             Disaster = disasterEntity,
+            DisasterLocationId = Guid.NewGuid(),
             Location = new Location
             {
                 Country = p.Country,
@@ -55,13 +57,21 @@ public class DisastersController : ControllerBase
     }
 
     [HttpGet(Name = "GetDisasters")]
-    public DisastersResponse Get()
+    public DisastersResponse Get([FromQuery] DateOnly fromDate)
     {
         using var db = new DisastersDbContext();
-        var disasters = db.Disasters
+        var disastersQuery = db.Disasters
             .Include(x => x.DisasterLocations)
             .ThenInclude(x => x.Location)
-            .AsNoTracking()
+            .AsNoTracking();
+
+        if (fromDate != default)
+        {
+            disastersQuery = disastersQuery.Where(x => x.Occured >= fromDate.BeginningOfDay());
+        }
+            
+        var disasters = disastersQuery
+            .OrderBy(p => p.Occured)
             .ToList();
         // var disasters = db.Disasters.Where(x => EF.Functions.Like(x.Summary, "%STUFF%")).ToList();
             
@@ -81,4 +91,6 @@ public class DisastersController : ControllerBase
                 })
         };
     }
+    
+    
 }
