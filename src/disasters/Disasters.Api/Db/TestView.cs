@@ -2,5 +2,6 @@ namespace Disasters.Api.Db;
 
 public class TestView
 {
-    public string Input { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
 }
