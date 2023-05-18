@@ -9,5 +9,5 @@ public class Location
 
     public string Country { get; set; } = "";
 
-    public virtual List<Disaster> Disasters { get; set; }
+    public virtual List<DisasterLocation> DisasterLocations { get; set; }
 }

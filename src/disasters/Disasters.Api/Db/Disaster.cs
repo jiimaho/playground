@@ -9,5 +9,5 @@ public class Disaster
 
     public DateTimeOffset Occured { get; set; }
     public string Summary { get; set; } = "";
-    public virtual List<Location> Locations { get; set; }
+    public virtual List<DisasterLocation> DisasterLocations { get; set; }
 }

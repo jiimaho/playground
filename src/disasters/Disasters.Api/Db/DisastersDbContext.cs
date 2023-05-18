@@ -13,7 +13,13 @@ public class DisastersDbContext : DbContext
             .EnableSensitiveDataLogging();
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+    }
+
     public DbSet<Disaster> Disasters { get; set; }
     
     public DbSet<Location> Locations { get; set; }
+
+    public DbSet<DisasterLocation> DisasterLocations { get; set; }
 }

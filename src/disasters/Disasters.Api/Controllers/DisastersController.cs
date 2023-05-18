@@ -31,20 +31,25 @@ public class DisastersController : ControllerBase
     public void Post([FromBody] DisasterRequest disaster)
     {
         using var db = new DisastersDbContext();
-        var locations = disaster.Locations.Select(l => new Location
-        {
-            Country = l.Country,
-            LocationId = l.LocationId
-        }).ToList();
         
         var disasterEntity = new Disaster
         {
             DisasterId = Guid.NewGuid(),
-            Summary = disaster.Summary,
-            Locations = locations
+            Summary = disaster.Summary
         };
 
-        db.Locations.AddRange(locations);
+        var locations = disaster.Locations.Select(p => new DisasterLocation
+        {
+            Disaster = disasterEntity,
+            Location = new Location
+            {
+                Country = p.Country,
+                LocationId = p.LocationId
+            }
+        }).ToList();
+
+        db.Locations.AddRange(locations.Select(x => x.Location));
+        db.DisasterLocations.AddRange(locations);
         db.Disasters.Add(disasterEntity);
         db.SaveChanges();
     }
@@ -54,7 +59,8 @@ public class DisastersController : ControllerBase
     {
         using var db = new DisastersDbContext();
         var disasters = db.Disasters
-            .Include(x => x.Locations)
+            .Include(x => x.DisasterLocations)
+            .ThenInclude(x => x.Location)
             .AsNoTracking()
             .ToList();
         // var disasters = db.Disasters.Where(x => EF.Functions.Like(x.Summary, "%STUFF%")).ToList();
@@ -67,10 +73,10 @@ public class DisastersController : ControllerBase
                     Summary = x.Summary,
                     Occured = x.Occured,
                     DisasterId = x.DisasterId,
-                    Locations = x.Locations.Select(p => new LocationResponseItem
+                    Locations = x.DisasterLocations.Select(p => new LocationResponseItem
                     {
-                        LocationId = p.LocationId,
-                        Country = p.Country
+                        LocationId = p.Location.LocationId,
+                        Country = p.Location.Country
                     })
                 })
         };
