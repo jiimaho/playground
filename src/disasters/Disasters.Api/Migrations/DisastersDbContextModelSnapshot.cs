@@ -22,25 +22,13 @@ namespace Disasters.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DisasterLocation", b =>
-                {
-                    b.Property<Guid>("DisastersDisasterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("LocationsLocationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("DisastersDisasterId", "LocationsLocationId");
-
-                    b.HasIndex("LocationsLocationId");
-
-                    b.ToTable("DisasterLocation");
-                });
-
             modelBuilder.Entity("Disasters.Api.Db.Disaster", b =>
                 {
                     b.Property<Guid>("DisasterId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LocationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("Occured")
@@ -52,7 +40,9 @@ namespace Disasters.Api.Migrations
 
                     b.HasKey("DisasterId");
 
-                    b.ToTable("Disasters");
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Disasters", (string)null);
                 });
 
             modelBuilder.Entity("Disasters.Api.Db.Location", b =>
@@ -67,22 +57,18 @@ namespace Disasters.Api.Migrations
 
                     b.HasKey("LocationId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
-            modelBuilder.Entity("DisasterLocation", b =>
+            modelBuilder.Entity("Disasters.Api.Db.Disaster", b =>
                 {
-                    b.HasOne("Disasters.Api.Db.Disaster", null)
+                    b.HasOne("Disasters.Api.Db.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("DisastersDisasterId")
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Disasters.Api.Db.Location", null)
-                        .WithMany()
-                        .HasForeignKey("LocationsLocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Location");
                 });
 #pragma warning restore 612, 618
         }
