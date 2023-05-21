@@ -56,6 +56,11 @@ public class DisasterFunction
 
     public APIGatewayProxyResponse Get(APIGatewayProxyRequest request, ILambdaContext context)
     {
+        return new APIGatewayProxyResponse
+        {
+            Body = "This is a test",
+            StatusCode = 900
+        };
         using var db = new DisastersDbContext();
         var disastersQuery = db.Disasters
             .Include(x => x.DisasterLocations)

@@ -1,3 +1,4 @@
+using Disasters.Api.Db.Seed;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -17,6 +18,10 @@ public class DisastersDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TestView>().HasNoKey().ToView("TestView");
+        
+        modelBuilder.ApplyConfiguration(new LocationSeed());
+        modelBuilder.ApplyConfiguration(new DisasterSeed());
+        modelBuilder.ApplyConfiguration(new DisasterLocationSeed());
     }
 
     public DbSet<Disaster> Disasters { get; set; }

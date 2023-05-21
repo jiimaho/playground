@@ -397,4 +397,9 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-src/disasters/DisastersApi/.aws-sam/
+# Custom stuff
+src/disasters/Disasters.Api/.aws-sam/
+.DS_Store
+.idea/
+src/.DS_Store
+src/frontend/.DS_Store
