@@ -1,17 +1,13 @@
 using Disasters.Api.Db;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Disasters.Api.Controllers;
+namespace Disasters.Api.Functions;
 
-[ApiController]
-[Route("[controller]")]
-public class SummaryController : ControllerBase
+public class SummaryFunction
 {
     public record SummaryResponse(IEnumerable<DisasterSummaryResponseItem> disasters);
     public record DisasterSummaryResponseItem(string Summary, string Places);
     
-    [HttpGet(Name = "GetSummary")]
     public SummaryResponse GetSummary()
     {
         using var db = new DisastersDbContext();

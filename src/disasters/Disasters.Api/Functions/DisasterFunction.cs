@@ -1,24 +1,23 @@
+using Amazon.Lambda.APIGatewayEvents;
+using Amazon.Lambda.Core;
 using Disasters.Api.Db;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
-namespace Disasters.Api.Controllers;
+namespace Disasters.Api.Functions;
 
-[ApiController]
-[Route("[controller]")]
-public class DisastersController : ControllerBase
+public class DisasterFunction
 {
-    private readonly ILogger<DisastersController> _logger;
+    private readonly ILogger<DisasterFunction> _logger;
 
-    public DisastersController(ILogger<DisastersController> logger)
+    public DisasterFunction(ILogger<DisasterFunction> logger)
     {
         _logger = logger;
     }
     
     public record DeleteDisasterRequest(Guid DisasterId);
     
-    [HttpDelete(Name = "DeleteDisaster")]
-    public void Delete([FromBody] DeleteDisasterRequest request)
+    public void Delete(DeleteDisasterRequest request)
     {
         using var db = new DisastersDbContext();
         var disaster = db.Disasters.Find(request.DisasterId);
@@ -27,8 +26,7 @@ public class DisastersController : ControllerBase
         db.SaveChanges();
     }
     
-    [HttpPost(Name = "AddDisaster")]
-    public void Post([FromBody] DisasterRequest request, ISystemClock clock)
+    public void Post(DisasterRequest request, ISystemClock clock)
     {
         using var db = new DisastersDbContext();
         
@@ -56,8 +54,7 @@ public class DisastersController : ControllerBase
         db.SaveChanges();
     }
 
-    [HttpGet(Name = "GetDisasters")]
-    public DisastersResponse Get([FromQuery] DateOnly fromDate)
+    public APIGatewayProxyResponse Get(APIGatewayProxyRequest request, ILambdaContext context)
     {
         using var db = new DisastersDbContext();
         var disastersQuery = db.Disasters
@@ -65,17 +62,16 @@ public class DisastersController : ControllerBase
             .ThenInclude(x => x.Location)
             .AsNoTracking();
 
-        if (fromDate != default)
-        {
-            disastersQuery = disastersQuery.Where(x => x.Occured >= fromDate.BeginningOfDay());
-        }
+        // if (fromDate != default)
+        // {
+        //     disastersQuery = disastersQuery.Where(x => x.Occured >= fromDate.BeginningOfDay());
+        // }
             
         var disasters = disastersQuery
             .OrderBy(p => p.Occured)
             .ToList();
-        // var disasters = db.Disasters.Where(x => EF.Functions.Like(x.Summary, "%STUFF%")).ToList();
             
-        return new DisastersResponse
+        var dis = new DisastersResponse
         {
             Disasters = disasters.Select(x => 
                 new DisasterResponseItem
@@ -90,7 +86,7 @@ public class DisastersController : ControllerBase
                     })
                 })
         };
+
+        return new APIGatewayProxyResponse();
     }
-    
-    
 }
