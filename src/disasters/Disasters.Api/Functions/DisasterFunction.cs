@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Disasters.Api.Db;
@@ -54,12 +56,13 @@ public class DisasterFunction
         db.SaveChanges();
     }
 
-    public APIGatewayProxyResponse Get(APIGatewayProxyRequest request, ILambdaContext context)
+    public static async Task<APIGatewayProxyResponse> Get(APIGatewayProxyRequest request, ILambdaContext context)
     {
+        Console.WriteLine("Hello World");
         return new APIGatewayProxyResponse
         {
             Body = "This is a test",
-            StatusCode = 900
+            StatusCode = 200
         };
         using var db = new DisastersDbContext();
         var disastersQuery = db.Disasters

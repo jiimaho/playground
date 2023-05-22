@@ -1,3 +1,4 @@
+#file: noinspection YAMLSchemaValidation
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
@@ -11,12 +12,13 @@ Globals:
 Resources:
   GetDisastersFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Name: GetDisastersFunction
     Metadata:
-      BuildMethod: dotnet7
+      BuildMethod: dotnet6
     Properties:
       CodeUri: ./
       Handler: Disasters.Api::Disasters.Api.Functions.DisasterFunction::Get
-      Runtime: provided.al2
+      Runtime: dotnet6
       Architectures:
         - x86_64
       MemorySize: 256
@@ -29,6 +31,11 @@ Resources:
           Properties:
             Path: /disasters
             Method: get
+  GetDisastersFunctionLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/GetDisastersFunction
+      RetentionInDays: 7
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
