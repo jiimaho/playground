@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Disasters.Api.Db;
 
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public class Disaster
 {
     [Key]

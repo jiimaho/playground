@@ -24,6 +24,21 @@ public class DisastersDbContext : DbContext
         modelBuilder.ApplyConfiguration(new DisasterLocationSeed());
     }
 
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        // Set common properties like ModifiedAt for example :)
+        // var entries = ChangeTracker.Entries().Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+        //
+        // var now = new SystemClock().UtcNow;
+        //
+        // foreach (var entityEntry in entries)
+        // {
+        //     
+        // }
+        
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
     public DbSet<Disaster> Disasters { get; set; }
     
     public DbSet<Location> Locations { get; set; }

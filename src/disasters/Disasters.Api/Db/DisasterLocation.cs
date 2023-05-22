@@ -1,5 +1,6 @@
 namespace Disasters.Api.Db;
 
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
 public class DisasterLocation
 {
     public Guid DisasterLocationId { get; set; }
