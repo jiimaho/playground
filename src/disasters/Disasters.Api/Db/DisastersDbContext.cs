@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Disasters.Api.Db;
 
-public class DisastersDbContext : DbContext
+public class DisastersDbContext : AuditableDisastersDbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -22,21 +22,6 @@ public class DisastersDbContext : DbContext
         modelBuilder.ApplyConfiguration(new LocationSeed());
         modelBuilder.ApplyConfiguration(new DisasterSeed());
         modelBuilder.ApplyConfiguration(new DisasterLocationSeed());
-    }
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        // Set common properties like ModifiedAt for example :)
-        // var entries = ChangeTracker.Entries().Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
-        //
-        // var now = new SystemClock().UtcNow;
-        //
-        // foreach (var entityEntry in entries)
-        // {
-        //     
-        // }
-        
-        return await base.SaveChangesAsync(cancellationToken);
     }
 
     public DbSet<Disaster> Disasters { get; set; }

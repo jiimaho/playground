@@ -53,7 +53,7 @@ public class DisasterFunction
         db.Locations.AddRange(locations.Select(x => x.Location));
         db.DisasterLocations.AddRange(locations);
         db.Disasters.Add(disasterEntity);
-        db.SaveChanges();
+        db.SaveChangesAsync("Jim").Wait();
     }
 
     public static async Task<APIGatewayProxyResponse> Get(APIGatewayProxyRequest request, ILambdaContext context)
