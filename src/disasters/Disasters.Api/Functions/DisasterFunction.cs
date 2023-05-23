@@ -35,9 +35,7 @@ public class DisasterFunction
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(apiRequest.Body));
         var request = await JsonSerializer.DeserializeAsync<DisasterRequest>(memoryStream);
         
-        
         Console.WriteLine("Connection");
-        await using var db = new DisastersDbContext();
         
         var disasterEntity = new Disaster
         {
@@ -57,14 +55,26 @@ public class DisasterFunction
             }
         }).ToList();
 
-        db.Locations.AddRange(locations.Select(x => x.Location));
-        db.DisasterLocations.AddRange(locations);
-        db.Disasters.Add(disasterEntity);
+        await using var db = new DisastersDbContext();
+        // Just for demonstration: using transaction
+        var tx = await db.Database.BeginTransactionAsync();
+        try
+        { 
+            db.Locations.AddRange(locations.Select(x => x.Location));
+            db.DisasterLocations.AddRange(locations);
+            db.Disasters.Add(disasterEntity);
         
-        Console.WriteLine("Saving changes");
-        await db.SaveChangesAsync("Jim");
-        
-        Console.WriteLine("Changes saved");
+            await db.SaveChangesAsync("Jim");
+            await tx.CommitAsync();
+            Console.WriteLine("Changes committed");
+        }
+        catch (Exception e)
+        {
+            await tx.RollbackAsync();
+            Console.WriteLine(e);
+            throw;
+        }
+
         return new APIGatewayProxyResponse
         {
             StatusCode = 200
