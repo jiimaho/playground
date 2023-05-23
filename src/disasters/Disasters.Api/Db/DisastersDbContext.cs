@@ -20,6 +20,12 @@ public class DisastersDbContext : AuditableDisastersDbContext
             .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
             .EnableSensitiveDataLogging();
     }
+    
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<string>().HaveMaxLength(300);
+        base.ConfigureConventions(configurationBuilder);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
