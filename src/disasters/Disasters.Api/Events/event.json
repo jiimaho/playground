@@ -1,5 +1,5 @@
 {
-    "body": "{\"summary\": \"hello world this is a disaster\"}",
+    "body": "{\"Summary\": \"hello world this is a asdasd\", \"Occured\": \"2023-02-18T21:15:15.000Z\"}",
     "resource": "/{proxy+}",
     "path": "/disaster",
     "httpMethod": "POST",

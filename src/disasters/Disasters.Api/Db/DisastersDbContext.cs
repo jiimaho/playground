@@ -10,9 +10,9 @@ public class DisastersDbContext : AuditableDisastersDbContext
     {
         optionsBuilder.UseSqlServer(
                 // For when running locally
-                "Server=localhost,1433;Database=disastersql;User Id=sa;Password=V34fxzM6xfVBu23ALLxc;Encrypt=False",
+                // "Server=localhost,1433;Database=disastersql;User Id=sa;Password=V34fxzM6xfVBu23ALLxc;Encrypt=False",
                 // For when running in docker
-                // "Server=172.17.0.2,1433;Database=disastersql;User Id=sa;Password=V34fxzM6xfVBu23ALLxc;Encrypt=False")
+                "Server=172.17.0.2,1433;Database=disastersql;User Id=sa;Password=V34fxzM6xfVBu23ALLxc;Encrypt=False",
                 sqlServerOptionsBuilder =>
                 {
                     sqlServerOptionsBuilder.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);

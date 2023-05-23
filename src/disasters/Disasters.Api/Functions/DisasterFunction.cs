@@ -38,8 +38,8 @@ public class DisasterFunction
         Console.WriteLine("Entering DisasterFunction.Post");
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(apiRequest.Body));
         var request = await JsonSerializer.DeserializeAsync<DisasterRequest>(memoryStream);
-
-        Console.WriteLine("Connection");
+        Console.WriteLine("Deserialized");
+        Console.WriteLine(apiRequest.Body);
 
         var disasterEntity = new Disaster
         {
@@ -59,25 +59,35 @@ public class DisasterFunction
             }
         }).ToList();
 
+
+        Console.WriteLine("Entities created");
         await using var db = new DisastersDbContext();
         // Just for demonstration: using transaction
-        var tx = await db.Database.BeginTransactionAsync();
-        try
-        {
-            db.Locations.AddRange(locations.Select(x => x.Location));
-            db.DisasterLocations.AddRange(locations);
-            db.Disasters.Add(disasterEntity);
+        var strategy = db.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync<Disaster, Disaster>(null, async (c, state, token) =>
+            {
+                await using var transaction = await db.Database.BeginTransactionAsync(token);
+                Console.WriteLine("BeginTransactionAsync");
+                try
+                {
+                    db.Locations.AddRange(locations.Select(x => x.Location));
+                    db.DisasterLocations.AddRange(locations);
+                    db.Disasters.Add(disasterEntity);
 
-            await db.SaveChangesAsync("Jim");
-            await tx.CommitAsync();
-            Console.WriteLine("Changes committed");
-        }
-        catch (Exception e)
-        {
-            await tx.RollbackAsync();
-            Console.WriteLine(e);
-            throw;
-        }
+                    await db.SaveChangesAsync(token);
+                    await transaction.CommitAsync(token);
+                    Console.WriteLine("Committed");
+                    Console.WriteLine("Changes committed");
+                    return disasterEntity;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Exception caught");
+                    Console.WriteLine(e);
+                    await transaction.RollbackAsync(token);
+                    throw;
+                }
+            }, verifySucceeded: null);
 
         return new APIGatewayProxyResponse
         {
@@ -88,7 +98,7 @@ public class DisasterFunction
     // ReSharper disable once UnusedMember.Global
     public static async Task<APIGatewayProxyResponse> Get(APIGatewayProxyRequest request, ILambdaContext context)
     {
-        Console.WriteLine("Entering DisasterFunction.Get");
+        Console.WriteLine("This indeed seem to work!");
         return new APIGatewayProxyResponse
         {
             Body = "This is a test",
