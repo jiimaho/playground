@@ -9,8 +9,10 @@ public class DisastersDbContext : AuditableDisastersDbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(
-                "Server=172.17.0.2,1433;Database=disastersql;User Id=sa;Password=V34fxzM6xfVBu23ALLxc;Encrypt=False")
-            // "Data Source=(localhost)\\disastersql;Initial Catalog=Disasters;Encrypt=False");
+                // For when running locally
+                "Server=localhost,1433;Database=disastersql;User Id=sa;Password=V34fxzM6xfVBu23ALLxc;Encrypt=False")
+                // For when running in docker
+                // "Server=172.17.0.2,1433;Database=disastersql;User Id=sa;Password=V34fxzM6xfVBu23ALLxc;Encrypt=False")
             .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
             .EnableSensitiveDataLogging();
     }
@@ -18,9 +20,9 @@ public class DisastersDbContext : AuditableDisastersDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TestView>().HasNoKey().ToView("TestView");
-        
-        modelBuilder.ApplyConfiguration(new LocationSeed());
-        modelBuilder.ApplyConfiguration(new DisasterSeed());
+
+        modelBuilder.ApplyConfiguration(new LocationConfiguration());
+        modelBuilder.ApplyConfiguration(new DisasterConfiguration());
         modelBuilder.ApplyConfiguration(new DisasterLocationSeed());
     }
 

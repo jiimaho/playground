@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Disasters.Api.Db.Seed;
 
-public class LocationSeed : IEntityTypeConfiguration<Location>
+public class LocationConfiguration : IEntityTypeConfiguration<Location>
 {
     public void Configure(EntityTypeBuilder<Location> builder)
     {
+        builder.Property(p => p.Country).HasMaxLength(50);
+        
         builder.HasData(new List<Location>
         {
             new()

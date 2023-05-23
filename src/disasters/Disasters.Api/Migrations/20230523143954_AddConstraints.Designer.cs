@@ -4,6 +4,7 @@ using Disasters.Api.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Disasters.Api.Migrations
 {
     [DbContext(typeof(DisastersDbContext))]
-    partial class DisastersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230523143954_AddConstraints")]
+    partial class AddConstraints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +82,7 @@ namespace Disasters.Api.Migrations
                         new
                         {
                             DisasterId = new Guid("694be870-2024-41a5-b08a-5054b431b4c2"),
-                            Occured = new DateTimeOffset(new DateTime(2023, 5, 23, 16, 51, 9, 222, DateTimeKind.Unspecified).AddTicks(2110), new TimeSpan(0, 2, 0, 0, 0)),
+                            Occured = new DateTimeOffset(new DateTime(2023, 5, 23, 16, 39, 53, 985, DateTimeKind.Unspecified).AddTicks(7710), new TimeSpan(0, 2, 0, 0, 0)),
                             Summary = "Seed"
                         });
                 });
