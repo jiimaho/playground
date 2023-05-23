@@ -1,4 +1,4 @@
-namespace Disasters.Api;
+namespace Disasters.Api.Utils;
 
 public interface ISystemClock
 {
