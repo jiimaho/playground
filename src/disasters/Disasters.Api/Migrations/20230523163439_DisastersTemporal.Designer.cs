@@ -4,6 +4,7 @@ using Disasters.Api.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Disasters.Api.Migrations
 {
     [DbContext(typeof(DisastersDbContext))]
-    partial class DisastersDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230523163439_DisastersTemporal")]
+    partial class DisastersTemporal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,7 +108,7 @@ namespace Disasters.Api.Migrations
                         new
                         {
                             DisasterId = new Guid("694be870-2024-41a5-b08a-5054b431b4c2"),
-                            Occured = new DateTimeOffset(new DateTime(2023, 5, 23, 18, 39, 36, 885, DateTimeKind.Unspecified).AddTicks(6420), new TimeSpan(0, 2, 0, 0, 0)),
+                            Occured = new DateTimeOffset(new DateTime(2023, 5, 23, 18, 34, 39, 712, DateTimeKind.Unspecified).AddTicks(4990), new TimeSpan(0, 2, 0, 0, 0)),
                             Summary = "Seed"
                         });
                 });
@@ -181,13 +183,13 @@ namespace Disasters.Api.Migrations
                     b.HasOne("Disasters.Api.Db.Disaster", "Disaster")
                         .WithMany("DisasterLocations")
                         .HasForeignKey("DisasterId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Disasters.Api.Db.Location", "Location")
                         .WithMany("DisasterLocations")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Disaster");

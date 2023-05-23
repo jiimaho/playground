@@ -34,6 +34,20 @@ public class DisastersDbContext : AuditableDisastersDbContext
         modelBuilder.ApplyConfiguration(new LocationConfiguration());
         modelBuilder.ApplyConfiguration(new DisasterConfiguration());
         modelBuilder.ApplyConfiguration(new DisasterLocationSeed());
+        
+        DefaultForeignKeysToRestrictBehaviourOnDelete(modelBuilder);
+    }
+
+    private static void DefaultForeignKeysToRestrictBehaviourOnDelete(ModelBuilder modelBuilder)
+    {
+        var foreignKeys = modelBuilder.Model.GetEntityTypes()
+            .SelectMany(e => e.GetForeignKeys())
+            .Where(x => x is { IsOwnership: false, DeleteBehavior: DeleteBehavior.Cascade });
+        
+        foreach (var mutableForeignKey in foreignKeys)
+        {
+            mutableForeignKey.DeleteBehavior = DeleteBehavior.Restrict;
+        }
     }
 
     public DbSet<Disaster> Disasters { get; set; }
