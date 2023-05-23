@@ -36,6 +36,32 @@ Resources:
     Properties:
       LogGroupName: /aws/lambda/GetDisastersFunction
       RetentionInDays: 7
+  PostDisastersFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Name: PostDisastersFunction
+    Metadata:
+      BuildMethod: dotnet6
+    Properties:
+      CodeUri: ./
+      Handler: Disasters.Api::Disasters.Api.Functions.DisasterFunction::Post
+      Runtime: dotnet6
+      Architectures:
+        - x86_64
+      MemorySize: 256
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          PARAM1: VALUE
+      Events:
+        GetDisasters:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /disasters
+            Method: post
+  PostDisastersFunctionLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/PostDisastersFunction
+      RetentionInDays: 7
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -50,3 +76,10 @@ Outputs:
   GetDisastersFunctionIamRole:
     Description: "Implicit IAM Role created for disasters function"
     Value: !GetAtt GetDisastersFunctionRole.Arn
+    
+  PostDisastersFunction:
+    Description: "Disasters Lambda Function ARN"
+    Value: !GetAtt PostDisastersFunction.Arn
+  PostDisastersFunctionIamRole:
+    Description: "Implicit IAM Role created for disasters function"
+    Value: !GetAtt PostDisastersFunctionRole.Arn

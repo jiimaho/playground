@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Amazon.Lambda.APIGatewayEvents;
@@ -28,9 +29,13 @@ public class DisasterFunction
         db.SaveChanges();
     }
     
-    public void Post(DisasterRequest request, ISystemClock clock)
+    public static async Task<APIGatewayProxyResponse> Post(APIGatewayProxyRequest apiRequest, ILambdaContext context)
     {
-        using var db = new DisastersDbContext();
+        Console.WriteLine("Entering DisasterFunction.Post");
+        using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(apiRequest.Body));
+        var request = await JsonSerializer.DeserializeAsync<DisasterRequest>(memoryStream);
+        
+        await using var db = new DisastersDbContext();
         
         var disasterEntity = new Disaster
         {
@@ -53,12 +58,17 @@ public class DisasterFunction
         db.Locations.AddRange(locations.Select(x => x.Location));
         db.DisasterLocations.AddRange(locations);
         db.Disasters.Add(disasterEntity);
-        db.SaveChangesAsync("Jim").Wait();
+        await db.SaveChangesAsync("Jim");
+
+        return new APIGatewayProxyResponse
+        {
+            StatusCode = 200
+        };
     }
 
     public static async Task<APIGatewayProxyResponse> Get(APIGatewayProxyRequest request, ILambdaContext context)
     {
-        Console.WriteLine("Hello World");
+        Console.WriteLine("Entering DisasterFunction.Get");
         return new APIGatewayProxyResponse
         {
             Body = "This is a test",
