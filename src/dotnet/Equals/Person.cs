@@ -1,30 +1,36 @@
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace Equals;
+
 internal class Person : IEquatable<Person>
 {
     public string Id { get; }
+
     public string Name { get; }
+
     public int Age { get; }
+
+    public Person(string id, string name, int age)
+    {
+        Id = id;
+        Name = name;
+        Age = age;
+    }
     
-    // If we don't override this method then comparisons for Person will always return false
-    // Worth to override even if we skip IEquatable<Person>
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((Person)obj);
-    }
+    public static Person Empty => new(string.Empty, string.Empty, 0);
 
-    // This method is used by underlying comparisons methods and returns a unique value representing the object
-    public override int GetHashCode()
-    {
-        return Id.GetHashCode();
-    }
+    // Why?
+    // Must override to support value-based equality
+    public override bool Equals(object? obj) => obj is Person other && Equals(other);
 
-    // Required by IEquatable<Person>. Makes comparisons for Person much faster since we skip boxing
-    public bool Equals(Person? other)
-    {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return Id == other.Id;
-    }
+    // Why?
+    // Makes comparisons for Person much more PERFORMANT since we skip boxing. Required by IEquatable<Person>. 
+    // If we don't implement this then the default implementation will be used which will use the Equals method taking an object
+    public bool Equals(Person? other) => other != null && Id == other.Id;
+    
+    // Why?
+    // Usually best to override this method when overriding Equals
+    // Do note that a hashcode is NOT a unique identifier for the object, and collisions can occur
+    // Still this hashcode is used for example in hashed collections like HashSet<T> and Dictionary<TKey,TValue>
+    public override int GetHashCode() => Id.GetHashCode();
 }
