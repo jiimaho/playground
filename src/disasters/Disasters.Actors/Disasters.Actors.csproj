@@ -20,5 +20,6 @@
       <None Update="app.conf">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Remove="Properties\launchSettings.json" />
     </ItemGroup>
 </Project>
