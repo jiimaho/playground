@@ -22,6 +22,9 @@ public class Person
     // Default implementation returns the memory address of the object
     public override int GetHashCode() => Id.GetHashCode();
 
+    public override bool Equals(object? obj) =>
+        obj is Person other && Id == other.Id;
+
     // Why?
     // You can customize the equality operator to do whatever you want.
     public static bool operator ==(Person p, Uri uri) => false;
