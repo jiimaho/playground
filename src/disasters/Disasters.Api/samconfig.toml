@@ -21,6 +21,7 @@ s3_prefix = "DisastersApi"
 region = "eu-north-1"
 disable_rollback = true
 image_repositories = []
+profile = "steadycodingdefault"
 
 [default.package.parameters]
 resolve_s3 = true

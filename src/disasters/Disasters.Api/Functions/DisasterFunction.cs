@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Text;
 using System.Text.Json;
 using Amazon.Lambda.APIGatewayEvents;
@@ -11,9 +13,17 @@ namespace Disasters.Api.Functions;
 public class DisasterFunction
 {
     private readonly ILogger<DisasterFunction> _logger;
+    private readonly ActivitySource _activity; // Equivalent to RootSpan in OpenTelemetry
+    private readonly Meter _meter; // Equivalent to Meter in OpenTelemetry
+    private readonly Counter<int> _getCounter;
+    private readonly Histogram<int> _responseCounter;
 
     public DisasterFunction(ILogger<DisasterFunction> logger)
     {
+        _activity = new ActivitySource("Disasters.Api", "1.0.0");
+        _meter = new Meter("Disasters.Api", "1.0.0");
+        _getCounter = _meter.CreateCounter<int>("number_of_get_requests", "requests", "Number of GET requests made to the Get Lambda function");
+        _responseCounter = _meter.CreateHistogram<int>("response_time", "milliseconds", "Response time in milliseconds for the Get Lambda function");
         _logger = logger;
     }
 
@@ -30,7 +40,7 @@ public class DisasterFunction
         return new APIGatewayProxyResponse{ StatusCode = 200 };
     }
     
-    public static async Task<APIGatewayProxyResponse> Post(APIGatewayProxyRequest apiRequest, ILambdaContext context)
+    public async Task<APIGatewayProxyResponse> Post(APIGatewayProxyRequest apiRequest, ILambdaContext context)
     {
         Console.WriteLine("Entering DisasterFunction.Post");
         using var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(apiRequest.Body));
@@ -92,33 +102,46 @@ public class DisasterFunction
         };
     }
 
-    public static async Task<APIGatewayProxyResponse> Get(APIGatewayProxyRequest request, ILambdaContext context)
+    public async Task<APIGatewayProxyResponse> Get(APIGatewayProxyRequest request, ILambdaContext context)
     {
-        Console.WriteLine("This indeed seem to work!");
-        await using var db = new DisastersDbContext();
-        var disastersQuery = db.Disasters
-            .Include(x => x.DisasterLocations)
-            .ThenInclude(x => x.Location)
-            .AsNoTracking();
-        
-        var disasters = disastersQuery
-            .OrderBy(p => p.Occured)
-            .ToList();
-        
-        var response = new DisastersResponse
+        using (var activity = _activity.CreateActivity(nameof(Get), ActivityKind.Internal))
         {
-            Disasters = disasters.Select(x =>
-                new DisasterResponseItem(
-                    Summary: x.Summary, 
-                    Occured: x.Occured, 
-                    DisasterId: x.DisasterId,
-                    Locations: x.DisasterLocations.Select(p =>
-                        new LocationResponseItem(
-                            LocationId: p.Location.LocationId, 
-                            Country: p.Location.Country))))
-        };
-        
-        return new APIGatewayProxyResponse();
+            await using var db = new DisastersDbContext();
+            var disastersQuery = db.Disasters
+                .Include(x => x.DisasterLocations)
+                .ThenInclude(x => x.Location)
+                .AsNoTracking();
+
+            IEnumerable<Disaster> disasters;
+            using (var activity2 = _activity.CreateActivity("Get from db", ActivityKind.Internal))
+            {
+                disasters = disastersQuery
+                    .OrderBy(p => p.Occured)
+                    .ToList();
+            }
+
+            DisastersResponse response;
+            using (var activity3 = _activity.CreateActivity("Map to response", ActivityKind.Internal))
+            {
+                response = new DisastersResponse
+                {
+                    Disasters = disasters.Select(x =>
+                        new DisasterResponseItem(
+                            Summary: x.Summary, 
+                            Occured: x.Occured, 
+                            DisasterId: x.DisasterId,
+                            Locations: x.DisasterLocations.Select(p =>
+                                new LocationResponseItem(
+                                    LocationId: p.Location.LocationId, 
+                                    Country: p.Location.Country))))
+                };
+            }
+            activity.Stop();
+            _responseCounter.Record(activity.Duration.Milliseconds);
+            _getCounter.Add(1);
+            
+            return new APIGatewayProxyResponse();
+        }
     }
 }
 
