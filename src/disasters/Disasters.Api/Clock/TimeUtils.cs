@@ -1,4 +1,4 @@
-namespace SystemClock;
+namespace Disasters.Api.Clock;
 
 public static class TimeUtils
 {
