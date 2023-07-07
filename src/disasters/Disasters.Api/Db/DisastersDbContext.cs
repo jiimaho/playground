@@ -16,6 +16,7 @@ public class DisastersDbContext : AuditableDisastersDbContext
                 sqlServerOptionsBuilder =>
                 {
                     sqlServerOptionsBuilder.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
+                    sqlServerOptionsBuilder.CommandTimeout(20);
                 })
             .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information)
             .EnableSensitiveDataLogging();

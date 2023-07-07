@@ -12,19 +12,17 @@ namespace Disasters.Api.Functions;
 
 public class DisasterFunction
 {
-    private readonly ILogger<DisasterFunction> _logger;
     private readonly ActivitySource _activity; // Equivalent to RootSpan in OpenTelemetry
     private readonly Meter _meter; // Equivalent to Meter in OpenTelemetry
     private readonly Counter<int> _getCounter;
     private readonly Histogram<int> _responseCounter;
 
-    public DisasterFunction(ILogger<DisasterFunction> logger)
+    public DisasterFunction()
     {
         _activity = new ActivitySource("Disasters.Api", "1.0.0");
         _meter = new Meter("Disasters.Api", "1.0.0");
         _getCounter = _meter.CreateCounter<int>("number_of_get_requests", "requests", "Number of GET requests made to the Get Lambda function");
         _responseCounter = _meter.CreateHistogram<int>("response_time", "milliseconds", "Response time in milliseconds for the Get Lambda function");
-        _logger = logger;
     }
 
     public async Task<APIGatewayProxyResponse> Delete(APIGatewayProxyRequest apiRequest, ILambdaContext context)
@@ -104,22 +102,31 @@ public class DisasterFunction
 
     public async Task<APIGatewayProxyResponse> Get(APIGatewayProxyRequest request, ILambdaContext context)
     {
+        Console.WriteLine("Entering DisasterFunction.Get");
         using (var activity = _activity.CreateActivity(nameof(Get), ActivityKind.Internal))
         {
+            Console.WriteLine("Activity created");
             await using var db = new DisastersDbContext();
+            
+            Console.WriteLine("DbContext created");
             var disastersQuery = db.Disasters
                 .Include(x => x.DisasterLocations)
                 .ThenInclude(x => x.Location)
                 .AsNoTracking();
-
+            Console.WriteLine("Query created");
             IEnumerable<Disaster> disasters;
             using (var activity2 = _activity.CreateActivity("Get from db", ActivityKind.Internal))
             {
-                disasters = disastersQuery
+                disasters = await disastersQuery
                     .OrderBy(p => p.Occured)
-                    .ToList();
+                    .ToListAsync();
             }
 
+            Console.WriteLine("Disasters retrieved");
+            foreach (var disaster in disasters)
+            {
+                Console.WriteLine($"Disaster: {disaster.Summary}");
+            }
             DisastersResponse response;
             using (var activity3 = _activity.CreateActivity("Map to response", ActivityKind.Internal))
             {
@@ -136,11 +143,22 @@ public class DisasterFunction
                                     Country: p.Location.Country))))
                 };
             }
-            activity.Stop();
-            _responseCounter.Record(activity.Duration.Milliseconds);
+
+            Console.WriteLine("Response mapped");
+            activity?.Stop();
+            _responseCounter.Record(activity?.Duration.Milliseconds ?? 0);
             _getCounter.Add(1);
             
-            return new APIGatewayProxyResponse();
+            return new APIGatewayProxyResponse
+            {
+                Body = JsonSerializer.Serialize(response),
+                StatusCode = 200,
+                Headers = new Dictionary<string, string>
+                {
+                    {"Content-Type", "application/json"},
+                    {"Fkin", "King"}
+                }
+            };
         }
     }
 }
