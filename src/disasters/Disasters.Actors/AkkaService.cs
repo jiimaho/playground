@@ -1,7 +1,6 @@
 using Akka.Actor;
 using Akka.Actor.Setup;
 using Akka.DependencyInjection;
-
 namespace Disasters.Actors;
 
 public class AkkaService : IHostedService
@@ -12,12 +11,13 @@ public class AkkaService : IHostedService
     private ActorSystemSetup _actorSystemSetup;
     private ActorSystem _actorSystem;
 
-    public AkkaService(ILogger<AkkaService> logger, IServiceProvider serviceProvider, IHostApplicationLifetime appLifetime)
+    public AkkaService(ILogger<AkkaService> logger, Serilog.ILogger serilog, IServiceProvider serviceProvider, IHostApplicationLifetime appLifetime)
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
         _appLifetime = appLifetime;
-        Console.WriteLine("AkkaService created");
+        logger.LogInformation("This is done with microsoft logger {0}", Environment.Version);
+        serilog.Information("This is done with serilog logger {Version}", Environment.Version);
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
