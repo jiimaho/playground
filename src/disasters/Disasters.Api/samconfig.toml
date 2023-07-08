@@ -19,7 +19,7 @@ confirm_changeset = true
 resolve_s3 = true
 s3_prefix = "DisastersApi"
 region = "eu-north-1"
-disable_rollback = true
+disable_rollback = false
 image_repositories = []
 profile = "steadycodingdefault"
 

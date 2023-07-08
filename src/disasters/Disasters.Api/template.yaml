@@ -31,6 +31,13 @@ Resources:
           Properties:
             Path: /disasters
             Method: get
+    Connectors: 
+      MyConn:
+        Properties:
+          Destination: 
+            Id: DisastersTable
+          Permissions:
+            - Read
   GetDisastersFunctionLogs:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -62,6 +69,16 @@ Resources:
     Properties:
       LogGroupName: /aws/lambda/PostDisastersFunction
       RetentionInDays: 7
+  DisastersTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: Disasters
+      PrimaryKey:
+        Name: DisasterId
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -76,7 +93,6 @@ Outputs:
   GetDisastersFunctionIamRole:
     Description: "Implicit IAM Role created for disasters function"
     Value: !GetAtt GetDisastersFunctionRole.Arn
-    
   PostDisastersFunction:
     Description: "Disasters Lambda Function ARN"
     Value: !GetAtt PostDisastersFunction.Arn
