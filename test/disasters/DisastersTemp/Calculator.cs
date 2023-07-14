@@ -1,9 +1,15 @@
-﻿namespace DisastersTemp;
+﻿using System.Collections.ObjectModel;
+
+namespace DisastersTemp;
 
 public class Calculator
 {
-    public int FirstNumber { get; set; }
-    public int SecondNumber { get; set; }
+    public Collection<int> Numbers { get; } = new();
 
-    public int Add() => FirstNumber + SecondNumber;
+    public void Include(int number)
+    {
+        Numbers.Add(number);
+    }
+
+    public int Add() => Numbers.Sum();
 }

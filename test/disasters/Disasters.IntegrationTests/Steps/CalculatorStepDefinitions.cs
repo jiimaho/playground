@@ -21,17 +21,24 @@ public sealed class CalculatorStepDefinitions
     [Given("the first number is (.*)")]
     public void GivenTheFirstNumberIs(int number)
     {
-        _calculator.FirstNumber = number;
+        _calculator.Include(number);
     }
 
     [Given("the second number is (.*)")]
     public void GivenTheSecondNumberIs(int number)
     {
-        _calculator.SecondNumber = number;
+        _calculator.Include(number);
+    }
+    
+    [Given(@"adding (.*) as well")]
+    public void GivenAddingAsWell(int number)
+    {
+        _calculator.Include(number);
     }
 
-    [When("the two numbers are added")]
-    public void WhenTheTwoNumbersAreAdded()
+    
+    [When(@"all numbers are summarized")]
+    public void WhenAllNumbersAreSummarized()
     {
         _result = _calculator.Add();
     }
