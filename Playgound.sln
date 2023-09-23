@@ -62,6 +62,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisastersTemp", "test\disas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disasters.IntegrationTests", "test\disasters\Disasters.IntegrationTests\Disasters.IntegrationTests.csproj", "{60002E21-A57D-4F83-82FD-6349452E8853}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDocumentDbQuery", "src\aws\SimpleDocumentDbQuery\SimpleDocumentDbQuery.csproj", "{358973B5-A61A-44E9-A6B9-DDAFB24F48C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +154,10 @@ Global
 		{60002E21-A57D-4F83-82FD-6349452E8853}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60002E21-A57D-4F83-82FD-6349452E8853}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60002E21-A57D-4F83-82FD-6349452E8853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{358973B5-A61A-44E9-A6B9-DDAFB24F48C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{358973B5-A61A-44E9-A6B9-DDAFB24F48C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{358973B5-A61A-44E9-A6B9-DDAFB24F48C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{358973B5-A61A-44E9-A6B9-DDAFB24F48C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{19E5EEB0-E054-4593-B3ED-D1B04277C6A7} = {60A28D13-1AEB-4752-908A-D38A35D89A89}
@@ -182,5 +188,6 @@ Global
 		{1CD3BDAF-636A-417E-9F1F-CD5107A3A8A3} = {60A28D13-1AEB-4752-908A-D38A35D89A89}
 		{544797B8-BCB5-4723-9519-50997A882874} = {1CD3BDAF-636A-417E-9F1F-CD5107A3A8A3}
 		{60002E21-A57D-4F83-82FD-6349452E8853} = {1CD3BDAF-636A-417E-9F1F-CD5107A3A8A3}
+		{358973B5-A61A-44E9-A6B9-DDAFB24F48C4} = {9020F14E-9F61-4158-A97A-2FEAA80CF931}
 	EndGlobalSection
 EndGlobal
