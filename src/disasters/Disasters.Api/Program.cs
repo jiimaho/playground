@@ -1,9 +1,10 @@
-namespace Disasters.Api;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+var app = builder.Build();
+
+app.MapGet("/disasters", context =>
 {
-    public static void Main(string[] args)
-    {
-        
-    }
-}
+    return Task.FromResult("Helo World!");
+});
+
+app.Run();
