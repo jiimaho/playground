@@ -32,8 +32,6 @@ public class AkkaService : IHostedService
         
         _actorSystem = ActorSystem.Create("Disasters", _actorSystemSetup);
         
-        var _ = _actorSystem.ActorOf(CarActor.Props, "RandomActor");
-        
         _actorSystem.WhenTerminated.ContinueWith(tr =>
         {
             _appLifetime.StopApplication();
