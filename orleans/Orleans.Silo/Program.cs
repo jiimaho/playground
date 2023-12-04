@@ -16,6 +16,13 @@ builder.UseOrleans(siloBuilder =>
             {
                 EndPoints = { "localhost:6379" }
             };
+        })
+        .AddRedisGrainStorage("wallboxStore", optionsBuilder =>
+        {
+            optionsBuilder.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions
+            {
+                EndPoints = { "localhost:6379" }
+            };
         });
 });
 

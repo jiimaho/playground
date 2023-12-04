@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Orleans.Client" Version="7.2.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Grains.Interfaces\Grains.Interfaces.csproj" />
+    </ItemGroup>
+</Project>
