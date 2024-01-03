@@ -4,11 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grains.Interfaces", "Grains
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grains.Implementation", "Grains.Implementation\Grains.Implementation.csproj", "{CD4BACAA-31BE-4E0E-B3EC-45C38438A118}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.Silo", "Orleans.Silo\Orleans.Silo.csproj", "{316E0F35-C7D1-4F2F-AA60-9262F96B2D6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.Server", "Orleans.Server\Orleans.Server.csproj", "{316E0F35-C7D1-4F2F-AA60-9262F96B2D6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.Client", "Orleans.Client\Orleans.Client.csproj", "{3FB77144-1BBC-4B64-8679-915BA254C6EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.StartChargingClient", "Orleans.StartChargingClient\Orleans.StartChargingClient.csproj", "{3FB77144-1BBC-4B64-8679-915BA254C6EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.Silo.Web", "Orleans.Silo.Web\Orleans.Silo.Web.csproj", "{48F42826-FFED-4B3F-94FA-D221611AD1D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.WebClient", "Orleans.WebClient\Orleans.WebClient.csproj", "{48F42826-FFED-4B3F-94FA-D221611AD1D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

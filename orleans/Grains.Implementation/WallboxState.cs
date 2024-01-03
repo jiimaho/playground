@@ -4,5 +4,5 @@ namespace Grains.Implementation;
 [Alias("WallboxState")]
 public class WallboxState
 {
-    [Id(0)] public string Status { get; set; } = "Unknown";
+    [Id(0)] public WallboxStatus Status { get; set; } = WallboxStatus.Unavailable;
 }

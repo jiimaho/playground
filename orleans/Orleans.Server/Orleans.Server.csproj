@@ -19,6 +19,7 @@
       <PackageReference Include="Microsoft.Orleans.Persistence.Redis" Version="7.2.4" />
       <PackageReference Include="Microsoft.Orleans.Reminders.Redis" Version="7.2.4" />
       <PackageReference Include="Microsoft.Orleans.Server" Version="7.2.4" />
+      <PackageReference Include="Microsoft.Orleans.Streaming" Version="7.2.4" />
     </ItemGroup>
 
     <ItemGroup>

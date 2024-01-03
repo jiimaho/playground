@@ -23,7 +23,9 @@ builder.UseOrleans(siloBuilder =>
             {
                 EndPoints = { "localhost:6379" }
             };
-        });
+        })
+        .AddMemoryStreams("in-memory")
+        .AddMemoryGrainStorage("PubSubStore");
 });
 
 builder.UseConsoleLifetime();
