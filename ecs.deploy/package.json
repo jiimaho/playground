@@ -1,0 +1,29 @@
+{
+  "name": "ecs_deploy",
+  "version": "1.0.0",
+  "description": "This project is used only to download, update and deploy a relevant task defintion and it's service to ECS",
+  "main": "deploy.ts",
+  "type": "module",
+  "scripts": {
+    "deploy": "npx tsx deploy.ts",
+    "echo": "echo works"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://volvocargroup.visualstudio.com/Energy%20Services%20Lab/_git/ESL.HEMS"
+  },
+  "keywords": [
+    "ecs",
+    "deploy",
+    "aws"
+  ],
+  "author": "HEMS",
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-sdk/client-ecs": "^3.477.0",
+    "@aws-sdk/client-ssm": "^3.477.0",
+    "dotenv": "^16.3.1",
+    "typescript": "^5.3.3",
+    "zx": "^7.2.3"
+  }
+}
