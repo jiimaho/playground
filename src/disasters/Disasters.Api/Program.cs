@@ -16,12 +16,6 @@ try
 
     builder.AddApplicationServices();
 
-    builder.Logging.ClearProviders();
-    builder.Host.UseSerilog();
-    builder.Services.AddSerilog(Log.Logger);
-    
-    builder.Services.AddHttpClient();
-
     var app = builder.Build();
 
     app.UseSerilogRequestLogging(options =>
@@ -31,7 +25,7 @@ try
 
     app.MapEndpoints();
 
-    app.Run();
+    await app.RunAsync();
 }
 catch (Exception e)
 {

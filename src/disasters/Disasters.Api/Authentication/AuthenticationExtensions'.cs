@@ -2,10 +2,11 @@ namespace Disasters.Api.Authentication;
 
 public static class AuthenticationExtensions    
 {
+    // ReSharper disable once UnusedMethodReturnValue.Global
     public static WebApplicationBuilder AddApplicationAuthentication(this WebApplicationBuilder builder)
     {
         builder.Services.AddAuthentication()
-            .AddScheme<AuthenticationHandlerOptions, AuthenticationHandler>("MyScheme", options => { });
+            .AddScheme<AuthenticationHandlerOptions, AuthenticationHandler>("MyScheme", _ => { });
 
         return builder;
     }
