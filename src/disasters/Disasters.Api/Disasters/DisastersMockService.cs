@@ -18,9 +18,8 @@ public class DisastersMockService(ILogger<DisastersMockService> Logger, Serilog.
             DateTimeOffset.Now,
             "Jim",
             100.456m);
-            
         
-        IEnumerable<DisasterVm> disasterVms = new List<DisasterVm> { new("DisasterMock") };
+        IEnumerable<DisasterVm> disasterVms = new List<DisasterVm> { new("Heavy rain in louisiana") };
         
         return Task.FromResult(disasterVms);
     }
