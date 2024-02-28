@@ -1,0 +1,2 @@
+### Get disasters
+GET http://localhost:5000/disasters
