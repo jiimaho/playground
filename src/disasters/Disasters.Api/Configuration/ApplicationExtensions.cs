@@ -15,6 +15,8 @@ public static class ApplicationExtensions
         builder.Services.AddSerilog(Log.Logger);
     
         builder.Services.AddHttpClient();
+
+        builder.Services.AddSingleton(TimeProvider.System);
         
         builder.AddApplicationAuthentication();
         builder.AppApplicationAuthorization();

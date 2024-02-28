@@ -1,21 +1,22 @@
-using Serilog;
-
 namespace Disasters.Api.Disasters;
 
-public class DisastersMockService(ILogger<DisastersMockService> Logger, Serilog.ILogger SeriLogger) : IDisastersService
+public class DisastersMockService(
+    ILogger<DisastersMockService> microsoftLogger, 
+    ILogger logger,
+    TimeProvider timeProvider) : IDisastersService
 {
     public Task<IEnumerable<DisasterVm>> GetDisasters()
     {
-        Logger.LogInformation(
+        microsoftLogger.LogInformation(
             "{SourceContext} Getting disasters using Microsoft logger {Time:yyyy-MM-dd:HH:mm:ss} {Person:l} {Amount:NN.NN}", 
             GetType().Name,
-            DateTimeOffset.Now,
+            timeProvider.GetUtcNow(),
             "Jim",
             100.456m);
-        SeriLogger.Information(
+        logger.Information(
             "{SourceContext} Getting disasters using Serilog logger {Time:yyyy-MM-dd:HH:mm:ss} {Person:l} {Amount:NN.NN}", 
             GetType().Name,
-            DateTimeOffset.Now,
+            timeProvider.GetUtcNow(),
             "Jim",
             100.456m);
         
