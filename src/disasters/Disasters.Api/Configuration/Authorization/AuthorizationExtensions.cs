@@ -1,4 +1,4 @@
-namespace Disasters.Api.Authorization;
+namespace Disasters.Api.Configuration.Authorization;
 
 public static class AuthorizationExtensions
 {

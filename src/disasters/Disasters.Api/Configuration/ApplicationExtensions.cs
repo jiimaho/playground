@@ -1,6 +1,6 @@
-using Disasters.Api.Authentication;
-using Disasters.Api.Authorization;
-using Disasters.Api.Disasters;
+using Disasters.Api.Configuration.Authentication;
+using Disasters.Api.Configuration.Authorization;
+using Disasters.Api.Services;
 using Serilog;
 
 namespace Disasters.Api.Configuration;
@@ -23,10 +23,12 @@ public static class ApplicationExtensions
         
         if (builder.Environment.IsDevelopment())
         {
+            Log.Logger.Information("Using {DisasterService}", nameof(DisastersMockService));
             builder.Services.AddSingleton<IDisastersService, DisastersMockService>();
         }
         else
         {
+            Log.Logger.Information("Using {DisasterService}", nameof(DisastersService));
             builder.Services.AddSingleton<IDisastersService, DisastersService>();   
         }
 

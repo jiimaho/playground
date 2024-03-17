@@ -1,2 +1,3 @@
-### Get disasters
-GET http://localhost:5000/disasters
+@path=/disasters
+### /disasters
+GET http://localhost:5241{{path}}

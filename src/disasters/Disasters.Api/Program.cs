@@ -15,6 +15,9 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     builder.AddApplicationServices();
+    builder.AddServiceDefaults();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
     var app = builder.Build();
 
@@ -23,7 +26,10 @@ try
         options.MessageTemplate = "Handled {RequestPath} {Person} {Properties}";
     });
 
-    app.MapEndpoints();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    
+    app.MapDisasters();
 
     await app.RunAsync();
 }

@@ -1,7 +1,4 @@
-namespace Disasters.Api.Disasters;
-
-using System;
-using System.Collections.Generic;
+namespace Disasters.Api.Services;
 
 public class DisasterResponse
 {

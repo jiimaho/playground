@@ -1,4 +1,4 @@
-namespace Disasters.Api.Disasters;
+namespace Disasters.Api.Services;
 
 public interface IDisastersService
 {

@@ -1,8 +1,9 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using Disasters.Api.Authentication;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
+
+namespace Disasters.Api.Configuration.Authentication;
 
 public class AuthenticationHandler : AuthenticationHandler<AuthenticationHandlerOptions>
 {

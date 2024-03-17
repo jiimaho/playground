@@ -1,45 +1,35 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Akka.Actor;
-using Akka.Hosting;
+using Disasters.GraphQL;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
 
-var builder = WebApplication.CreateBuilder(args);
-    
-builder.Services
-    .AddAkka("disasters", configurationBuilder =>
-    {
-        configurationBuilder.WithActors((system, registry) =>
-        {
-            var graphqlActor = system.ActorOf(GraphQLActor.Props(), "GraphQLActor");
-            registry.Register<GraphQLActor>(graphqlActor);
-            // get singleton actor?
-        });
-    });
-
-var app = builder.Build();
-
-app.MapGet("/readme/{val}", (string val, IActorRegistry registry) =>
+try
 {
-    var actor = registry.Get<GraphQLActor>();
-    actor.Tell(val);
-    return "This is just intended to be a playground for clustered Akka.NET and GraphQL.";
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-Console.WriteLine("GraphQL Server up and running!");
-await app.RunAsync();
+    // Aspire
+    builder.AddServiceDefaults();
 
-public class GraphQLActor : ReceiveActor
-{
-    public GraphQLActor()
-    {
-        ReceiveAny(o =>
-        {
-            Console.WriteLine($"Received \"{o.ToString()}\"");
-            Console.WriteLine($"Received \"{o.ToString()}\"");
-            Console.WriteLine("");
-        });
-    }
-    
-    public static Props Props() => Akka.Actor.Props.Create(() => new GraphQLActor());
+    builder.Services.AddGraphQLServer()
+        .AddQueryType<Query>();
+
+    var app = builder.Build();
+
+    app.MapGraphQL()
+        .AllowAnonymous()
+        .WithName("graphql");
+    app.MapBananaCakePop()
+        .AllowAnonymous();
+
+    Log.Logger.Information("GraphQL Server will start now");
+    await app.RunAsync();
 }
+catch (Exception e) { Log.Fatal(e, "Application failed unexpectedly"); }
+finally { Log.CloseAndFlush(); }

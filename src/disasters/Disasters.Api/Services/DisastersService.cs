@@ -1,4 +1,4 @@
-namespace Disasters.Api.Disasters;
+namespace Disasters.Api.Services;
 
 public class DisastersService(IHttpClientFactory httpClientFactory) : IDisastersService
 {
@@ -15,6 +15,6 @@ public class DisastersService(IHttpClientFactory httpClientFactory) : IDisasters
         if (content is null)
             throw new Exception("Failed to deserialize response");
 
-        return content.data.Select(x => new DisasterVm(x.fields.name));
+        return content.data.Select(x => new DisasterVm(x.fields.name, x.fields.country.First().name));
     }   
 }

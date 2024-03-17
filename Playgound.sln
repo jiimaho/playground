@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+#
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{65D79425-25EC-4565-9049-773B2B0B36D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{60A28D13-1AEB-4752-908A-D38A35D89A89}"
@@ -37,6 +38,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleDocumentDbQuery", "src\aws\SimpleDocumentDbQuery\SimpleDocumentDbQuery.csproj", "{358973B5-A61A-44E9-A6B9-DDAFB24F48C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disasters.Lambda", "src\disasters\Disasters.Lambda\Disasters.Lambda.csproj", "{77F1626C-1488-4FCF-8A9F-C3F9C5A82492}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disasters.AppHost", "src\disasters\Disasters.AppHost\Disasters.AppHost.csproj", "{3508D9F8-FA9C-4806-BD23-64FB972E5CBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disasters.ServiceDefaults", "src\disasters\Disasters.ServiceDefaults\Disasters.ServiceDefaults.csproj", "{7CECCA20-0C77-4ECF-A713-CC29EC3C1F05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +97,14 @@ Global
 		{77F1626C-1488-4FCF-8A9F-C3F9C5A82492}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77F1626C-1488-4FCF-8A9F-C3F9C5A82492}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77F1626C-1488-4FCF-8A9F-C3F9C5A82492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3508D9F8-FA9C-4806-BD23-64FB972E5CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3508D9F8-FA9C-4806-BD23-64FB972E5CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3508D9F8-FA9C-4806-BD23-64FB972E5CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3508D9F8-FA9C-4806-BD23-64FB972E5CBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CECCA20-0C77-4ECF-A713-CC29EC3C1F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CECCA20-0C77-4ECF-A713-CC29EC3C1F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CECCA20-0C77-4ECF-A713-CC29EC3C1F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CECCA20-0C77-4ECF-A713-CC29EC3C1F05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9020F14E-9F61-4158-A97A-2FEAA80CF931} = {65D79425-25EC-4565-9049-773B2B0B36D7}
@@ -110,5 +123,7 @@ Global
 		{60002E21-A57D-4F83-82FD-6349452E8853} = {1CD3BDAF-636A-417E-9F1F-CD5107A3A8A3}
 		{358973B5-A61A-44E9-A6B9-DDAFB24F48C4} = {9020F14E-9F61-4158-A97A-2FEAA80CF931}
 		{77F1626C-1488-4FCF-8A9F-C3F9C5A82492} = {1F8E48C4-DDA2-4404-8B83-3536D0DF8A69}
+		{3508D9F8-FA9C-4806-BD23-64FB972E5CBD} = {1F8E48C4-DDA2-4404-8B83-3536D0DF8A69}
+		{7CECCA20-0C77-4ECF-A713-CC29EC3C1F05} = {1F8E48C4-DDA2-4404-8B83-3536D0DF8A69}
 	EndGlobalSection
 EndGlobal
