@@ -5,18 +5,17 @@ using System.Diagnostics.Metrics;
 // Below is .NET BCL classes and in comments the equivalent in OpenTelemetry
 
  // Tracing
-var activitySource = new ActivitySource("Diagnostics.Program", "0.1.1"); // Root span
-using var span = activitySource.CreateActivity("name", ActivityKind.Client); // Span
+var activitySource = new ActivitySource("Diagnostics.Program", "0.1.1"); // Root span, ONE singleton per app is recommended.
+var _ = new ActivitySource("Diagnostics.Program", "0.1.1"); // Grouped by NAME, so this is essentially the same as the one above
+using var activity = activitySource.CreateActivity("name", ActivityKind.Client); // Span, add as many as you like
 { 
-    span.SetTag("key", "value"); // Tags
+    activity?.SetTag("key", "value"); // Tags, decorate with application specific information
     using var client = new HttpClient();
-    using (var nested = activitySource.StartActivity("operation")) // Span
-    {
-        nested.Start();
-        nested.SetTag("BaseAddress", client.BaseAddress);
-        await client.GetAsync("");
-        nested.Stop();
-    }
+    using var operation = activitySource.StartActivity("ExternalCall", ActivityKind.Client); // Span, add as many as you like
+    operation?.Start();
+    operation?.SetTag("BaseAddress", client.BaseAddress);
+    await client.GetAsync("");
+    operation?.Stop();
 }
 
 
