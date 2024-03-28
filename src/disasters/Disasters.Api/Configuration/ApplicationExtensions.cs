@@ -1,5 +1,7 @@
 using Disasters.Api.Configuration.Authentication;
 using Disasters.Api.Configuration.Authorization;
+using Disasters.Api.Endpoints;
+using Disasters.Api.Middleware;
 using Disasters.Api.Services;
 using Serilog;
 
@@ -10,9 +12,12 @@ public static class ApplicationExtensions
     // ReSharper disable once UnusedMethodReturnValue.Global
     public static WebApplicationBuilder AddApplicationServices(this WebApplicationBuilder builder)
     {
+        builder.AddServiceDefaults();
+
+        builder.Services.AddOpenTelemetry().WithTracing(tracing => tracing.AddSource("Disasters.Api"));
+        
         builder.Logging.ClearProviders();
-        builder.Host.UseSerilog();
-        builder.Services.AddSerilog(Log.Logger);
+        builder.Host.UseSerilog(Log.Logger);
     
         builder.Services.AddHttpClient();
 
@@ -20,6 +25,9 @@ public static class ApplicationExtensions
         
         builder.AddApplicationAuthentication();
         builder.AppApplicationAuthorization();
+        
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
         
         if (builder.Environment.IsDevelopment())
         {
@@ -33,5 +41,22 @@ public static class ApplicationExtensions
         }
 
         return builder;
-    } 
+    }
+
+    public static WebApplication MapApplicationMiddlewareAndEndpoints(this WebApplication app)
+    {
+        app.UseMiddleware<LogHeadersMiddleware>();
+        
+        app.UseSerilogRequestLogging(options =>
+        {
+            options.MessageTemplate = "Returned {StatusCode} for path {RequestPath}";
+        });
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    
+        app.MapDisasters();
+
+        return app;
+    }
 }

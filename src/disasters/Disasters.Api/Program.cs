@@ -1,5 +1,4 @@
 using Disasters.Api.Configuration;
-using Disasters.Api.Endpoints;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -15,21 +14,10 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     builder.AddApplicationServices();
-    builder.AddServiceDefaults();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
 
     var app = builder.Build();
 
-    app.UseSerilogRequestLogging(options =>
-    {
-        options.MessageTemplate = "Handled {RequestPath} {Person} {Properties}";
-    });
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    
-    app.MapDisasters();
+    app.MapApplicationMiddlewareAndEndpoints();
 
     await app.RunAsync();
 }

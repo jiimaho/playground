@@ -1,0 +1,7 @@
+### Disasters Query
+POST http://localhost:5245/graphql
+Content-Type: application/json
+
+{
+  "query": "query { disasters { name location } }"
+}

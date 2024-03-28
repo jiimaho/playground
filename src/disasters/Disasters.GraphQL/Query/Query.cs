@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Disasters.GraphQL;
+namespace Disasters.GraphQL.Query;
 
 public class Query
 {
@@ -9,16 +9,20 @@ public class Query
         [Service] IHttpClientFactory factory,
         [Service] IConfiguration configuration)
     {
-        var client = factory.CreateClient("DisastersBackend");
-
-        // var host = configuration.GetValue<string>("disastersbackend");
-        // var response = await client.GetFromJsonAsync<IEnumerable<Disaster>>($"http://{host}/disasters");
-        var response = await client.GetAsync($"http://_disasters.backend/disasters");
+        using (var activity = Tracing.DisastersGraphQl.StartActivity("About to get..."))
+        {
+            activity?.SetTag("ThreadId", Thread.CurrentThread.ManagedThreadId);
+            await Task.Delay(2000);
+        }
+        
+        var client = factory.CreateClient("backend");
+        var response = await client.GetAsync("/disasters");
         response.EnsureSuccessStatusCode();
 
         try
         {
             var data = await response.Content.ReadFromJsonAsync<IEnumerable<Disaster>>();
+            if (data is null) throw new Exception("No data found!");
             return data;
         }
         catch (Exception e)

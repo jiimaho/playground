@@ -9,8 +9,9 @@ using OpenTelemetry.Trace;
 
 namespace Microsoft.Extensions.Hosting;
 
-public static class Extensions
+public static class ApplicationExtensions
 {
+    // ReSharper disable once UnusedMethodReturnValue.Global
     public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
     {
         builder.ConfigureOpenTelemetry();
@@ -65,6 +66,7 @@ public static class Extensions
         return builder;
     }
 
+    // ReSharper disable once UnusedMethodReturnValue.Local
     private static IHostApplicationBuilder AddOpenTelemetryExporters(this IHostApplicationBuilder builder)
     {
         var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);

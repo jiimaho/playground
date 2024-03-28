@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reactive.Linq;
 using Disasters.Api.Services;
 
@@ -11,19 +12,27 @@ public static class DisastersEndpoint
         builder.MapGet("/disasters", 
                 async (
                 HttpContext context, 
-                LinkGenerator generator, 
-                IDisastersService disasterService) =>
-            {
-                var link = generator.GetPathByName("disasters");
-                var disasters = await disasterService.GetDisasters();
+                IDisastersService disasterService,
+                ILogger logger) =>
+                {
+                    
+                    using (var activity = Tracing.DisastersApi.StartActivity("Crunching...", ActivityKind.Internal))
+                    {
+                        await Task.Delay(2000);
+                    }
+                    
+                    var at = Tracing.DisastersApi.StartActivity("GetDisasters");
+                    var disasters = await disasterService.GetDisasters();
+                    if (at == null) logger.Warning("at is null!!!");
+                    at?.Dispose();
 
-                var obs = Observable.FromAsync(disasterService.GetDisasters)
-                    .Retry(0)
-                    .Subscribe(x => Console.WriteLine("Observable done"));
+                    var obs = Observable.FromAsync(disasterService.GetDisasters)
+                        .Retry(0)
+                        .Subscribe(x => Console.WriteLine("Observable done"));
 
-                obs.Dispose();
+                    obs.Dispose();
 
-                await context.Response.WriteAsJsonAsync(disasters);
+                    await context.Response.WriteAsJsonAsync(disasters);
             })
             .RequireAuthorization("MaPol")
             .WithName("disasters")
