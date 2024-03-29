@@ -1,6 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Disasters.GraphQL;
 using Disasters.GraphQL.Configuration;
 using Serilog;
 using Serilog.Events;
@@ -8,6 +7,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .MinimumLevel.Debug()
     .WriteTo.Console(
         theme: AnsiConsoleTheme.Code, 
             outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext} {Message:lj} {Properties:j}{NewLine}{Exception}")

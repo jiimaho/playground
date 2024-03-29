@@ -29,6 +29,8 @@ public static class ApplicationExtensions
             http.UseServiceDiscovery();
         });
 
+        builder.Services.AddSingleton(TimeProvider.System);
+
         return builder;
     }
 
