@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Reactive.Linq;
 using Disasters.Api.Services;
 
@@ -15,16 +14,7 @@ public static class DisastersEndpoint
                 IDisastersService disasterService,
                 ILogger logger) =>
                 {
-                    
-                    using (var activity = Tracing.DisastersApi.StartActivity("Crunching...", ActivityKind.Internal))
-                    {
-                        await Task.Delay(2000);
-                    }
-                    
-                    var at = Tracing.DisastersApi.StartActivity("GetDisasters");
                     var disasters = await disasterService.GetDisasters();
-                    if (at == null) logger.Warning("at is null!!!");
-                    at?.Dispose();
 
                     var obs = Observable.FromAsync(disasterService.GetDisasters)
                         .Retry(0)

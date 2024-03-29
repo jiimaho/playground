@@ -14,12 +14,18 @@ public static class ApplicationExtensions
     {
         builder.AddServiceDefaults();
 
-        builder.Services.AddOpenTelemetry().WithTracing(tracing => tracing.AddSource("Disasters.Api"));
+        builder.Services
+            .AddOpenTelemetry()
+            .WithTracing(tracing => tracing.AddSource("Disasters.Api"));
         
         builder.Logging.ClearProviders();
         builder.Host.UseSerilog(Log.Logger);
     
-        builder.Services.AddHttpClient();
+        builder.Services.AddHttpClient(HttpClients.ReliefWeb, client =>
+        {
+            client.BaseAddress = new Uri("https://api.reliefweb.int");
+            client.Timeout = TimeSpan.FromSeconds(5);
+        });
 
         builder.Services.AddSingleton(TimeProvider.System);
         
@@ -36,8 +42,8 @@ public static class ApplicationExtensions
         }
         else
         {
-            Log.Logger.Information("Using {DisasterService}", nameof(DisastersService));
-            builder.Services.AddSingleton<IDisastersService, DisastersService>();   
+            Log.Logger.Information("Using {DisasterService}", nameof(ReliefWebDisastersService));
+            builder.Services.AddSingleton<IDisastersService, ReliefWebDisastersService>();   
         }
 
         return builder;
