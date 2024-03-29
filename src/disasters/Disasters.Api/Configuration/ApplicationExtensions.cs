@@ -19,7 +19,8 @@ public static class ApplicationExtensions
 
         builder.Services
             .AddOpenTelemetry()
-            .WithTracing(tracing => tracing.AddSource("Disasters.Api")
+            .WithTracing(tracing =>
+                tracing.AddSource("Disasters.Api")
                 .AddSource("OpenTelemetry.Instrumentation.StackExchangeRedis"));
         
         builder.Logging.ClearProviders();
@@ -54,6 +55,10 @@ public static class ApplicationExtensions
                     sp.GetRequiredService<IConnectionMultiplexer>(),
                     sp.GetRequiredService<ILogger>(),
                     sp.GetRequiredService<TimeProvider>()));
+            builder.Services.Decorate<IDisastersService>((inner, sp) => 
+                new TraceDisasterServiceDecorator(
+                    inner,
+                    sp.GetRequiredService<ILogger>()));
         }
 
         return builder;

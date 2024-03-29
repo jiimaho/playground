@@ -10,15 +10,19 @@ public class ReliefWebDisastersService(
     
     public async Task<IEnumerable<DisasterVm>> GetDisasters()
     {
-        using var activity = Tracing.DisastersApi.StartActivity(ActivityKind.Client);
+        using var a = Tracing.StartCustomActivity(GetType());
+        if (a is null)
+        {
+            _logger.Debug("No activity found, skipping tracing");
+        }
+        _logger.Debug("Calling ReliefWeb API to get disasters");
         using var client = httpClientFactory.CreateClient(HttpClients.ReliefWeb);
 
         var response = await client.GetAsync("/v1/disasters?appname=rwint-user-0&profile=list&preset=latest&slim=1");
 
         response.EnsureSuccessStatusCode();
 
-        activity?.SetTag("Version", "v1");
-        activity?.SetTag("StatusCode", response.StatusCode.ToString());
+        Activity.Current?.SetTag("RawResponse", await response.Content.ReadAsStringAsync());
         try
         {
             var content = await response.Content.ReadFromJsonAsync<DisasterResponse>();

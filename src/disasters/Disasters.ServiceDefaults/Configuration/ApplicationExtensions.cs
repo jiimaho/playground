@@ -52,15 +52,15 @@ public static class ApplicationExtensions
             })
             .WithTracing(tracing =>
             {
-                if (builder.Environment.IsDevelopment())
-                {
+                // if (builder.Environment.IsDevelopment())
+                // {
                     // We want to view all traces in development
                     tracing.SetSampler(new AlwaysOnSampler());
-                }
+                // }
 
                 tracing.AddAspNetCoreInstrumentation()
-                    .AddGrpcClientInstrumentation()
-                    .AddHttpClientInstrumentation();
+                        .AddGrpcClientInstrumentation()
+                        .AddHttpClientInstrumentation();
             });
 
         builder.AddOpenTelemetryExporters();

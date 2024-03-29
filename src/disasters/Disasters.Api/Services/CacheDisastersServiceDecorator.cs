@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using StackExchange.Redis;
 
@@ -17,16 +18,16 @@ public class CacheDisastersServiceDecorator(
 
     public async Task<IEnumerable<DisasterVm>> GetDisasters()
     {
+        using var _ = Tracing.StartCustomActivity(GetType());
         var now = timeProvider.GetLocalNow();
         if (now < expireAt)
         {
-            _logger.Debug("Reading from cache");
-            var storedJson = await connectionMultiplexer.GetDatabase().StringGetAsync("disasters");
-            if (storedJson.IsNullOrEmpty)
+            var storedJson = await StringGet("disasters");
+            if (!storedJson.HasValue)
             {
                 return await StoreInCacheAndGet();
             }
-            _logger.Debug("Found data in cache");
+            _logger.Debug("Reading from cache");
             var result = JsonSerializer.Deserialize<IEnumerable<DisasterVm>>(storedJson!);
             return result!;
         }
@@ -38,14 +39,17 @@ public class CacheDisastersServiceDecorator(
         return await StoreInCacheAndGet();
     }
 
+    private Task<RedisValue> StringGet(string key) => connectionMultiplexer.GetDatabase().StringGetAsync(key);
+    
+    private async Task StringSet(string key, RedisValue value) => await connectionMultiplexer.GetDatabase().StringSetAsync(key, value);
+
     private async Task<IEnumerable<DisasterVm>> StoreInCacheAndGet()
     {
-        _logger.Debug("Calling {Type} to get disasters", inner.GetType().Name);
+        _logger.Debug(nameof(StoreInCacheAndGet));
         var disasters = (await inner.GetDisasters()).ToList();
         var json = JsonSerializer.Serialize(disasters);
-        await connectionMultiplexer.GetDatabase().StringSetAsync("disasters", new RedisValue(json));
+        await StringSet("disasters", json);
         expireAt = timeProvider.GetLocalNow().Add(ExpirationWindow);
-        _logger.Debug("Updated cache");
         return disasters;
     }
 }

@@ -9,7 +9,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
     .WriteTo.Console(
         theme: AnsiConsoleTheme.Code, 
-        outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext} {Message:lj} {Properties:j}{NewLine}{Exception}")
+        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj} {Properties:j}{NewLine}{Exception}")
     .CreateLogger();
 
 try
