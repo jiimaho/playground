@@ -23,8 +23,14 @@ public static class ApplicationExtensions
                 tracing.AddSource("Disasters.Api")
                 .AddSource("OpenTelemetry.Instrumentation.StackExchangeRedis"));
         
-        builder.Logging.ClearProviders();
-        builder.Host.UseSerilog(Log.Logger);
+        builder.Host.UseSerilog((context, provider, configuration) =>
+        {
+            configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .ReadFrom.Services(provider)
+                .Enrich.FromLogContext()
+                .WriteTo.StandardConsole();
+        });
     
         builder.Services.AddHttpClient(HttpClients.ReliefWeb, client =>
         {

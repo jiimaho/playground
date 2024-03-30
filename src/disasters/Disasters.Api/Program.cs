@@ -1,26 +1,17 @@
 using Disasters.Api.Configuration;
+using JetBrains.Annotations;
 using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
 
-Log.Logger = new LoggerConfiguration()
-    //.MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-    .MinimumLevel.Override("Disasters", LogEventLevel.Debug)
-    .MinimumLevel.Warning()
-    .WriteTo.Console(
-        theme: AnsiConsoleTheme.Code, 
-        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext} {Message:lj} {Properties:j}{NewLine}{Exception}")
-    .CreateLogger();
+Log.Logger = LogHelper.Bootstrap();
 
 try
 {
-    Log.Logger.Information("Starting up");
     var builder = WebApplication.CreateBuilder(args);
-
+    
     builder.AddApplicationServices();
 
     var app = builder.Build();
-
+    
     app.MapApplicationMiddlewareAndEndpoints();
 
     await app.RunAsync();
@@ -33,3 +24,6 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+[UsedImplicitly]
+public partial class Program;

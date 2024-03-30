@@ -1,0 +1,10 @@
+﻿[
+  {
+    name: Heavy rain,
+    location: Lousiana
+  },
+  {
+    name: Earthquake,
+    location: California
+  }
+]
