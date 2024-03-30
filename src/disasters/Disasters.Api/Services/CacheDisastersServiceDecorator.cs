@@ -18,7 +18,7 @@ public class CacheDisastersServiceDecorator(
 
     public async Task<IEnumerable<DisasterVm>> GetDisasters()
     {
-        using var _ = Tracing.StartCustomActivity(GetType());
+        using var _ = Trace.DisastersApi.StartActivity(GetType());
         var now = timeProvider.GetLocalNow();
         if (now < expireAt)
         {

@@ -7,7 +7,7 @@ public class TraceDisasterServiceDecorator(IDisastersService inner, ILogger seri
     public async Task<IEnumerable<DisasterVm>> GetDisasters()
     {
         _logger.Debug("Tracing disaster service");
-        using var _ = Tracing.StartCustomActivity(GetType());
+        using var _ = Trace.DisastersApi.StartActivity(GetType());
         return await inner.GetDisasters();
     }
 }

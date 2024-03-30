@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Disasters.Api.Services;
 
 public class DisastersMockService( 
@@ -9,7 +7,7 @@ public class DisastersMockService(
     
     public Task<IEnumerable<DisasterVm>> GetDisasters()
     {
-        using var activity = Tracing.DisastersApi.StartActivity(ActivityKind.Internal);
+        using var activity = Trace.DisastersApi.StartActivity(GetType());
         
         _logger.Debug("Creating mock disasters");
         IEnumerable<DisasterVm> disasterVms = new List<DisasterVm>

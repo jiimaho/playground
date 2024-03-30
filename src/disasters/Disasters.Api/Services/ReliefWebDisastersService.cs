@@ -10,7 +10,7 @@ public class ReliefWebDisastersService(
     
     public async Task<IEnumerable<DisasterVm>> GetDisasters()
     {
-        using var a = Tracing.StartCustomActivity(GetType());
+        using var a = Trace.DisastersApi.StartActivity(GetType());
         if (a is null)
         {
             _logger.Debug("No activity found, skipping tracing");
