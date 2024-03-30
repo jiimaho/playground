@@ -1,4 +1,3 @@
-using System.Reactive.Linq;
 using Disasters.Api.Services;
 
 namespace Disasters.Api.Endpoints;
@@ -15,13 +14,6 @@ public static class DisastersEndpoint
                 ILogger logger) =>
                 {
                     var disasters = await disasterService.GetDisasters();
-
-                    var obs = Observable.FromAsync(disasterService.GetDisasters)
-                        .Retry(0)
-                        .Subscribe(x => Console.WriteLine("Observable done"));
-
-                    obs.Dispose();
-
                     await context.Response.WriteAsJsonAsync(disasters);
             })
             .RequireAuthorization("MaPol")
