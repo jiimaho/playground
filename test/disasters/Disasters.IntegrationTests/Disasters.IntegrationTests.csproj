@@ -7,13 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Using Include="TechTalk.SpecFlow" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-        <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
-        <PackageReference Include="SpecFlow.xUnit" Version="3.9.22" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <PrivateAssets>all</PrivateAssets>
@@ -23,7 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DisastersTemp\DisastersTemp.csproj" />
     </ItemGroup>
 
 </Project>
