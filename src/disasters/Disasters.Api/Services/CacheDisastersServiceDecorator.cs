@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text.Json;
 using StackExchange.Redis;
 
@@ -16,7 +15,7 @@ public class CacheDisastersServiceDecorator(
     private static readonly TimeSpan ExpirationWindow = TimeSpan.FromMinutes(1);
     private static DateTimeOffset expireAt = DateTimeOffset.MinValue;
 
-    public async Task<IEnumerable<DisasterVm>> GetDisasters()
+    public async Task<IEnumerable<DisasterVm>> GetDisasters(int page, int pageSize)
     {
         using var _ = Trace.DisastersApi.StartActivity(GetType());
         var now = timeProvider.GetLocalNow();
@@ -25,7 +24,7 @@ public class CacheDisastersServiceDecorator(
             var storedJson = await StringGet("disasters");
             if (!storedJson.HasValue)
             {
-                return await StoreInCacheAndGet();
+                return await StoreInCacheAndGet(page, pageSize);
             }
             _logger.Debug("Reading from cache");
             var result = JsonSerializer.Deserialize<IEnumerable<DisasterVm>>(storedJson!);
@@ -36,19 +35,25 @@ public class CacheDisastersServiceDecorator(
             "Will invalidate cache since cache expired at {ExpireAt:yyyy-MM-dd hh-mm-ss} and time now is {Now:yyyy-MM-dd hh-mm-ss}",
             expireAt,
             now);
-        return await StoreInCacheAndGet();
+        return await StoreInCacheAndGet(page, pageSize);
     }
 
+    public Task MarkSafe(MarkSafeVm markSafeVm)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static string GetKey(int page, int pageSize) => $"disasters:{page}:{pageSize}";
     private Task<RedisValue> StringGet(string key) => connectionMultiplexer.GetDatabase().StringGetAsync(key);
     
     private async Task StringSet(string key, RedisValue value) => await connectionMultiplexer.GetDatabase().StringSetAsync(key, value);
 
-    private async Task<IEnumerable<DisasterVm>> StoreInCacheAndGet()
+    private async Task<IEnumerable<DisasterVm>> StoreInCacheAndGet(int page, int pageSize)
     {
         _logger.Debug(nameof(StoreInCacheAndGet));
-        var disasters = (await inner.GetDisasters()).ToList();
+        var disasters = (await inner.GetDisasters(page, pageSize)).ToList();
         var json = JsonSerializer.Serialize(disasters);
-        await StringSet("disasters", json);
+        await StringSet(GetKey(page, pageSize), json);
         expireAt = timeProvider.GetLocalNow().Add(ExpirationWindow);
         return disasters;
     }

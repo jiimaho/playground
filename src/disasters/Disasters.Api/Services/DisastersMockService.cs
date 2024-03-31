@@ -5,7 +5,7 @@ public class DisastersMockService(
 {
     private readonly ILogger _logger = logger.ForContext<DisastersMockService>();
     
-    public Task<IEnumerable<DisasterVm>> GetDisasters()
+    public Task<IEnumerable<DisasterVm>> GetDisasters(int i, int page)
     {
         using var activity = Trace.DisastersApi.StartActivity(GetType());
         
@@ -17,5 +17,10 @@ public class DisastersMockService(
         _logger.Debug("Returning mock disasters");
         
         return Task.FromResult(disasterVms);
+    }
+
+    public Task MarkSafe(MarkSafeVm markSafeVm)
+    {
+        return Task.CompletedTask;
     }
 }

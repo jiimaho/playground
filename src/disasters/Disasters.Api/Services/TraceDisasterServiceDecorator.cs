@@ -4,10 +4,17 @@ public class TraceDisasterServiceDecorator(IDisastersService inner, ILogger seri
 {
     private readonly ILogger _logger = serilog.ForContext<TraceDisasterServiceDecorator>();
     
-    public async Task<IEnumerable<DisasterVm>> GetDisasters()
+    public async Task<IEnumerable<DisasterVm>> GetDisasters(int page, int pageSize)
     {
         _logger.Debug("Tracing disaster service");
         using var _ = Trace.DisastersApi.StartActivity(GetType());
-        return await inner.GetDisasters();
+        return await inner.GetDisasters(page, pageSize);
+    }
+
+    public async Task MarkSafe(MarkSafeVm markSafeVm)
+    {
+        _logger.Debug("Tracing disaster service");
+        using var _ = Trace.DisastersApi.StartActivity(GetType());
+        await inner.MarkSafe(markSafeVm);
     }
 }

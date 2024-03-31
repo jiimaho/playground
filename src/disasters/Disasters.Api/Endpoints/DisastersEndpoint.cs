@@ -1,19 +1,23 @@
 using Disasters.Api.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Disasters.Api.Endpoints;
 
 public static class DisastersEndpoint
 {
     // ReSharper disable once UnusedMethodReturnValue.Global
-    public static WebApplication MapDisasters(this WebApplication builder)
+    public static WebApplication MapGetDisasters(this WebApplication builder)
     {
         builder.MapGet("/disasters", 
                 async (
                 HttpContext context, 
                 IDisastersService disasterService,
-                ILogger logger) =>
+                ILogger logger,
+                [FromQuery] int page,
+                [FromQuery] int pageSize) =>
                 {
-                    var disasters = await disasterService.GetDisasters();
+                    var disasters = await disasterService.GetDisasters(page, pageSize);
+                    
                     await context.Response.WriteAsJsonAsync(disasters);
             })
             .RequireAuthorization("MaPol")
@@ -24,4 +28,6 @@ public static class DisastersEndpoint
 
         return builder;
     }
+    
+    public record DisastersResponse(IEnumerable<DisasterVm> Disasters, int TotalCount, int Start, int End);
 }

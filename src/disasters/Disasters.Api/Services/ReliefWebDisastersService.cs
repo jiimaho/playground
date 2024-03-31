@@ -8,7 +8,7 @@ public class ReliefWebDisastersService(
 {
     private readonly ILogger _logger = serilog.ForContext<ReliefWebDisastersService>();
     
-    public async Task<IEnumerable<DisasterVm>> GetDisasters()
+    public async Task<IEnumerable<DisasterVm>> GetDisasters(int page, int pageSize)
     {
         using var a = Trace.DisastersApi.StartActivity(GetType());
         if (a is null)
@@ -25,7 +25,7 @@ public class ReliefWebDisastersService(
         Activity.Current?.SetTag("RawResponse", await response.Content.ReadAsStringAsync());
         try
         {
-            var content = await response.Content.ReadFromJsonAsync<DisasterResponse>();
+            var content = await response.Content.ReadFromJsonAsync<ReliefWebDisasterResponse>();
 
             if (content is null)
             {
@@ -39,5 +39,10 @@ public class ReliefWebDisastersService(
             _logger.Error(e, "Error while parsing response from ReliefWeb API");
             throw;
         }
-    }   
+    }
+
+    public Task MarkSafe(MarkSafeVm markSafeVm)
+    {
+        return Task.CompletedTask;
+    }
 }

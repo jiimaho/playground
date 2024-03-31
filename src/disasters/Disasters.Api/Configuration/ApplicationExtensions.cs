@@ -82,7 +82,8 @@ public static class ApplicationExtensions
         app.UseSwagger();
         app.UseSwaggerUI();
     
-        app.MapDisasters();
+        app.MapGetDisasters()
+            .MapPostMarkSafe();
 
         return app;
     }
