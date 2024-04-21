@@ -5,7 +5,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
-Log.Logger = new LoggerConfiguration()
+var logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
     .MinimumLevel.Debug()
     .WriteTo.Console(
@@ -26,5 +26,7 @@ try
     Log.Logger.Information("GraphQL Server will start now");
     await app.RunAsync();
 }
-catch (Exception e) { Log.Fatal(e, "Application failed unexpectedly"); }
-finally { Log.CloseAndFlush(); }
+catch (Exception e)
+{
+    logger.Fatal(e, "Application failed unexpectedly");
+}

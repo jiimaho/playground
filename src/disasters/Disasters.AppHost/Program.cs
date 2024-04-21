@@ -14,4 +14,7 @@ var disastersEndpoint = builder.AddProject<Projects.Disasters_Api>("backend")
 builder.AddProject<Projects.Disasters_GraphQL>("graphql")
     .WithReference(disastersEndpoint);
 
+builder.AddProject<Projects.Disasters_gRPC>("grpc")
+    .WithReference(disastersEndpoint);
+
 builder.Build().Run();

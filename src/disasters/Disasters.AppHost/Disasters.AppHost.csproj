@@ -15,6 +15,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Disasters.Api\Disasters.Api.csproj" />
       <ProjectReference Include="..\Disasters.GraphQL\Disasters.GraphQL.csproj" />
+      <ProjectReference Include="..\Disasters.gRPC\Disasters.gRPC.csproj" />
       <ProjectReference Include="..\Disasters.ServiceDefaults\Disasters.ServiceDefaults.csproj" />
     </ItemGroup>
 
