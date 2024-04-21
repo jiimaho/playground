@@ -2,7 +2,7 @@ using Disasters.Api.Configuration;
 using JetBrains.Annotations;
 using Serilog;
 
-Log.Logger = LogHelper.Bootstrap();
+var logger = LogHelper.CreateStartupLogger();
 
 try
 {
@@ -18,11 +18,7 @@ try
 }
 catch (Exception e)
 {
-    Log.Fatal(e, "Application failed unexpectedly");
-}
-finally
-{
-    Log.CloseAndFlush();
+    logger.Fatal(e, "Application failed unexpectedly");
 }
 
 [UsedImplicitly]

@@ -18,4 +18,10 @@ public static class LogHelper
         .MinimumLevel.Warning()
         .WriteTo.StandardConsole()
         .CreateBootstrapLogger();
+
+    public static ILogger CreateStartupLogger() => new LoggerConfiguration()
+        .MinimumLevel.Override("Disasters", LogEventLevel.Debug)
+        .MinimumLevel.Warning()
+        .WriteTo.Console()
+        .CreateLogger();
 }

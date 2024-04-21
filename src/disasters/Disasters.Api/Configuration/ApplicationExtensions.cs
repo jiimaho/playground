@@ -14,15 +14,14 @@ public static class ApplicationExtensions
     public static WebApplicationBuilder AddApplicationServices(this WebApplicationBuilder builder)
     {
         builder.AddServiceDefaults();
-        
         builder.AddRedis("cache");
 
         builder.Services
             .AddOpenTelemetry()
             .WithTracing(tracing =>
                 tracing.AddSource("Disasters.Api")
-                .AddSource("OpenTelemetry.Instrumentation.StackExchangeRedis"));
-        
+                    .AddSource("OpenTelemetry.Instrumentation.StackExchangeRedis"));
+
         builder.Host.UseSerilog((context, provider, configuration) =>
         {
             configuration
@@ -31,7 +30,7 @@ public static class ApplicationExtensions
                 .Enrich.FromLogContext()
                 .WriteTo.StandardConsole();
         });
-    
+
         builder.Services.AddHttpClient(HttpClients.ReliefWeb, client =>
         {
             client.BaseAddress = new Uri("https://api.reliefweb.int");
@@ -39,13 +38,13 @@ public static class ApplicationExtensions
         });
 
         builder.Services.AddSingleton(TimeProvider.System);
-        
+
         builder.AddApplicationAuthentication();
         builder.AppApplicationAuthorization();
-        
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        
+
         if (builder.Environment.IsDevelopment())
         {
             Log.Logger.Information("Using {DisasterService}", nameof(DisastersMockService));
@@ -55,13 +54,13 @@ public static class ApplicationExtensions
         {
             Log.Logger.Information("Using {DisasterService}", nameof(ReliefWebDisastersService));
             builder.Services.AddSingleton<IDisastersService, ReliefWebDisastersService>();
-            builder.Services.Decorate<IDisastersService>((inner, sp) => 
+            builder.Services.Decorate<IDisastersService>((inner, sp) =>
                 new CacheDisastersServiceDecorator(
                     inner,
                     sp.GetRequiredService<IConnectionMultiplexer>(),
                     sp.GetRequiredService<ILogger>(),
                     sp.GetRequiredService<TimeProvider>()));
-            builder.Services.Decorate<IDisastersService>((inner, sp) => 
+            builder.Services.Decorate<IDisastersService>((inner, sp) =>
                 new TraceDisasterServiceDecorator(
                     inner,
                     sp.GetRequiredService<ILogger>()));
@@ -73,7 +72,7 @@ public static class ApplicationExtensions
     public static WebApplication MapApplicationMiddlewareAndEndpoints(this WebApplication app)
     {
         app.UseMiddleware<LogHeadersMiddleware>();
-        
+
         app.UseSerilogRequestLogging(options =>
         {
             options.MessageTemplate = "Returned {StatusCode} for path {RequestPath}";
@@ -81,7 +80,7 @@ public static class ApplicationExtensions
 
         app.UseSwagger();
         app.UseSwaggerUI();
-    
+
         app.MapGetDisasters()
             .MapPostMarkSafe();
 
