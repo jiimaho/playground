@@ -34,9 +34,24 @@ public class CalculatorServiceImpl : Calculator.Calculator.CalculatorBase
         {
             numbers.Add(requestStream.Current.Number);
         }
-        
+
         var average = numbers.Average();
         return new AverageResponse { Average = average };
+    }
+
+    public override async Task MaximumStream(IAsyncStreamReader<MaximumRequest> requestStream,
+        IServerStreamWriter<MaximumResponse> responseStream, ServerCallContext context)
+    {
+        var max = int.MinValue;
+        while (await requestStream.MoveNext(context.CancellationToken))
+        {
+            var number = requestStream.Current.Number;
+            if (number > max)
+            {
+                max = number;
+            }
+            await responseStream.WriteAsync(new MaximumResponse { Maximum = max });
+        }
     }
 
     private static IEnumerable<int> GetPrimes(int number)

@@ -23,6 +23,15 @@ service Calculator {
   rpc Add(Request) returns (Response);
   rpc GetPrimes(PrimeNumberRequest) returns (stream PrimeNumberResponse);
   rpc ComputeAverageStream(stream AverageRequest) returns (AverageResponse);
+  rpc MaximumStream(stream MaximumRequest) returns (stream MaximumResponse);
+}
+
+message MaximumRequest {
+  int32 number = 1;
+}
+
+message MaximumResponse {
+  int32 maximum = 1;
 }
 
 message AverageRequest {
