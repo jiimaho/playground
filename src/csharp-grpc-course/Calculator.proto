@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package Calculator;
+
+message Request {
+  int32 first = 1;
+  int32 second = 2;
+}
+
+message Response {
+  int32 result = 1;
+}
+
+message PrimeNumberRequest {
+  int32 prime = 1;
+}
+
+message PrimeNumberResponse {
+  int32 primePart = 1;
+}
+
+service Calculator {
+  rpc Add(Request) returns (Response);
+  rpc GetPrimes(PrimeNumberRequest) returns (stream PrimeNumberResponse);
+  rpc ComputeAverageStream(stream AverageRequest) returns (AverageResponse);
+}
+
+message AverageRequest {
+  int32 number = 1;
+}
+
+message AverageResponse {
+  double average = 1;
+}
