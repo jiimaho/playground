@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using Calculator;
 using Grpc.Core;
 
-namespace Server;
+namespace GrpcServer;
 
 public class CalculatorServiceImpl : Calculator.Calculator.CalculatorBase
 {

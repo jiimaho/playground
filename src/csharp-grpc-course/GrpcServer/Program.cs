@@ -1,6 +1,6 @@
 using System.Net;
+using GrpcServer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Server;
 
 try
 {
