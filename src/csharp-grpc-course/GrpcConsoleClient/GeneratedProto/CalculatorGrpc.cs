@@ -61,6 +61,10 @@ namespace Calculator {
     static readonly grpc::Marshaller<global::Calculator.MaximumRequest> __Marshaller_Calculator_MaximumRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Calculator.MaximumRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Calculator.MaximumResponse> __Marshaller_Calculator_MaximumResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Calculator.MaximumResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Calculator.RunDeadlineRequest> __Marshaller_Calculator_RunDeadlineRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Calculator.RunDeadlineRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Calculator.RunDeadlineResponse> __Marshaller_Calculator_RunDeadlineResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Calculator.RunDeadlineResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Calculator.Request, global::Calculator.Response> __Method_Add = new grpc::Method<global::Calculator.Request, global::Calculator.Response>(
@@ -94,6 +98,14 @@ namespace Calculator {
         __Marshaller_Calculator_MaximumRequest,
         __Marshaller_Calculator_MaximumResponse);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Calculator.RunDeadlineRequest, global::Calculator.RunDeadlineResponse> __Method_RunDeadline = new grpc::Method<global::Calculator.RunDeadlineRequest, global::Calculator.RunDeadlineResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "RunDeadline",
+        __Marshaller_Calculator_RunDeadlineRequest,
+        __Marshaller_Calculator_RunDeadlineResponse);
+
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
@@ -124,6 +136,12 @@ namespace Calculator {
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task MaximumStream(grpc::IAsyncStreamReader<global::Calculator.MaximumRequest> requestStream, grpc::IServerStreamWriter<global::Calculator.MaximumResponse> responseStream, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Calculator.RunDeadlineResponse> RunDeadline(global::Calculator.RunDeadlineRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -207,6 +225,26 @@ namespace Calculator {
       {
         return CallInvoker.AsyncDuplexStreamingCall(__Method_MaximumStream, null, options);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Calculator.RunDeadlineResponse RunDeadline(global::Calculator.RunDeadlineRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RunDeadline(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Calculator.RunDeadlineResponse RunDeadline(global::Calculator.RunDeadlineRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_RunDeadline, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Calculator.RunDeadlineResponse> RunDeadlineAsync(global::Calculator.RunDeadlineRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RunDeadlineAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Calculator.RunDeadlineResponse> RunDeadlineAsync(global::Calculator.RunDeadlineRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_RunDeadline, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override CalculatorClient NewInstance(ClientBaseConfiguration configuration)
@@ -224,7 +262,8 @@ namespace Calculator {
           .AddMethod(__Method_Add, serviceImpl.Add)
           .AddMethod(__Method_GetPrimes, serviceImpl.GetPrimes)
           .AddMethod(__Method_ComputeAverageStream, serviceImpl.ComputeAverageStream)
-          .AddMethod(__Method_MaximumStream, serviceImpl.MaximumStream).Build();
+          .AddMethod(__Method_MaximumStream, serviceImpl.MaximumStream)
+          .AddMethod(__Method_RunDeadline, serviceImpl.RunDeadline).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
@@ -238,6 +277,7 @@ namespace Calculator {
       serviceBinder.AddMethod(__Method_GetPrimes, serviceImpl == null ? null : new grpc::ServerStreamingServerMethod<global::Calculator.PrimeNumberRequest, global::Calculator.PrimeNumberResponse>(serviceImpl.GetPrimes));
       serviceBinder.AddMethod(__Method_ComputeAverageStream, serviceImpl == null ? null : new grpc::ClientStreamingServerMethod<global::Calculator.AverageRequest, global::Calculator.AverageResponse>(serviceImpl.ComputeAverageStream));
       serviceBinder.AddMethod(__Method_MaximumStream, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::Calculator.MaximumRequest, global::Calculator.MaximumResponse>(serviceImpl.MaximumStream));
+      serviceBinder.AddMethod(__Method_RunDeadline, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Calculator.RunDeadlineRequest, global::Calculator.RunDeadlineResponse>(serviceImpl.RunDeadline));
     }
 
   }

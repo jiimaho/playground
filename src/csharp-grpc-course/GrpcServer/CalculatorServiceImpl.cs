@@ -6,12 +6,21 @@ namespace GrpcServer;
 
 public class CalculatorServiceImpl : Calculator.Calculator.CalculatorBase
 {
-    public override Task<Response> Add(Request request, ServerCallContext context)
+    public override async Task<Response> Add(Request request, ServerCallContext context)
     {
-        return Task.FromResult(new Response
+        await Task.Delay(6000);
+        if (context.CancellationToken.IsCancellationRequested)
+        {
+            throw new RpcException(new Status(StatusCode.Cancelled, "Someone cancelled the request"));
+        }
+        if (request.First > 10)
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Our manager decided that we can't add numbers greater than 10."));
+        }
+        return new Response
         {
             Result = request.First + request.Second
-        });
+        };
     }
 
     public override async Task GetPrimes(
@@ -52,6 +61,17 @@ public class CalculatorServiceImpl : Calculator.Calculator.CalculatorBase
             }
             await responseStream.WriteAsync(new MaximumResponse { Maximum = max });
         }
+    }
+
+
+    public override async Task<RunDeadlineResponse> RunDeadline(RunDeadlineRequest request, ServerCallContext context)
+    {
+        await Task.Delay(5000);
+        if (context.CancellationToken.IsCancellationRequested)
+        {
+            throw new RpcException(new Status(StatusCode.Cancelled, "The cancellation token is cancelled! Since i've slept fr 5 seconds the client has likely cancelled the request"));
+        }
+        return new RunDeadlineResponse { Message = "Should not get this far!!!" };
     }
 
     private static IEnumerable<int> GetPrimes(int number)

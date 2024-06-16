@@ -24,6 +24,7 @@ service Calculator {
   rpc GetPrimes(PrimeNumberRequest) returns (stream PrimeNumberResponse);
   rpc ComputeAverageStream(stream AverageRequest) returns (AverageResponse);
   rpc MaximumStream(stream MaximumRequest) returns (stream MaximumResponse);
+  rpc RunDeadline(RunDeadlineRequest) returns (RunDeadlineResponse);
 }
 
 message MaximumRequest {
@@ -40,4 +41,11 @@ message AverageRequest {
 
 message AverageResponse {
   double average = 1;
+}
+
+message RunDeadlineRequest {
+}
+
+message RunDeadlineResponse {
+  string message = 1;
 }
