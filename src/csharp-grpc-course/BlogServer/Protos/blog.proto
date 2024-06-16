@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+message Blog {
+  string id = 1;
+  string author = 2;
+  string title = 3;
+  string content = 4;
+}
+
+message CreateBlogRequest {
+  Blog blog = 1; // will not contain an id
+}
+
+message CreateBlogResponse {
+  Blog blog = 1; // will contain the id
+}
+
+service BlogService {
+  rpc CreateBlog(CreateBlogRequest) returns (CreateBlogResponse);
+  rpc ReadBlog(ReadBlogRequest) returns (ReadBlogResponse);
+  rpc UpdateBlog(UpdateBlogRequest) returns (UpdateBlogResponse);
+  rpc DeleteBlog(DeleteBlogRequest) returns (DeleteBlogResponse);
+  rpc ListBlog(Empty) returns (ListBlogResponse);
+}
+
+message Empty {
+}
+
+message ListBlogResponse {
+  repeated Blog blog = 1;
+} 
+
+message DeleteBlogRequest {
+  string id = 1;
+}
+
+message DeleteBlogResponse {
+  string id = 1;
+}
+
+message UpdateBlogRequest {
+  Blog blog = 1;
+}
+
+message UpdateBlogResponse {
+  Blog blog = 1;
+}
+
+message ReadBlogRequest {
+  string id = 1;
+}
+
+message ReadBlogResponse {
+  Blog blog = 1;
+}

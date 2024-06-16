@@ -17,4 +17,31 @@ message CreateBlogResponse {
 
 service BlogService {
   rpc CreateBlog(CreateBlogRequest) returns (CreateBlogResponse);
+  rpc ReadBlog(ReadBlogRequest) returns (ReadBlogResponse);
+  rpc UpdateBlog(UpdateBlogRequest) returns (UpdateBlogResponse);
+  rpc DeleteBlog(DeleteBlogRequest) returns (DeleteBlogResponse);
+}
+
+message DeleteBlogRequest {
+  string id = 1;
+}
+
+message DeleteBlogResponse {
+  string id = 1;
+}
+
+message UpdateBlogRequest {
+  Blog blog = 1;
+}
+
+message UpdateBlogResponse {
+  Blog blog = 1;
+}
+
+message ReadBlogRequest {
+  string id = 1;
+}
+
+message ReadBlogResponse {
+  Blog blog = 1;
 }
