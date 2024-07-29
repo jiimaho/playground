@@ -12,7 +12,7 @@
         <PackageReference Include="HotChocolate.AspNetCore" Version="13.9.0" />
         <PackageReference Include="HotChocolate.Data" Version="13.9.0" />
         <PackageReference Include="HotChocolate.Types" Version="13.9.0" />
-        <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     </ItemGroup>
 

@@ -14,7 +14,7 @@ public static class ApplicationExtensions
     public static WebApplicationBuilder AddApplicationServices(this WebApplicationBuilder builder)
     {
         builder.AddServiceDefaults();
-        builder.AddRedis("cache");
+        builder.AddRedisClient("cache");
 
         builder.Services
             .AddOpenTelemetry()

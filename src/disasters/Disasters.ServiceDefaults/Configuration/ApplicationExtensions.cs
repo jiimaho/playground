@@ -26,7 +26,7 @@ public static class ApplicationExtensions
             http.AddStandardResilienceHandler();
 
             // Turn on service discovery by default
-            http.UseServiceDiscovery();
+            http.AddServiceDiscovery();
         });
 
         builder.Services.AddSingleton(TimeProvider.System);

@@ -8,7 +8,7 @@ var redis = builder.AddRedis("cache");
 var disastersEndpoint = builder.AddProject<Projects.Disasters_Api>("backend")
     .WithReference(redis)
     .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Production")
-    .WithHttpEndpoint(name: "backend-two", hostPort: 8080)
+    .WithHttpEndpoint(name: "backend-two", port: 8080)
     .GetEndpoint("backend-two");
 
 builder.AddProject<Projects.Disasters_GraphQL>("graphql")
