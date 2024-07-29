@@ -1,0 +1,11 @@
+@Orleans.ChatClient_HostAddress = http://localhost:5084
+
+POST {{Orleans.ChatClient_HostAddress}}/rooms/first
+Accept: application/json
+Content-Type: application/json
+
+{
+  "message": "Hello, World!"
+}
+
+###
