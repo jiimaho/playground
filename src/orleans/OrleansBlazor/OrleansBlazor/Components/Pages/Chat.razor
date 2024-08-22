@@ -2,7 +2,14 @@
 
 <h3>Chat</h3>
 
+<ul>
+    @foreach (var message in Messages)
+    {
+        <li>@message</li>
+    }
+</ul>
+
 @code {
     
-    public List<string> Messages { get; set; } = new List<string>();
+    public List<string> Messages { get; set; } = new List<string> { "Hello", "World" };
 }
