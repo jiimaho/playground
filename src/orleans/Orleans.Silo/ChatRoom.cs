@@ -1,30 +1,30 @@
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using JetBrains.Annotations;
+using Orleans.Runtime;
 using Orleans.Utilities;
 
 namespace Orleans.Silo;
 
-[Alias("IChatRoom")]
-public interface IChatRoom : IGrainWithStringKey
+[UsedImplicitly]
+public class ChatRoom : Grain, IChatRoom
 {
-    [Alias("PostMessage")]
-    Task PostMessage(ChatMessage chatMessage);
-    [Alias("Join")]
-    Task<ReadOnlyCollection<ChatMessage>> Join(IChatRoomObserver observer);
-    [Alias("Leave")]
-    Task Leave(IChatRoomObserver observer);
+    private readonly IPersistentState<ChatRoomState> _state;
+    private readonly ObserverManager<IChatRoomObserver> _observers;
 
-    Task<ImmutableArray<ChatMessage>> GetHistory();
-}
+    // ReSharper disable once ConvertToPrimaryConstructor
+    public ChatRoom(
+        ILogger<ChatRoom> logger,
+        [PersistentState("chatRoom", "memory")] IPersistentState<ChatRoomState> state)
+    {
+        _state = state;
+        _observers = new ObserverManager<IChatRoomObserver>(TimeSpan.FromHours(1), logger);
+    }
 
-public class ChatRoom(ILogger<ChatRoom> logger) : Grain,IChatRoom
-{
-    private readonly Collection<ChatMessage> _history = [];
-    private readonly ObserverManager<IChatRoomObserver> _observers = new(TimeSpan.FromMinutes(5), logger);
-    
     public async Task PostMessage(ChatMessage chatMessage)
     {
-        _history.Add(chatMessage);
+        _state.State.History.Add(chatMessage);
+        await _state.WriteStateAsync();
         Console.WriteLine($"{nameof(ChatRoom)} is notifying all observers of the message: {chatMessage}");   
         await _observers.Notify(x => x.ReceiveMessage(chatMessage));
     }
@@ -32,7 +32,7 @@ public class ChatRoom(ILogger<ChatRoom> logger) : Grain,IChatRoom
     public Task<ReadOnlyCollection<ChatMessage>> Join(IChatRoomObserver observer)
     {
         _observers.Subscribe(observer, observer);
-        return Task.FromResult(_history.AsReadOnly());
+        return Task.FromResult(new ReadOnlyCollection<ChatMessage>(_state.State.History));
     }
 
     public Task Leave(IChatRoomObserver observer)
@@ -43,16 +43,7 @@ public class ChatRoom(ILogger<ChatRoom> logger) : Grain,IChatRoom
 
     public Task<ImmutableArray<ChatMessage>> GetHistory()
     {
-        return Task.FromResult(_history.Select(m => m).ToImmutableArray());
+        var history = ImmutableArray<ChatMessage>.Empty.AddRange(_state.State.History);
+        return Task.FromResult(history);
     }
-}
-
-[Alias("ChatMessage")]
-[GenerateSerializer]
-public record ChatMessage(string User, string Message)
-{
-    [Id(0)]
-    public DateTimeOffset Timestamp { get; } = DateTimeOffset.Now;
-
-    public override string ToString() => $"{Timestamp:HH:mm:ss} {User}: {Message}";
 }

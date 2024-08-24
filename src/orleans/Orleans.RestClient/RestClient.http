@@ -15,7 +15,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "message": "Something else"
+  "message": "Bottom!"
 }
 
 ###

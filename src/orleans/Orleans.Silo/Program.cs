@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseOrleans((ctx, siloBuilder) =>
 {
     siloBuilder.UseLocalhostClustering();
+    siloBuilder.AddMemoryGrainStorage("memory");
     siloBuilder.Services.AddLogging();
 });
 

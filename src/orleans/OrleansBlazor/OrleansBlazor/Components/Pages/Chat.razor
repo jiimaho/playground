@@ -4,13 +4,13 @@
 
 <h1>Chat</h1>
 
+<div style="overflow-y: scroll; height: 200px;">
+    @foreach (var message in Messages)
+    {
+        <p>@message.ToString()</p>
+    }
+</div>
+
 <input @bind="@Username" />
 <input @bind="@Message" />
 <button @onclick="SendMessage">Send Message</button>
-
-<ul>
-    @foreach (var message in Messages)
-    {
-        <li>@message.ToString()</li>
-    }
-</ul>
