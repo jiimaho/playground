@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Orleans;
+using Orleans.Configuration;
 using Orleans.Hosting;
 using Orleans.Silo;
 
@@ -12,7 +13,16 @@ builder.Services.AddSwaggerGen();
 
 builder.Host.UseOrleansClient((context, clientBuilder) =>
 {
-    clientBuilder.UseLocalhostClustering();
+    clientBuilder.UseDynamoDBClustering(options =>
+    {
+        options.Service = "eu-west-1";
+    });
+    clientBuilder.Configure<ClusterOptions>(options =>
+    {
+        options.ClusterId = "blazor-cluster";
+        options.ServiceId = $"service-number-{Environment.GetEnvironmentVariable("SERIVCE_NUMBER")}";
+    });
+
 });
 
 var app = builder.Build();
