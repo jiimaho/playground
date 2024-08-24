@@ -65,7 +65,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "orleans", "orleans", "{0B07
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.Silo", "src\orleans\Orleans.Silo\Orleans.Silo.csproj", "{7424A42B-28C6-4875-9F4B-A53313054DCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.WebClient", "src\orleans\Orleans.WebClient\Orleans.WebClient.csproj", "{DDD6DFE5-EBDD-47B6-A12C-EABF6F6348EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.RestClient", "src\orleans\Orleans.RestClient\Orleans.RestClient.csproj", "{DDD6DFE5-EBDD-47B6-A12C-EABF6F6348EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.ConsoleClient", "src\orleans\Orleans.ConsoleClient\Orleans.ConsoleClient.csproj", "{E3171ADD-2BD6-4E4A-AFFF-1795342B64C8}"
 EndProject

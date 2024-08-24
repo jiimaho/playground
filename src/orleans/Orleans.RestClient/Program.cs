@@ -26,10 +26,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("rooms/{id}/messages", async (IClusterClient clusterClient, ChatMessageRequest reqeust) =>
+app.MapPost("rooms/{id}/messages", async (IClusterClient clusterClient, [FromRoute] string id, ChatMessageRequest request) =>
     {
-        var chatRoom = clusterClient.GetGrain<IChatRoom>(reqeust.id);
-        await chatRoom.PostMessage(new ChatMessage("Anon", reqeust.Message));
+        var chatRoom = clusterClient.GetGrain<IChatRoom>(id);
+        var chatMessage = new ChatMessage("RestClient", request.Message);
+        await chatRoom.PostMessage(chatMessage);
         return Results.Ok();
     })
     .WithName("PostMessage")
@@ -37,4 +38,4 @@ app.MapPost("rooms/{id}/messages", async (IClusterClient clusterClient, ChatMess
 
 app.Run();
 
-record ChatMessageRequest([FromQuery] string id, [FromBody] string Message);
+record ChatMessageRequest([FromBody] string Message);

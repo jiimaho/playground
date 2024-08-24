@@ -1,15 +1,16 @@
 @page "/chat"
+@rendermode InteractiveServer
+@inject IClusterClient ClusterClient
 
-<h3>Chat</h3>
+<h1>Chat</h1>
+
+<input @bind="@Username" />
+<input @bind="@Message" />
+<button @onclick="SendMessage">Send Message</button>
 
 <ul>
     @foreach (var message in Messages)
     {
-        <li>@message</li>
+        <li>@message.ToString()</li>
     }
 </ul>
-
-@code {
-    
-    public List<string> Messages { get; set; } = new List<string> { "Hello", "World" };
-}

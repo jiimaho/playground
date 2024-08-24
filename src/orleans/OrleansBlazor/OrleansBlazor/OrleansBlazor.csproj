@@ -8,6 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" />
+        <PackageReference Include="Microsoft.Orleans.Client" Version="8.1.0" />
+        <ProjectReference Include="..\..\Orleans.Silo\Orleans.Silo.csproj" />
         <ProjectReference Include="..\OrleansBlazor.Client\OrleansBlazor.Client.csproj"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.3"/>
     </ItemGroup>

@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using Orleans.Utilities;
 
@@ -12,6 +13,8 @@ public interface IChatRoom : IGrainWithStringKey
     Task<ReadOnlyCollection<ChatMessage>> Join(IChatRoomObserver observer);
     [Alias("Leave")]
     Task Leave(IChatRoomObserver observer);
+
+    Task<ImmutableArray<ChatMessage>> GetHistory();
 }
 
 public class ChatRoom(ILogger<ChatRoom> logger) : Grain,IChatRoom
@@ -37,8 +40,19 @@ public class ChatRoom(ILogger<ChatRoom> logger) : Grain,IChatRoom
         _observers.Unsubscribe(observer);
         return Task.CompletedTask;
     }
+
+    public Task<ImmutableArray<ChatMessage>> GetHistory()
+    {
+        return Task.FromResult(_history.Select(m => m).ToImmutableArray());
+    }
 }
 
 [Alias("ChatMessage")]
 [GenerateSerializer]
-public record ChatMessage(string User, string Message);
+public record ChatMessage(string User, string Message)
+{
+    [Id(0)]
+    public DateTimeOffset Timestamp { get; } = DateTimeOffset.Now;
+
+    public override string ToString() => $"{Timestamp:HH:mm:ss} {User}: {Message}";
+}

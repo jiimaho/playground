@@ -1,12 +1,15 @@
-using OrleansBlazor.Client.Pages;
 using OrleansBlazor.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddOrleansClient(clientBuilder =>
+{
+    clientBuilder.UseLocalhostClustering();
+});
 
 var app = builder.Build();
 
