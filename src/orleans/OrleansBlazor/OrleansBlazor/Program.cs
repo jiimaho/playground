@@ -1,3 +1,4 @@
+using Orleans.Configuration;
 using OrleansBlazor.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,15 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOrleansClient(clientBuilder =>
 {
-    clientBuilder.UseLocalhostClustering();
+    clientBuilder.UseDynamoDBClustering(options =>
+    {
+        options.Service = "eu-west-1";
+    });
+    clientBuilder.Configure<ClusterOptions>(options =>
+    {
+        options.ClusterId = "blazor-cluster";
+        options.ServiceId = "blazor-service";
+    });
 });
 
 var app = builder.Build();
