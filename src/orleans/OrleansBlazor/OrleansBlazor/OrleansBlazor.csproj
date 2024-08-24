@@ -21,4 +21,16 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Components\Pages\Chat.razor.cs">
+        <DependentUpon>Chat.razor</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Components\Pages\Chat.razor.css">
+        <DependentUpon>Chat.razor</DependentUpon>
+      </None>
+    </ItemGroup>
+
 </Project>

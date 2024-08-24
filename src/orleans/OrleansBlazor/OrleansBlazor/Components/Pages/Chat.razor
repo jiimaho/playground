@@ -2,14 +2,23 @@
 @rendermode InteractiveServer
 @inject IClusterClient ClusterClient
 
-<h1>Chat</h1>
+<h1>Chat @Messages.Count()</h1>
 
-<div style="overflow-y: scroll; height: 200px;">
-    @foreach (var message in Messages)
-    {
-        <p>@message.ToString()</p>
-    }
-</div>
+<!-- <div style="overflow-y: scroll; height: 200px;"> -->
+   <div class="chat-container">
+       @foreach (var message in Messages)
+       {
+           <div class="chat-message">
+               <div class="message-info">
+                   <span class="username">@message.User</span>
+                   <span class="timestamp">@message.Timestamp.ToString("h:mm tt")</span>
+               </div>
+               <div class="message-text">@message.Message</div>
+           </div>
+       }
+   </div> 
+<!-- </div> -->
+
 
 <input @bind="@Username" />
 <input @bind="@Message" />

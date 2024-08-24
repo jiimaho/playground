@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using Orleans.Silo;
 
 namespace OrleansBlazor.Components.Pages;
@@ -10,7 +9,7 @@ namespace OrleansBlazor.Components.Pages;
 public partial class Chat : ComponentBase
 {
     private IChatRoomObserver? _o;
-    protected List<string> Messages { get; } = new();
+    protected List<ChatMessage> Messages { get; } = new();
 
     public string? Message { get; set; }
     public string? Username { get; set; }
@@ -20,14 +19,14 @@ public partial class Chat : ComponentBase
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>("all");
         var observer = new ChatRoomObserver(async msg =>
         {
-            Messages.Add(msg.ToString());
+            Messages.Add(msg);
             await InvokeAsync(StateHasChanged);
             Console.WriteLine("Got msg!");
         });
         _o = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
         await chatRoomGrain.Join(_o);
         var history = await chatRoomGrain.GetHistory();
-        Messages.AddRange(history.Select(m => m.ToString()));
+        Messages.AddRange(history.ToList());
         Console.WriteLine("Got grain and running");
     }
 
