@@ -36,6 +36,11 @@ builder.Host.UseOrleans((ctx, siloBuilder) =>
     {
         options.SiloName = $"silo-number-{Environment.GetEnvironmentVariable("SILO_NUMBER")}"; 
     });
+    siloBuilder.Services.Configure<ClusterMembershipOptions>(options =>
+    {
+        options.DefunctSiloCleanupPeriod = TimeSpan.FromMinutes(1);
+        options.DefunctSiloExpiration = TimeSpan.FromMinutes(1);
+    });
     
     siloBuilder.Services.AddLogging();
 }).UseConsoleLifetime();
