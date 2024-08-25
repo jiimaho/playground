@@ -14,7 +14,26 @@
 
     private void IncrementCount()
     {
+        if (OperatingSystem.IsBrowser())
+         {
+             Console.WriteLine("Running in a Blazor WebAssembly environment.");
+         }
+         else
+         {
+             Console.WriteLine("Running in a Blazor Server environment.");
+         } 
         currentCount++;
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (OperatingSystem.IsBrowser())
+         {
+             Console.WriteLine("Running in a Blazor WebAssembly environment.");
+         }
+         else
+         {
+             Console.WriteLine("Running in a Blazor Server environment.");
+         } 
+    }
 }
