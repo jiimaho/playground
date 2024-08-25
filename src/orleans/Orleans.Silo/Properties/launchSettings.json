@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "1": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "AWS_PROFILE": "localstack",
+        "GATEWAY_PORT": "8081",
+        "SILO_PORT": "8082",
+        "SERVICE_NUMBER": "1"
+      }
+    },
+    "2": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "AWS_PROFILE": "localstack",
+        "GATEWAY_PORT": "8083",
+        "SILO_PORT": "8084",
+        "SERVICE_NUMBER": "2"
+      }
+    },
+    "3": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "AWS_PROFILE": "localstack",
+        "GATEWAY_PORT": "8085",
+        "SILO_PORT": "8086",
+        "SERVICE_NUMBER": "3"
+      }
+    }
+  }
+}
