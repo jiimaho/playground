@@ -1,6 +1,6 @@
 using Orleans.Silo;
 
-namespace OrleansBlazor.Components.Pages;
+namespace OrleansBlazor;
 
 public class ChatRoomConsoleWriter : IChatRoomObserver 
 {

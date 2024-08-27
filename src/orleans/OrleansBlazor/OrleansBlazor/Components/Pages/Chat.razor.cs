@@ -9,13 +9,23 @@ namespace OrleansBlazor.Components.Pages;
 public partial class Chat : ComponentBase
 {
     private IChatRoomObserver? _o;
-    protected List<ChatMessage> Messages { get; } = new();
+    protected List<ChatMessage> Messages { get; set; } = [];
 
     public string? Message { get; set; }
     public string? Username { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(2000);
+        if (OperatingSystem.IsBrowser())
+        {
+            Console.WriteLine("Running in a Blazor WebAssembly environment.");
+        }
+        else
+        {
+            Console.WriteLine("Running in a Blazor Server environment.");
+        }
+
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>("all");
         var observer = new ChatRoomObserver(async msg =>
         {
@@ -32,8 +42,9 @@ public partial class Chat : ComponentBase
 
     protected async Task SendMessage()
     {
-        Console.WriteLine($"Am i executed on the server or in the browser? Environment.OSVersion: {Environment.OSVersion}, Process: {Process.GetCurrentProcess().Id}");
-        if (Username is null ||  Message is null)
+        Console.WriteLine(
+            $"Am i executed on the server or in the browser? Environment.OSVersion: {Environment.OSVersion}, Process: {Process.GetCurrentProcess().Id}");
+        if (Username is null || Message is null)
             return;
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>("all");
         var chatMessage = new ChatMessage(User: Username, Message: Message);
