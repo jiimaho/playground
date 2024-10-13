@@ -1,7 +1,7 @@
 @Orleans.ChatClient_HostAddress = http://localhost:5084
 
-### Hello world
-POST {{Orleans.ChatClient_HostAddress}}/rooms/all/messages
+### Post message Hello world
+POST http://localhost:5084/rooms/all/messages
 Accept: application/json
 Content-Type: application/json
 
@@ -9,7 +9,16 @@ Content-Type: application/json
   "message": "Hello, World!"
 }
 
-### Something else
+### Post empty
+POST http://localhost:5084/rooms/all/messages
+Accept: application/json
+Content-Type: application/json
+
+{
+  "message": null
+}
+
+### Post Something else
 POST {{Orleans.ChatClient_HostAddress}}/rooms/all/messages
 Accept: application/json
 Content-Type: application/json

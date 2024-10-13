@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3"/>
         <PackageReference Include="Microsoft.Orleans.Client" Version="8.1.0" />
         <PackageReference Include="Microsoft.Orleans.Clustering.DynamoDB" Version="8.2.0" />
