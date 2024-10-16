@@ -5,14 +5,13 @@ using Orleans.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseOrleans((ctx, siloBuilder) =>
+builder.Host.UseOrleans((_, siloBuilder) =>
 {
     siloBuilder.UseDynamoDBClustering(options =>
     {
         options.CreateIfNotExists = true;
         options.Service = "eu-west-1";
     });
-    // siloBuilder.UseLocalhostClustering();
     siloBuilder.AddDynamoDBGrainStorage("blazorStore", options =>
     {
         options.CreateIfNotExists = true;
