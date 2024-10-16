@@ -7,12 +7,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddOrleansClient(clientBuilder =>
+builder.Host.UseOrleansClient((ctx, clientBuilder) =>
 {
-    clientBuilder.UseDynamoDBClustering(options =>
-    {
-        options.Service = "eu-west-1";
-    });
+    clientBuilder.UseDynamoDBClustering(options => { options.Service = "eu-west-1"; });
     clientBuilder.Configure<ClusterOptions>(options =>
     {
         options.ClusterId = "blazor-cluster";
