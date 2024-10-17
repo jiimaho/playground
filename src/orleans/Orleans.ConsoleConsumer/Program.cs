@@ -3,13 +3,23 @@
 using ConsoleApp1;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Orleans.Configuration;
 
 var host = new HostApplicationBuilder();
 
-host.Services.AddOrleansClient(builder =>
-{
-    builder.UseLocalhostClustering();
+Environment.SetEnvironmentVariable("AWS_PROFILE", "localstack");
 
+host.UseOrleansClient(builder =>
+{
+    builder.UseDynamoDBClustering(options =>
+    {
+        options.Service = "eu-west-1";
+    });
+    builder.Configure<ClusterOptions>(options =>
+    {
+        options.ClusterId = "blazor-cluster";
+        options.ServiceId = "blazor-service";
+    });
 });
 
 host.Services.AddHostedService<ChatBackgroundService>();
