@@ -67,7 +67,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.Silo", "src\orleans
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.RestClient", "src\orleans\Orleans.RestClient\Orleans.RestClient.csproj", "{DDD6DFE5-EBDD-47B6-A12C-EABF6F6348EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.ConsoleClient", "src\orleans\Orleans.ConsoleClient\Orleans.ConsoleClient.csproj", "{E3171ADD-2BD6-4E4A-AFFF-1795342B64C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.ConsoleConsumer", "src\orleans\Orleans.ConsoleConsumer\Orleans.ConsoleConsumer.csproj", "{E3171ADD-2BD6-4E4A-AFFF-1795342B64C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrleansBlazor", "src\orleans\OrleansBlazor\OrleansBlazor\OrleansBlazor.csproj", "{A9CF5FAE-D4B6-4021-93AE-061D4670FC0A}"
 EndProject
