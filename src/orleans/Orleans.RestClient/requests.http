@@ -18,13 +18,13 @@ Content-Type: application/json
   "message": null
 }
 
-### Post Something else
+### Post as moderator
 POST {{Orleans.ChatClient_HostAddress}}/rooms/all/messages
 Accept: application/json
 Content-Type: application/json
 
 {
-  "message": "Bottom!"
+  "message": "Moderator here"
 }
 
 ###
