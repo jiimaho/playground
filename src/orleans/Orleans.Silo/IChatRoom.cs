@@ -20,4 +20,7 @@ public interface IChatRoom : IGrainWithStringKey
     
     [Alias("GetPeopleOnline")]
     Task<ImmutableArray<string>> GetUsersOnline();
+
+    [Alias("Clear")]
+    Task Clear();
 }

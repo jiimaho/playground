@@ -79,4 +79,10 @@ public class ChatRoom : Grain, IChatRoom
         var users = ImmutableArray<string>.Empty.AddRange(_volatileState.LastMessageSentByUser.Select(x => x.Key));
         return Task.FromResult(users);
     }
+
+    public Task Clear()
+    {
+        _state.State.History.Clear();
+        return _state.WriteStateAsync();
+    }
 }

@@ -48,6 +48,13 @@ public partial class Chat : ComponentBase
         Messages.AddRange(history.ToList());
         Console.WriteLine("Got grain and running");
     }
+    
+    protected async Task Clear()
+    {
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>("all");
+        await chatRoomGrain.Clear();
+        Messages.Clear();
+    }
 
     protected async Task SendMessage()
     {
