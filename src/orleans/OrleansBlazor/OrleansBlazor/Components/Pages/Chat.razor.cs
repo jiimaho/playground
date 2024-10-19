@@ -36,6 +36,11 @@ public partial class Chat : ComponentBase
             UsersOnline.AddRange(usersOnline);
             await InvokeAsync(StateHasChanged);
             Console.WriteLine("Got msg!");
+        }, async users => {
+            UsersOnline.Clear();
+            UsersOnline.AddRange(users);
+            await InvokeAsync(StateHasChanged);
+            Console.WriteLine("Got users!");
         });
         _o = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
         await chatRoomGrain.Join(_o);

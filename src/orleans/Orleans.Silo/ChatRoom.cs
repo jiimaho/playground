@@ -30,12 +30,19 @@ public class ChatRoom : Grain, IChatRoom
     
     private Task UpdateUsersOnline(ChatRoomVolatileState state)
     {
+        var changed = false;
         foreach (var user in _volatileState.LastMessageSentByUser)
         {
             if (user.Value < DateTimeOffset.UtcNow.AddMinutes(-1))
             {
+                changed = true;
                 _volatileState.LastMessageSentByUser.Remove(user.Key);
             }
+        }
+        
+        if (changed)
+        {
+            return _observers.Notify(x => x.UsersOnlineChanged(_volatileState.LastMessageSentByUser.Keys.ToImmutableArray()));
         }
         return Task.CompletedTask;
     }
