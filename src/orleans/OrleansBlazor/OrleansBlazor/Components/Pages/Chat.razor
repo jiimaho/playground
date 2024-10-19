@@ -10,6 +10,14 @@
    {
         <ChatMessageComponent Message="@message" />
    }
+</div>
+
+<div class="users-online">
+    <h3>Users Online</h3>
+    @foreach (var user in UsersOnline)
+    {
+        <p>@user</p>
+    }
 </div> 
 
 <input @bind="@Username" />

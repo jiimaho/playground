@@ -17,4 +17,7 @@ public interface IChatRoom : IGrainWithStringKey
 
     [Alias("GetHistory")]
     Task<ImmutableArray<ChatMessage>> GetHistory();
+    
+    [Alias("GetPeopleOnline")]
+    Task<ImmutableArray<string>> GetUsersOnline();
 }

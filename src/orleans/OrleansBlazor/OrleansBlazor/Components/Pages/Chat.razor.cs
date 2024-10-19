@@ -11,6 +11,7 @@ public partial class Chat : ComponentBase
     private IChatRoomObserver? _o;
     protected List<ChatMessage> Messages { get; set; } = [];
 
+    public List<string> UsersOnline { get; set; } = [];
     public string? Message { get; set; }
     public string? Username { get; set; }
 
@@ -30,6 +31,9 @@ public partial class Chat : ComponentBase
         var observer = new ChatRoomObserver(async msg =>
         {
             Messages.Add(msg);
+            var usersOnline = await chatRoomGrain.GetUsersOnline();
+            UsersOnline.Clear();
+            UsersOnline.AddRange(usersOnline);
             await InvokeAsync(StateHasChanged);
             Console.WriteLine("Got msg!");
         });
