@@ -8,6 +8,9 @@ namespace OrleansBlazor.Components.Pages;
 [UsedImplicitly]
 public partial class Chat : ComponentBase
 {
+    [Inject]
+    private IClusterClient ClusterClient { get; init; } = null!;
+    
     private IChatRoomObserver? _o;
     protected List<ChatMessage> Messages { get; set; } = [];
 
