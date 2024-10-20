@@ -15,8 +15,8 @@ public partial class Chat : ComponentBase
     
     private IChatRoomObserver? _chatRoomObserver;
     
-    private List<ChatMessage> Messages { get; set; } = [];
-    public List<string> UsersOnline { get; set; } = [];
+    private List<Orleans.Silo.ChatMessage> Messages { get; set; } = [];
+    // public List<string> UsersOnline { get; set; } = [];
     private string? Message { get; set; }
     private string? Username { get; set; }
 
@@ -32,20 +32,12 @@ public partial class Chat : ComponentBase
         }
 
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
-        var observer = new ChatRoomObserver(async msg =>
+        var observer = new ChatRoomObserver(msg =>
         {
             Messages.Add(msg);
-            var usersOnline = await chatRoomGrain.GetUsersOnline();
-            UsersOnline.Clear();
-            UsersOnline.AddRange(usersOnline);
-            await InvokeAsync(StateHasChanged);
             Console.WriteLine("Got msg!");
-        }, async users => {
-            UsersOnline.Clear();
-            UsersOnline.AddRange(users);
-            await InvokeAsync(StateHasChanged);
-            Console.WriteLine("Got users!");
-        });
+            return Task.CompletedTask;
+        }, _ => Task.CompletedTask);
         _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
         await chatRoomGrain.Join(_chatRoomObserver);
         var history = await chatRoomGrain.GetHistory();
@@ -67,7 +59,7 @@ public partial class Chat : ComponentBase
         if (Username is null || Message is null)
             return;
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
-        var chatMessage = new ChatMessage(User: Username, Message: Message);
+        var chatMessage = new Orleans.Silo.ChatMessage(User: Username, Message: Message);
         await chatRoomGrain.PostMessage(chatMessage);
     }
 }

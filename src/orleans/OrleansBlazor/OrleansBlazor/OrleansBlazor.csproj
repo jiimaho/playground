@@ -26,8 +26,8 @@
       <Compile Update="Components\Pages\Chat.razor.cs">
         <DependentUpon>Chat.razor</DependentUpon>
       </Compile>
-      <Compile Update="Components\Pages\ChatMessageComponent.razor.cs">
-        <DependentUpon>ChatMessageComponent.razor</DependentUpon>
+      <Compile Update="Components\Pages\ChatMessage.razor.cs">
+        <DependentUpon>ChatMessage.razor</DependentUpon>
       </Compile>
       <Compile Update="Components\Pages\UsersOnline.razor.cs">
         <DependentUpon>UsersOnline.razor</DependentUpon>

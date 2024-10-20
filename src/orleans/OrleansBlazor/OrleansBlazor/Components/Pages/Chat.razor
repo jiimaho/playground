@@ -1,17 +1,16 @@
 @page "/chat"
 @rendermode InteractiveServer
 
+<UsersOnline ChatRoomId="@ChatRoomId" />
+
 <h1>Chat @Messages.Count()</h1>
 <button @onclick="Clear">Clear</button>
 <div class="chat-container">
    @foreach (var message in Messages)
    {
-        <ChatMessageComponent Message="@message" />
+        <ChatMessage Message="@message" />
    }
 </div>
-
-<UsersOnline AllUsersOnline="UsersOnline"/>
-
 
 <input @bind="@Username" />
 <input @bind="@Message" />
