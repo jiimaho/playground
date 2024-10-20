@@ -22,7 +22,6 @@ public partial class Chat : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(2000);
         if (OperatingSystem.IsBrowser())
         {
             Console.WriteLine("Running in a Blazor WebAssembly environment.");
