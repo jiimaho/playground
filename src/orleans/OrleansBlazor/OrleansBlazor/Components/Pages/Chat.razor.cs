@@ -11,12 +11,14 @@ public partial class Chat : ComponentBase
     [Inject]
     private IClusterClient ClusterClient { get; init; } = null!;
     
-    private IChatRoomObserver? _o;
-    protected List<ChatMessage> Messages { get; set; } = [];
-
+    private const string ChatRoomId = "all";
+    
+    private IChatRoomObserver? _chatRoomObserver;
+    
+    private List<ChatMessage> Messages { get; set; } = [];
     public List<string> UsersOnline { get; set; } = [];
-    public string? Message { get; set; }
-    public string? Username { get; set; }
+    private string? Message { get; set; }
+    private string? Username { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -30,7 +32,7 @@ public partial class Chat : ComponentBase
             Console.WriteLine("Running in a Blazor Server environment.");
         }
 
-        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>("all");
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         var observer = new ChatRoomObserver(async msg =>
         {
             Messages.Add(msg);
@@ -45,8 +47,8 @@ public partial class Chat : ComponentBase
             await InvokeAsync(StateHasChanged);
             Console.WriteLine("Got users!");
         });
-        _o = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
-        await chatRoomGrain.Join(_o);
+        _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
+        await chatRoomGrain.Join(_chatRoomObserver);
         var history = await chatRoomGrain.GetHistory();
         Messages.AddRange(history.ToList());
         Console.WriteLine("Got grain and running");
@@ -54,7 +56,7 @@ public partial class Chat : ComponentBase
     
     protected async Task Clear()
     {
-        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>("all");
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         await chatRoomGrain.Clear();
         Messages.Clear();
     }
@@ -65,7 +67,7 @@ public partial class Chat : ComponentBase
             $"Am i executed on the server or in the browser? Environment.OSVersion: {Environment.OSVersion}, Process: {Process.GetCurrentProcess().Id}");
         if (Username is null || Message is null)
             return;
-        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>("all");
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         var chatMessage = new ChatMessage(User: Username, Message: Message);
         await chatRoomGrain.PostMessage(chatMessage);
     }
