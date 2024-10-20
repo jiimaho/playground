@@ -12,13 +12,8 @@
    }
 </div>
 
-<div class="users-online">
-    <h3>Users Online</h3>
-    @foreach (var user in UsersOnline)
-    {
-        <p>@user</p>
-    }
-</div> 
+<UsersOnline AllUsersOnline="UsersOnline"/>
+
 
 <input @bind="@Username" />
 <input @bind="@Message" />
