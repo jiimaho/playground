@@ -51,9 +51,9 @@ public class ChatRoom : Grain, IChatRoom
     public async Task PostMessage(ChatMessage chatMessage)
     {
         _state.State.History.Add(chatMessage);
-        _volatileState.LastMessageSentByUser[chatMessage.User] = DateTimeOffset.UtcNow;
+        _volatileState.LastMessageSentByUser[chatMessage.Username] = DateTimeOffset.UtcNow;
         await _state.WriteStateAsync();
-        Console.WriteLine($"{nameof(ChatRoom)} is notifying all observers of the message: {chatMessage}");   
+        Console.WriteLine($"{nameof(ChatRoom)} is notifying all observers of the message: {chatMessage}");
         await _observers.Notify(x => x.ReceiveMessage(chatMessage));
     }
 

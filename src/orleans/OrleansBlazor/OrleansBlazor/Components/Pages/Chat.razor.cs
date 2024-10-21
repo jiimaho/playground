@@ -2,6 +2,7 @@ using System.Diagnostics;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
 using Orleans.Silo;
+using Orleans.Silo.Primitives;
 
 namespace OrleansBlazor.Components.Pages;
 
@@ -15,7 +16,7 @@ public partial class Chat : ComponentBase
     
     private IChatRoomObserver? _chatRoomObserver;
     
-    private List<Orleans.Silo.ChatMessage> Messages { get; set; } = [];
+    private List<Orleans.Silo.Primitives.ChatMessage> Messages { get; set; } = [];
     // public List<string> UsersOnline { get; set; } = [];
     private string? Message { get; set; }
     private string? Username { get; set; }
@@ -59,7 +60,7 @@ public partial class Chat : ComponentBase
         if (Username is null || Message is null)
             return;
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
-        var chatMessage = new Orleans.Silo.ChatMessage(User: Username, Message: Message);
+        var chatMessage = new Orleans.Silo.Primitives.ChatMessage(new Username(Username), Message);
         await chatRoomGrain.PostMessage(chatMessage);
     }
 }

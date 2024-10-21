@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Orleans.ChatClient;
 using Orleans.Configuration;
 using Orleans.Silo;
+using Orleans.Silo.Primitives;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,7 @@ app.MapPost(
             return Results.BadRequest(validationResult.Errors);
         }
         var chatRoom = clusterClient.GetGrain<IChatRoom>(id);
-        var chatMessage = new ChatMessage("RestClient", request.Message);
+        var chatMessage = new ChatMessage(new Username("RestClient"), request.Message);
         await chatRoom.PostMessage(chatMessage);
         return Results.Ok();
     })
