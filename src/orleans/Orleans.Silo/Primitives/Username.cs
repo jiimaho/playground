@@ -1,5 +1,6 @@
 namespace Orleans.Silo.Primitives;
 
+[Alias("Username")]
 [GenerateSerializer]
 public class Username : ValueObject
 {
