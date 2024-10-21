@@ -36,7 +36,7 @@ public partial class Chat : ComponentBase
         {
             Messages.Add(msg);
             Console.WriteLine("Got msg!");
-            return Task.CompletedTask;
+            return InvokeAsync(StateHasChanged);
         }, _ => Task.CompletedTask);
         _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
         await chatRoomGrain.Join(_chatRoomObserver);
