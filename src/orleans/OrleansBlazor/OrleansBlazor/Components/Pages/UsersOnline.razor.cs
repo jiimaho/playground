@@ -7,11 +7,13 @@ namespace OrleansBlazor.Components.Pages;
 
 public partial class UsersOnline : ComponentBase
 {
-    [Parameter, Required] public string ChatRoomId { get; set; } = null!;
+    [Parameter, Required]
+    public string ChatRoomId { get; set; } = null!;
 
-    [Inject] private IClusterClient ClusterClient { get; init; } = null!;
+    [Inject]
+    private IClusterClient ClusterClient { get; init; } = null!;
 
-    private List<Username> AllUsersOnline { get; set; } = new();
+    private List<Username> AllUsersOnline { get; set; } = [];
 
     private IChatRoomObserver _chatRoomObserver = null!;
 

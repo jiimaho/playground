@@ -18,7 +18,8 @@ public class ChatRoom : Grain, IChatRoom
     // ReSharper disable once ConvertToPrimaryConstructor
     public ChatRoom(
         ILogger<ChatRoom> logger,
-        [PersistentState("chatRoom", "blazorStore")] IPersistentState<ChatRoomState> state)
+        [PersistentState("chatRoom", "blazorStore")]
+        IPersistentState<ChatRoomState> state)
     {
         _state = state;
         _observers = new ObserverManager<IChatRoomObserver>(TimeSpan.FromHours(1), logger);
