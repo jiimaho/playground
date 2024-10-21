@@ -3,6 +3,7 @@ namespace Orleans.Silo.Primitives;
 [GenerateSerializer]
 public class Username : ValueObject
 {
+    [Id(0)]
     public string Value { get; }
 
     public Username(string value)
