@@ -1,5 +1,6 @@
 namespace Orleans.Silo.Primitives;
 
+[GenerateSerializer]
 public class Username : ValueObject
 {
     public string Value { get; }
@@ -14,4 +15,6 @@ public class Username : ValueObject
     {
         yield return Value;
     }
+
+    public override string ToString() => Value;
 }

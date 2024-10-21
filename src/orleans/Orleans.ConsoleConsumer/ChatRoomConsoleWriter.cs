@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using Orleans.Silo;
+using Orleans.Silo.Primitives;
 
 namespace Orleans.ConsoleConsumer;
 
@@ -17,7 +18,7 @@ public class ChatRoomConsoleWriter : IChatRoomObserver
         return Task.CompletedTask;
     }
     
-    public Task UsersOnlineChanged(ImmutableArray<string> usersOnline)
+    public Task UsersOnlineChanged(ImmutableArray<Username> usersOnline)
     {
         Console.WriteLine("People online: " + string.Join(", ", usersOnline)); 
         return Task.CompletedTask;

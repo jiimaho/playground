@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using Orleans.Silo.Primitives;
 
 namespace Orleans.Silo;
 
@@ -19,7 +20,7 @@ public interface IChatRoom : IGrainWithStringKey
     Task<ImmutableArray<ChatMessage>> GetHistory();
     
     [Alias("GetPeopleOnline")]
-    Task<ImmutableArray<string>> GetUsersOnline();
+    Task<ImmutableArray<Username>> GetUsersOnline();
 
     [Alias("Clear")]
     Task Clear();

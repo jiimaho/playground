@@ -1,17 +1,18 @@
 using System.Collections.Immutable;
 using Orleans.Silo;
+using Orleans.Silo.Primitives;
 
 namespace OrleansBlazor.Components;
 
 public class ChatRoomObserver : IChatRoomObserver
 {
     private readonly Func<ChatMessage, Task> _invoker;
-    private readonly Func<ImmutableArray<string>, Task> _usersOnlineChangedInvoker;
+    private readonly Func<ImmutableArray<Username>, Task> _usersOnlineChangedInvoker;
     
     // ReSharper disable once ConvertToPrimaryConstructor
     public ChatRoomObserver(
         Func<ChatMessage, Task> invoker,
-        Func<ImmutableArray<string>, Task> usersOnlineChangedInvoker)
+        Func<ImmutableArray<Username>, Task> usersOnlineChangedInvoker)
     {
         _invoker = invoker;
         _usersOnlineChangedInvoker = usersOnlineChangedInvoker;
@@ -19,6 +20,6 @@ public class ChatRoomObserver : IChatRoomObserver
 
     public Task ReceiveMessage(ChatMessage message) => _invoker(message);
 
-    public Task UsersOnlineChanged(ImmutableArray<string> usersOnline) =>
+    public Task UsersOnlineChanged(ImmutableArray<Username> usersOnline) =>
         _usersOnlineChangedInvoker.Invoke(usersOnline);
 }

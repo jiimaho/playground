@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using JetBrains.Annotations;
 using Orleans.Runtime;
+using Orleans.Silo.Primitives;
 using Orleans.Utilities;
 
 namespace Orleans.Silo;
@@ -42,7 +43,7 @@ public class ChatRoom : Grain, IChatRoom
         
         if (changed)
         {
-            return _observers.Notify(x => x.UsersOnlineChanged(_volatileState.LastMessageSentByUser.Keys.ToImmutableArray()));
+            return _observers.Notify(x => x.UsersOnlineChanged(_volatileState.LastMessageSentByUser.Keys.Select(a => new Username(a)).ToImmutableArray()));
         }
         return Task.CompletedTask;
     }
@@ -74,9 +75,9 @@ public class ChatRoom : Grain, IChatRoom
         return Task.FromResult(history);
     }
     
-    public Task<ImmutableArray<string>> GetUsersOnline()
+    public Task<ImmutableArray<Username>> GetUsersOnline()
     {
-        var users = ImmutableArray<string>.Empty.AddRange(_volatileState.LastMessageSentByUser.Select(x => x.Key));
+        var users = ImmutableArray<Username>.Empty.AddRange(_volatileState.LastMessageSentByUser.Select(x => new Username(x.Key)));
         return Task.FromResult(users);
     }
 

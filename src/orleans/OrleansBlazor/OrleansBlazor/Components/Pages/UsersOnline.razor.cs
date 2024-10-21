@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Components;
 using Orleans.Silo;
+using Orleans.Silo.Primitives;
 
 namespace OrleansBlazor.Components.Pages;
 
@@ -10,7 +11,7 @@ public partial class UsersOnline : ComponentBase
 
     [Inject] private IClusterClient ClusterClient { get; init; } = null!;
 
-    private List<string> AllUsersOnline { get; set; } = new();
+    private List<Username> AllUsersOnline { get; set; } = new();
 
     private IChatRoomObserver _chatRoomObserver = null!;
 
