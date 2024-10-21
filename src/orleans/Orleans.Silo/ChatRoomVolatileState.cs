@@ -1,3 +1,5 @@
+using Orleans.Silo.Primitives;
+
 namespace Orleans.Silo;
 
-public record ChatRoomVolatileState(Dictionary<string, DateTimeOffset> LastMessageSentByUser);
+public record ChatRoomVolatileState(Dictionary<Username, DateTimeOffset> LastMessageSentByUser);

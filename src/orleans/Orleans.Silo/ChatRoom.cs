@@ -12,7 +12,7 @@ public class ChatRoom : Grain, IChatRoom
 {
     private readonly IPersistentState<ChatRoomState> _state;
     private readonly ObserverManager<IChatRoomObserver> _observers;
-    
+
     private readonly ChatRoomVolatileState _volatileState = new([]);
 
     // ReSharper disable once ConvertToPrimaryConstructor
@@ -23,30 +23,6 @@ public class ChatRoom : Grain, IChatRoom
     {
         _state = state;
         _observers = new ObserverManager<IChatRoomObserver>(TimeSpan.FromHours(1), logger);
-
-        this.RegisterGrainTimer(
-            UpdateUsersOnline,
-            _volatileState,
-            new GrainTimerCreationOptions(TimeSpan.Zero, TimeSpan.FromSeconds(30)));
-    }
-    
-    private Task UpdateUsersOnline(ChatRoomVolatileState state)
-    {
-        var changed = false;
-        foreach (var user in _volatileState.LastMessageSentByUser)
-        {
-            if (user.Value < DateTimeOffset.UtcNow.AddMinutes(-1))
-            {
-                changed = true;
-                _volatileState.LastMessageSentByUser.Remove(user.Key);
-            }
-        }
-        
-        if (changed)
-        {
-            return _observers.Notify(x => x.UsersOnlineChanged(_volatileState.LastMessageSentByUser.Keys.Select(a => new Username(a)).ToImmutableArray()));
-        }
-        return Task.CompletedTask;
     }
 
     public async Task PostMessage(ChatMessage chatMessage)
@@ -75,11 +51,10 @@ public class ChatRoom : Grain, IChatRoom
         var history = ImmutableArray<ChatMessage>.Empty.AddRange(_state.State.History);
         return Task.FromResult(history);
     }
-    
-    public Task<ImmutableArray<Username>> GetUsersOnline()
+
+    public Task<Dictionary<Username, DateTimeOffset>> GetLastMessageSentByUsers()
     {
-        var users = ImmutableArray<Username>.Empty.AddRange(_volatileState.LastMessageSentByUser.Select(x => new Username(x.Key)));
-        return Task.FromResult(users);
+        return Task.FromResult(_volatileState.LastMessageSentByUser);
     }
 
     public Task Clear()

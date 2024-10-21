@@ -1,4 +1,5 @@
 using Orleans.Configuration;
+using Orleans.Silo.Configuration;
 using OrleansBlazor.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,7 @@ builder.Host.UseOrleansClient((ctx, clientBuilder) =>
         options.ClusterId = "blazor-cluster";
         options.ServiceId = "blazor-service";
     });
+    clientBuilder.Services.AddCustomSerialization();
 });
 
 var app = builder.Build();

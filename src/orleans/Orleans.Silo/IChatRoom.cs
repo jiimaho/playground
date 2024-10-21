@@ -19,8 +19,8 @@ public interface IChatRoom : IGrainWithStringKey
     [Alias("GetHistory")]
     Task<ImmutableArray<ChatMessage>> GetHistory();
     
-    [Alias("GetPeopleOnline")]
-    Task<ImmutableArray<Username>> GetUsersOnline();
+    [Alias("GetLastMessageSentByUsers")]
+    Task<Dictionary<Username, DateTimeOffset>> GetLastMessageSentByUsers();
 
     [Alias("Clear")]
     Task Clear();

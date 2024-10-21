@@ -2,6 +2,8 @@
 
 using System.Net;
 using Orleans.Configuration;
+using Orleans.Serialization;
+using Orleans.Silo.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +42,7 @@ builder.Host.UseOrleans((_, siloBuilder) =>
         options.DefunctSiloCleanupPeriod = TimeSpan.FromMinutes(1);
         options.DefunctSiloExpiration = TimeSpan.FromMinutes(1);
     });
+    siloBuilder.Services.AddCustomSerialization();
     
     siloBuilder.Services.AddLogging();
 }).UseConsoleLifetime();

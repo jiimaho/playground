@@ -4,22 +4,24 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orleans.Configuration;
 using Orleans.ConsoleConsumer;
+using Orleans.Silo.Configuration;
 
 var host = new HostApplicationBuilder();
 
 Environment.SetEnvironmentVariable("AWS_PROFILE", "localstack");
 
-host.UseOrleansClient(builder =>
+host.UseOrleansClient(clientBuilder =>
 {
-    builder.UseDynamoDBClustering(options =>
+    clientBuilder.UseDynamoDBClustering(options =>
     {
         options.Service = "eu-west-1";
     });
-    builder.Configure<ClusterOptions>(options =>
+    clientBuilder.Configure<ClusterOptions>(options =>
     {
         options.ClusterId = "blazor-cluster";
         options.ServiceId = "blazor-service";
     });
+    clientBuilder.Services.AddCustomSerialization();
 });
 
 host.Services.AddHostedService<ChatBackgroundService>();

@@ -22,19 +22,22 @@ public partial class UsersOnline : ComponentBase
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         var observer = new ChatRoomObserver(async _ =>
         {
-            var usersOnline = await chatRoomGrain.GetUsersOnline();
+            var lastMessageByUser = await chatRoomGrain.GetLastMessageSentByUsers();
+            var online = lastMessageByUser.Where(m => m.Value > DateTimeOffset.Now.AddMinutes(-1)).Select(m => m.Key);
             AllUsersOnline.Clear();
-            AllUsersOnline.AddRange(usersOnline);
+            AllUsersOnline.AddRange(online);
             await InvokeAsync(StateHasChanged);
-        }, usersOnline =>
+        }, async _ =>
         {
+            var lastMessageByUser = await chatRoomGrain.GetLastMessageSentByUsers();
+            var online = lastMessageByUser.Where(m => m.Value > DateTimeOffset.Now.AddMinutes(1)).Select(m => m.Key);
             AllUsersOnline.Clear();
-            AllUsersOnline.AddRange(usersOnline);
-            return InvokeAsync(StateHasChanged);
+            AllUsersOnline.AddRange(online);
+            await InvokeAsync(StateHasChanged);
         });
 
         _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
-        
+
         _ = chatRoomGrain.Join(_chatRoomObserver);
 
         return Task.CompletedTask;

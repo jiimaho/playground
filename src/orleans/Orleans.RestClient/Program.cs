@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Orleans.ChatClient;
 using Orleans.Configuration;
 using Orleans.Silo;
+using Orleans.Silo.Configuration;
 using Orleans.Silo.Primitives;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,7 @@ builder.Host.UseOrleansClient((context, clientBuilder) =>
         options.ClusterId = "blazor-cluster";
         options.ServiceId = $"service-number-{Environment.GetEnvironmentVariable("SERIVCE_NUMBER")}";
     });
+    clientBuilder.Services.AddCustomSerialization();
 
 });
 
