@@ -1,7 +1,14 @@
 <div class="users-online">
     <h3>Users Online</h3>
-    @foreach (var user in AllUsersOnline)
+    @foreach (var user in Users)
     {
-        <p>@user</p>
+        if (user.RecentlyWroteMessage)
+        {
+            <p class="green">@user.Username</p>
+        }
+        else
+        {
+            <p>@user.Username</p>
+        }
     }
 </div> 

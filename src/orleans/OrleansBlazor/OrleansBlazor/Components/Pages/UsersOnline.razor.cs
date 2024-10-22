@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Amazon.DynamoDBv2.Model;
 using Microsoft.AspNetCore.Components;
 using Orleans.Silo;
 using Orleans.Silo.Primitives;
@@ -17,14 +18,15 @@ public partial class UsersOnline : ComponentBase
     private IClusterClient ClusterClient { get; init; } = null!;
 
     // State
-    private List<Username> AllUsersOnline { get; set; } = [];
+    private List<UserData> Users { get; set; } = [];
 
     private IChatRoomObserver _chatRoomObserver = null!;
 
     private Timer _updateUsersOnline = null!;
 
     private const int UsersOnlineIntervalInSeconds = 5;
-    private const int UserOnlineDefinitionInMinutes = -1;
+    private const int UserOnlineDefinitionInSeconds = -120;
+    private const int RecentlyWroteMessageDefinitionInSeconds = -30;
 
     protected override Task OnInitializedAsync()
     {
@@ -37,16 +39,26 @@ public partial class UsersOnline : ComponentBase
         _updateUsersOnline.Elapsed += async (_, _) => { await UpdateUsersOnline(); };
         _updateUsersOnline.Start();
 
-        return Task.CompletedTask;
+        return UpdateUsersOnline();
     }
 
     private async Task UpdateUsersOnline()
     {
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         var lastMessageByUser = await chatRoomGrain.GetLastMessageSentByUsers();
-        var online = lastMessageByUser.Where(m => m.Value > DateTimeOffset.Now.AddMinutes(UserOnlineDefinitionInMinutes)).Select(m => m.Key);
-        AllUsersOnline.Clear();
-        AllUsersOnline.AddRange(online);
+        var userData = lastMessageByUser
+            .Where(x => x.Value > DateTimeOffset.UtcNow.AddSeconds(UserOnlineDefinitionInSeconds))
+            .Select(x => new UserData
+                { Username = x.Key, RecentlyWroteMessage = x.Value > DateTimeOffset.UtcNow.AddSeconds(RecentlyWroteMessageDefinitionInSeconds) })
+            .ToList();
+        Users.Clear();
+        Users.AddRange(userData);
         await InvokeAsync(StateHasChanged);
+    }
+
+    private class UserData
+    {
+        public Username Username { get; set; } = null!;
+        public bool RecentlyWroteMessage { get; set; }
     }
 }

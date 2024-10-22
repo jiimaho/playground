@@ -41,6 +41,9 @@
       <None Update="Components\Pages\ChatMessageComponent.razor.css">
         <DependentUpon>ChatMessageComponent.razor</DependentUpon>
       </None>
+      <None Update="Components\Pages\UsersOnline.razor.css">
+        <DependentUpon>UsersOnline.razor</DependentUpon>
+      </None>
     </ItemGroup>
 
 </Project>
