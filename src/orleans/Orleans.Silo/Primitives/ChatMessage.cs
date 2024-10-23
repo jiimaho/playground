@@ -13,6 +13,7 @@ public class ChatMessage
     [Id(2)]
     public DateTimeOffset Timestamp { get; } = DateTimeOffset.Now;
     
+    // ReSharper disable once ConvertToPrimaryConstructor
     public ChatMessage(Username username, string message)
     {
         Username = username;
