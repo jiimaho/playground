@@ -51,6 +51,15 @@ public class ChatRoom : Grain, IChatRoom
         var history = ImmutableArray<ChatMessage>.Empty.AddRange(_state.State.History);
         return Task.FromResult(history);
     }
+    
+    public Task<ImmutableArray<ChatMessage>> GetHistoryPaging(
+        int startIndex,
+        int numOfMessages,
+        GrainCancellationToken requestCancellationToken)
+    {
+        var result = _state.State.History.Skip(startIndex).Take(numOfMessages).ToImmutableArray();
+        return Task.FromResult(result);
+    }
 
     public Task<Dictionary<Username, DateTimeOffset>> GetLastMessageSentByUsers()
     {

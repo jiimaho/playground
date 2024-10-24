@@ -7,14 +7,16 @@
 
 <SendMessageWebAssembly/>
 <div class="chat-container">
-    <h1>Chat @Messages.Count()</h1>
+    <h1>Chat @Messages.Count</h1>
     <button @onclick="Clear">Clear</button>
-    <div class="messages">
-        @foreach (var message in Messages)
-        {
-            <ChatMessage Message="@message"/>
-        }
-    </div>
+    <Virtualize ItemsProvider="LoadMessages">
+        <EmptyContent>
+            No rows
+        </EmptyContent>
+        <ChildContent>
+            <ChatMessage Message="@context"></ChatMessage>
+        </ChildContent>
+    </Virtualize>
     <UsersOnline ChatRoomId="@ChatRoomId"/>
 </div>
 
@@ -87,4 +89,16 @@
     {
         await LocalStorage.SetItemAsStringAsync("chat:username", Username!);
     }
+
+    private async ValueTask<ItemsProviderResult<Orleans.Silo.Primitives.ChatMessage>> LoadMessages(ItemsProviderRequest request)
+    {
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
+        var history = await chatRoomGrain.GetHistory();
+        var numOfMessages = Math.Min(request.Count, history.Length - request.StartIndex);
+        var grainTokenSource = new GrainCancellationTokenSource();
+        request.CancellationToken.Register(() => grainTokenSource.Cancel());
+        var messages = await chatRoomGrain.GetHistoryPaging(request.StartIndex, numOfMessages, grainTokenSource.Token);
+        return new ItemsProviderResult<Orleans.Silo.Primitives.ChatMessage>(messages, history.Count());
+    }
+
 }
