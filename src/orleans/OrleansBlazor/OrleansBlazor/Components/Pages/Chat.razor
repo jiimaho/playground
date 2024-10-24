@@ -2,6 +2,7 @@
 @using Orleans.Silo
 @using Orleans.Silo.Primitives
 @using System.ComponentModel.DataAnnotations
+@using Blazored.LocalStorage
 @rendermode InteractiveServer
 
 <div class="chat-container">
@@ -16,19 +17,24 @@
     <UsersOnline ChatRoomId="@ChatRoomId"/>
 </div>
 
-
 <input @bind="@Username"/>
 <input @bind="@Message"/>
 <button @onclick="SendMessage">Send Message</button>
 
 @code {
 
-    [Inject]
-    private IClusterClient ClusterClient { get; init; } = null!;
-
+    // Parameters
     [Parameter, Required]
     public string ChatRoomId { get; set; } = null!;
 
+    // DI
+    [Inject]
+    private IClusterClient ClusterClient { get; init; } = null!;
+
+    [Inject]
+    private ILocalStorageService LocalStorage { get; init; } = null!;
+
+    // State
     private IChatRoomObserver? _chatRoomObserver;
 
     private List<Orleans.Silo.Primitives.ChatMessage> Messages { get; } = [];
@@ -49,6 +55,16 @@
         Messages.AddRange(history.ToList());
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var username = await LocalStorage.GetItemAsStringAsync("chat:username");
+        if (username is not null)
+        {
+            Username = username;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
     private async Task Clear()
     {
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
@@ -60,9 +76,14 @@
     {
         if (Username is null || Message is null)
             return;
+        await StoreUsernameInSession();
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         var chatMessage = new Orleans.Silo.Primitives.ChatMessage(new Username(Username), Message);
         await chatRoomGrain.PostMessage(chatMessage);
     }
 
+    private async Task StoreUsernameInSession()
+    {
+        await LocalStorage.SetItemAsStringAsync("chat:username", Username!);
+    }
 }

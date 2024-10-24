@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Orleans.Configuration;
 using Orleans.Silo.Configuration;
 using OrleansBlazor.Components;
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+builder.Services.AddBlazoredLocalStorage();
 
 builder.Host.UseOrleansClient((ctx, clientBuilder) =>
 {
