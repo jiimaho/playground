@@ -1,6 +1,7 @@
-@page "/chat"
+@page "/chat/{ChatRoomId}"
 @using Orleans.Silo
 @using Orleans.Silo.Primitives
+@using System.ComponentModel.DataAnnotations
 @rendermode InteractiveServer
 
 <div class="chat-container">
@@ -12,7 +13,7 @@
             <ChatMessage Message="@message"/>
         }
     </div>
-    <UsersOnline  ChatRoomId="@ChatRoomId"/>
+    <UsersOnline ChatRoomId="@ChatRoomId"/>
 </div>
 
 
@@ -24,11 +25,12 @@
 
     [Inject]
     private IClusterClient ClusterClient { get; init; } = null!;
-    
-    private const string ChatRoomId = "all";
-    
+
+    [Parameter, Required]
+    public string ChatRoomId { get; set; } = null!;
+
     private IChatRoomObserver? _chatRoomObserver;
-    
+
     private List<Orleans.Silo.Primitives.ChatMessage> Messages { get; } = [];
     private string? Message { get; set; }
     private string? Username { get; set; }
@@ -62,4 +64,5 @@
         var chatMessage = new Orleans.Silo.Primitives.ChatMessage(new Username(Username), Message);
         await chatRoomGrain.PostMessage(chatMessage);
     }
+
 }
