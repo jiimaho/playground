@@ -5,5 +5,10 @@
         <span class="username">@Message.Username</span>
         <span class="timestamp">(@Message.Timestamp.ToString("h:mm tt"))</span>
     </div>
-   <div class="message-text">@Message.Message</div>
+    <div class="message-text">@Message.Message</div>
 </div>
+
+@code {
+    [Parameter]
+    public Orleans.Silo.Primitives.ChatMessage Message { get; set; } = null!;
+}

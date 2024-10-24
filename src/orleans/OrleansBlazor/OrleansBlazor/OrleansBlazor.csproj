@@ -24,12 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Components\Pages\ChatMessage.razor.cs">
-        <DependentUpon>ChatMessage.razor</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="Components\Pages\Chat.razor.css">
         <DependentUpon>Chat.razor</DependentUpon>
       </None>
