@@ -1,9 +1,7 @@
 @page "/chat"
 @using Orleans.Silo
 @using Orleans.Silo.Primitives
-@using System.Diagnostics
 @rendermode InteractiveServer
-
 
 <div class="chat-container">
     <h1>Chat @Messages.Count()</h1>
@@ -31,47 +29,33 @@
     
     private IChatRoomObserver? _chatRoomObserver;
     
-    private List<Orleans.Silo.Primitives.ChatMessage> Messages { get; set; } = [];
-    // public List<string> UsersOnline { get; set; } = [];
+    private List<Orleans.Silo.Primitives.ChatMessage> Messages { get; } = [];
     private string? Message { get; set; }
     private string? Username { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (OperatingSystem.IsBrowser())
-        {
-            Console.WriteLine("Running in a Blazor WebAssembly environment.");
-        }
-        else
-        {
-            Console.WriteLine("Running in a Blazor Server environment.");
-        }
-
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         var observer = new ChatRoomObserver(msg =>
         {
             Messages.Add(msg);
-            Console.WriteLine("Got msg!");
             return InvokeAsync(StateHasChanged);
         }, _ => Task.CompletedTask);
         _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
         await chatRoomGrain.Join(_chatRoomObserver);
         var history = await chatRoomGrain.GetHistory();
         Messages.AddRange(history.ToList());
-        Console.WriteLine("Got grain and running");
     }
-    
-    protected async Task Clear()
+
+    private async Task Clear()
     {
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         await chatRoomGrain.Clear();
         Messages.Clear();
     }
 
-    protected async Task SendMessage()
+    private async Task SendMessage()
     {
-        Console.WriteLine(
-            $"Am i executed on the server or in the browser? Environment.OSVersion: {Environment.OSVersion}, Process: {Process.GetCurrentProcess().Id}");
         if (Username is null || Message is null)
             return;
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
