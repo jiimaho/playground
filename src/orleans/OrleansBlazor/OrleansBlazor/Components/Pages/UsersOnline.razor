@@ -3,25 +3,33 @@
 @using Orleans.Silo.Primitives
 @using System.Timers
 @rendermode InteractiveServer
+@page "/users-online/{ChatRoomId}"
 
 <div class="users-online">
     <h3>Users Online</h3>
-    <ul>
-        @foreach (var user in Users)
-        {
-            <li>
+    @if (Users.Count == 0)
+    {
+        <p>No users online in room @ChatRoomId</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var user in Users)
+            {
+                <li>
 
-                @if (user.RecentlyWroteMessage)
-                {
-                    <span class="green">@user.Username</span>
-                }
-                else
-                {
-                    <span>@user.Username</span>
-                }
-            </li>
-        }
-    </ul>
+                    @if (user.RecentlyWroteMessage)
+                    {
+                        <span class="green">@user.Username</span>
+                    }
+                    else
+                    {
+                        <span>@user.Username</span>
+                    }
+                </li>
+            }
+        </ul>
+    }
 
 </div>
 
@@ -52,6 +60,7 @@
         var observer = new ChatRoomObserver(_ => UpdateUsersOnline(), _ => UpdateUsersOnline());
         _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
         _ = chatRoomGrain.Join(_chatRoomObserver);
+
         _updateUsersOnline = new Timer(TimeSpan.FromSeconds(UsersOnlineIntervalInSeconds));
         _updateUsersOnline.Elapsed += async (_, _) => { await UpdateUsersOnline(); };
         _updateUsersOnline.Start();
