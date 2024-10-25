@@ -35,7 +35,7 @@
     private IClusterClient ClusterClient { get; init; } = null!;
 
     [Inject]
-    IJSRuntime JSRuntime { get; set; }
+    IJSRuntime JsRuntime { get; set; } = null!;
 
     [Inject]
     private ILocalStorageService LocalStorage { get; init; } = null!;
@@ -44,9 +44,10 @@
     private IChatRoomObserver? _chatRoomObserver;
 
     private List<Orleans.Silo.Primitives.ChatMessage> Messages { get; } = [];
-    private string? Message { get; set; }
     private string? Username { get; set; }
+    private string? Message { get; set; }
 
+    // Lifecycle
     protected override async Task OnInitializedAsync()
     {
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
@@ -63,7 +64,13 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await JSRuntime.InvokeVoidAsync("scrollToBottom", "chat-container");
+        await TryLoadUsernameFromSession();
+        await ScrollChatToBottom();
+    }
+
+    // Methods
+    private async Task TryLoadUsernameFromSession()
+    {
         if (Username is null)
         {
             var username = await LocalStorage.GetItemAsStringAsync("chat:username");
@@ -92,10 +99,7 @@
         await chatRoomGrain.PostMessage(chatMessage);
     }
 
-    private async Task StoreUsernameInSession()
-    {
-        await LocalStorage.SetItemAsStringAsync("chat:username", Username!);
-    }
-
+    private async Task StoreUsernameInSession() => await LocalStorage.SetItemAsStringAsync("chat:username", Username!);
+    private async Task ScrollChatToBottom() => await JsRuntime.InvokeVoidAsync("scrollToBottom", "chat-container");
 }
 
