@@ -7,30 +7,25 @@
 
 <div class="users-online">
     <h3>Users Online</h3>
-    @if (Users.Count == 0)
-    {
-        <p>No users online in room @ChatRoomId</p>
-    }
-    else
-    {
-        <ul>
-            @foreach (var user in Users)
-            {
+    <ul>
+        <Virtualize Items="Users">
+            <EmptyContent>
+                <li>No users online in room @ChatRoomId</li>
+            </EmptyContent>
+            <ChildContent>
                 <li>
-
-                    @if (user.RecentlyWroteMessage)
+                    @if (context.RecentlyWroteMessage)
                     {
-                        <span class="green">@user.Username</span>
+                        <span class="green">@context.Username</span>
                     }
                     else
                     {
-                        <span>@user.Username</span>
+                        <span>@context.Username</span>
                     }
                 </li>
-            }
-        </ul>
-    }
-
+            </ChildContent>
+        </Virtualize>
+    </ul>
 </div>
 
 @code {
