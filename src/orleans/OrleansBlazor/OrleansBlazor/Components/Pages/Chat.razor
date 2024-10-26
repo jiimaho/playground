@@ -1,11 +1,9 @@
 @page "/chat/{ChatRoomId}"
 @using Orleans.Silo
-@using Orleans.Silo.Primitives
 @using System.ComponentModel.DataAnnotations
 @using Blazored.LocalStorage
 @rendermode InteractiveServer
 
-<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
 <SendMessageWebAssembly/>
 <div id="chat-container" class="chat-container">
     <h1>Chat @Messages.Count</h1>
@@ -19,11 +17,8 @@
         }
     </ul>
 </div>
-<UsersOnline ChatRoomId="@ChatRoomId"/>
-
-<input @bind-value="@Username"/>
-<input @bind="@Message"/>
-<button @onclick="SendMessage">Send Message</button>
+<UsersOnline ChatRoomId="@ChatRoomId" />
+<SendMessageForm ChatRoomId="@ChatRoomId" />
 
 @code {
 
@@ -45,8 +40,6 @@
     private IChatRoomObserver? _chatRoomObserver;
 
     private List<Orleans.Silo.Primitives.ChatMessage> Messages { get; } = [];
-    private string? Username { get; set; }
-    private string? Message { get; set; }
 
     // Lifecycle
     protected override async Task OnInitializedAsync()
@@ -65,38 +58,10 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await TryLoadUsernameFromSession();
         await ScrollChatToBottom();
     }
 
     // Methods
-    private Task OnBeforeInternalNavigation(LocationChangingContext context) => TryPreventNavigation(context);
-
-    private async Task TryPreventNavigation(LocationChangingContext context)
-    {
-        if (Message is not null)
-        {
-            var confirm = await JsRuntime.InvokeAsync<bool>("confirm", "Leaving this page will clear the current message you're typing");
-            if (!confirm)
-            {
-                context.PreventNavigation();
-            }
-        }
-    }
-
-    private async Task TryLoadUsernameFromSession()
-    {
-        if (Username is null)
-        {
-            var username = await LocalStorage.GetItemAsStringAsync("chat:username");
-            if (username is not null)
-            {
-                Username = username;
-                await InvokeAsync(StateHasChanged);
-            }
-        }
-    }
-
     private async Task Clear()
     {
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
@@ -104,17 +69,5 @@
         Messages.Clear();
     }
 
-    private async Task SendMessage()
-    {
-        if (Username is null || Message is null)
-            return;
-        await StoreUsernameInSession();
-        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
-        var chatMessage = new Orleans.Silo.Primitives.ChatMessage(new Username(Username), Message);
-        await chatRoomGrain.PostMessage(chatMessage);
-        Message = null;
-    }
-
-    private async Task StoreUsernameInSession() => await LocalStorage.SetItemAsStringAsync("chat:username", Username!);
     private async Task ScrollChatToBottom() => await JsRuntime.InvokeVoidAsync("scrollToBottom", "chat-container");
 }

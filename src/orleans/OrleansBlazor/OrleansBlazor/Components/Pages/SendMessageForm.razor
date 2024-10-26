@@ -1,0 +1,71 @@
+@using Blazored.LocalStorage
+@using Orleans.Silo
+@using Orleans.Silo.Primitives
+@using System.ComponentModel.DataAnnotations
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
+
+<input @bind-value="@Username"/>
+<input @bind="@Message"/>
+<button @onclick="SendMessage">Send Message</button>
+
+@code {
+    // Parameters
+    [Parameter, Required]
+    public string ChatRoomId { get; set; } = null!;
+    
+    // DI
+    [Inject]
+    private ILocalStorageService LocalStorage { get; init; } = null!;
+
+    [Inject]
+    IJSRuntime JsRuntime { get; set; } = null!;
+
+    [Inject]
+    private IClusterClient ClusterClient { get; init; } = null!;
+
+    // State
+    private string? Username { get; set; }
+    private string? Message { get; set; }
+
+    // Methods
+    private async Task TryPreventNavigation(LocationChangingContext context)
+    {
+        if (Message is not null)
+        {
+            var confirm = await JsRuntime.InvokeAsync<bool>("confirm", "Leaving this page will clear the current message you're typing");
+            if (!confirm)
+            {
+                context.PreventNavigation();
+            }
+        }
+    }
+
+    private async Task TryLoadUsernameFromSession()
+    {
+        if (Username is null)
+        {
+            var username = await LocalStorage.GetItemAsStringAsync("chat:username");
+            if (username is not null)
+            {
+                Username = username;
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+
+    private async Task SendMessage()
+    {
+        if (Username is null || Message is null)
+            return;
+        await StoreUsernameInSession();
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
+        var chatMessage = new Orleans.Silo.Primitives.ChatMessage(new Username(Username), Message);
+        await chatRoomGrain.PostMessage(chatMessage);
+        Message = null;
+    }
+
+    private Task OnBeforeInternalNavigation(LocationChangingContext context) => TryPreventNavigation(context);
+    
+    private async Task StoreUsernameInSession() => await LocalStorage.SetItemAsStringAsync("chat:username", Username!);
+}
