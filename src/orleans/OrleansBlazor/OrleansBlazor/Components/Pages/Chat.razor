@@ -5,6 +5,7 @@
 @using Blazored.LocalStorage
 @rendermode InteractiveServer
 
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"></NavigationLock>
 <SendMessageWebAssembly/>
 <div id="chat-container" class="chat-container">
     <h1>Chat @Messages.Count</h1>
@@ -69,6 +70,20 @@
     }
 
     // Methods
+    private Task OnBeforeInternalNavigation(LocationChangingContext context) => TryPreventNavigation(context);
+
+    private async Task TryPreventNavigation(LocationChangingContext context)
+    {
+        if (Message is not null)
+        {
+            var confirm = await JsRuntime.InvokeAsync<bool>("confirm", "Leaving this page will clear the current message you're typing");
+            if (!confirm)
+            {
+                context.PreventNavigation();
+            }
+        }
+    }
+
     private async Task TryLoadUsernameFromSession()
     {
         if (Username is null)
@@ -97,9 +112,9 @@
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         var chatMessage = new Orleans.Silo.Primitives.ChatMessage(new Username(Username), Message);
         await chatRoomGrain.PostMessage(chatMessage);
+        Message = null;
     }
 
     private async Task StoreUsernameInSession() => await LocalStorage.SetItemAsStringAsync("chat:username", Username!);
     private async Task ScrollChatToBottom() => await JsRuntime.InvokeVoidAsync("scrollToBottom", "chat-container");
 }
-
