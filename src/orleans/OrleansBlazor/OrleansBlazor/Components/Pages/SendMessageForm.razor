@@ -1,3 +1,4 @@
+@page "/chat/{ChatRoomId}/send-message"
 @using Blazored.LocalStorage
 @using Orleans.Silo
 @using Orleans.Silo.Primitives
@@ -11,7 +12,7 @@
     <ValidationMessage For="@(() => Model.Username)"></ValidationMessage>
     <InputText class="form-control" @bind-Value="@Model.Message"/>
     <ValidationMessage For="@(() => Model.Message)"></ValidationMessage>
-    <button class="btn btn-primary mb-3" type="submit">Send Message</button>
+    <button class="btn btn-primary mb-3" type="submit">Send to @ChatRoomId</button>
 </EditForm>
 
 @code {
