@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Orleans.Configuration;
 using Orleans.Silo.Configuration;
 using OrleansBlazor.Components;
+using OrleansBlazor.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +39,9 @@ else
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseRouting();
 app.UseAntiforgery();
+app.UseEndpoints(erb => erb.AddReportRoute());
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
