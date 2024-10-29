@@ -1,23 +1,31 @@
 @page "/chat/{ChatRoomId}"
+@rendermode InteractiveAuto
 @using Orleans.Silo
 @using System.ComponentModel.DataAnnotations
 @using Blazored.LocalStorage
 
 <SendMessageWebAssembly/>
-<div id="chat-container" class="chat-container">
+@if (NotYetInitialized)
+{
+    <h1>Loading messages...</h1>
+}
+else
+{
     <h1>Chat @Messages.Count</h1>
     <button @onclick="Clear">Clear</button>
-    <ul id="chat-list">
-        @foreach (var message in Messages)
-        {
-            <li>
-                <ChatMessage Message="@message"></ChatMessage>
-            </li>
-        }
-    </ul>
-</div>
-<UsersOnline ChatRoomId="@ChatRoomId" />
-<SendMessageForm ChatRoomId="@ChatRoomId" />
+    <div id="chat-container" class="chat-container">
+        <ul id="chat-list">
+            @foreach (var message in Messages)
+            {
+                <li>
+                    <ChatMessage Message="@message"></ChatMessage>
+                </li>
+            }
+        </ul>
+    </div>
+    <UsersOnline ChatRoomId="@ChatRoomId"/>
+    <SendMessageForm ChatRoomId="@ChatRoomId"/>
+}
 
 @code {
 
@@ -40,9 +48,12 @@
 
     private List<Orleans.Silo.Primitives.ChatMessage> Messages { get; } = [];
 
+    private bool NotYetInitialized => Messages.Count == 0;
+
     // Lifecycle
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(300);
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         var observer = new ChatRoomObserver(async msg =>
         {
