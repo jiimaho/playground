@@ -1,11 +1,15 @@
+@page "/users-online/{ChatRoomId}"
 @using System.ComponentModel.DataAnnotations
 @using Orleans.Silo
 @using Orleans.Silo.Primitives
 @using System.Timers
-@page "/users-online/{ChatRoomId}"
 
 <div class="users-online">
     <h3>Users Online</h3>
+    @if (Users.Count == 0)
+    {
+        <p>No users online</p>
+    }
     <ul>
         @foreach (var user in Users)
         {
