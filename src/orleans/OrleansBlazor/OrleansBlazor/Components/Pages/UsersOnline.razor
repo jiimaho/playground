@@ -51,7 +51,7 @@
     protected override Task OnInitializedAsync()
     {
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
-        var observer = new ChatRoomObserver(_ => UpdateUsersOnline(), _ => UpdateUsersOnline());
+        var observer = new ChatRoomObserver(_ => UpdateUsersOnline(), _ => UpdateUsersOnline(), _ => UpdateUsersOnline());
         _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
         _ = chatRoomGrain.Join(_chatRoomObserver);
 

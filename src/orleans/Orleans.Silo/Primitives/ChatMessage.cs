@@ -2,7 +2,7 @@ namespace Orleans.Silo.Primitives;
 
 [Alias("ChatMessage")]
 [GenerateSerializer]
-public class ChatMessage
+public class ChatMessage : ValueObject
 {
     [Id(0)]
     public Username Username { get; set; }
@@ -21,4 +21,11 @@ public class ChatMessage
     }
 
     public override string ToString() => $"{Timestamp:HH:mm:ss} {Username}: {Message}";
+    
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Username;
+        yield return Message;
+        yield return Timestamp;
+    }
 }

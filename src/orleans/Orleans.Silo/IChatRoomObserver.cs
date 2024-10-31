@@ -9,5 +9,8 @@ public interface IChatRoomObserver : IGrainObserver
     [OneWay]
     Task ReceiveMessage(ChatMessage message);
     
+    [OneWay]
+    Task DeletedMessage(ChatMessage message);
+    
     Task UsersOnlineChanged(ImmutableArray<Username> usersOnline);
 }

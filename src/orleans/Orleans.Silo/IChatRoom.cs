@@ -30,4 +30,7 @@ public interface IChatRoom : IGrainWithStringKey
         int startIndex,
         int numOfMessages,
         GrainCancellationToken requestCancellationToken);
+
+    [Alias("DeleteMessage")]
+    Task DeleteMessage(ChatMessage message);
 }

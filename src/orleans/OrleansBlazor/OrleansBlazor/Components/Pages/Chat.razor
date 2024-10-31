@@ -19,6 +19,7 @@ else
             {
                 <li>
                     <ChatMessage Message="@message"></ChatMessage>
+                    <button @onclick="() => DeleteMessage(message)">Delete</button>
                 </li>
             }
         </ul>
@@ -59,6 +60,10 @@ else
         {
             Messages.Add(msg);
             await InvokeAsync(StateHasChanged);
+        }, async msg =>
+        {
+            Messages.Remove(msg);
+            await InvokeAsync(StateHasChanged);
         }, _ => Task.CompletedTask);
         _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
         await chatRoomGrain.Join(_chatRoomObserver);
@@ -77,6 +82,13 @@ else
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
         await chatRoomGrain.Clear();
         Messages.Clear();
+    }
+
+    private async Task DeleteMessage(Orleans.Silo.Primitives.ChatMessage message)
+    {
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
+        await chatRoomGrain.DeleteMessage(message);
+        Messages.Remove(message);
     }
 
     private async Task ScrollChatToBottom() => await JsRuntime.InvokeVoidAsync("scrollToBottom", "chat-container");

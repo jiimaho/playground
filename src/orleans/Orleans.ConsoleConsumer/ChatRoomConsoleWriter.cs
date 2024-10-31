@@ -12,6 +12,12 @@ public class ChatRoomConsoleWriter : IChatRoomObserver
         return Task.CompletedTask;
     }
 
+    public Task DeletedMessage(ChatMessage message)
+    {
+        Console.WriteLine($"Message deleted: {message}");
+        return Task.CompletedTask;
+    }
+
     public Task PeopleOnline(string[] users)
     {
         Console.WriteLine("People online: " + string.Join(", ", users)); 
