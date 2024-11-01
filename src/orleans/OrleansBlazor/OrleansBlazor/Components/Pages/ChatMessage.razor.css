@@ -18,8 +18,6 @@
 }
 
 .message-info {
-    display: flex;
-    justify-content: space-between;
     font-size: 0.8rem;
     margin-bottom: 5px;
     color: #555;
@@ -27,6 +25,7 @@
 
 .username {
     font-weight: bold;
+    margin-right: 5px;
 }
 
 .timestamp {
@@ -36,6 +35,12 @@
 .message-text {
     font-size: 1rem;
     color: #333;
+}
+
+.delete-button {
+    border: none;
+    font-size: 0.8rem;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 600px) {
