@@ -81,7 +81,7 @@
     {
         await StoreUsernameInSession();
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
-        var chatMessage = new Orleans.Silo.Primitives.ChatMessage(new Username(Model.Username!), Model.Message!);
+        var chatMessage = new Orleans.Silo.Primitives.ChatMessage(new Username(Model.Username!), Model.Message!, ChatRoomId);
         await chatRoomGrain.PostMessage(chatMessage);
         Model.Message = null;
     }

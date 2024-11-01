@@ -18,6 +18,7 @@ builder.Host.UseOrleans((_, siloBuilder) =>
     {
         options.CreateIfNotExists = true;
         options.Service = "eu-west-1";
+        options.GrainStorageSerializer = new CustomGrainStorageSerialization();
     });
 
     siloBuilder.Services.Configure<EndpointOptions>(options => 

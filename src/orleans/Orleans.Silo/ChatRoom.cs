@@ -66,9 +66,7 @@ public class ChatRoom : Grain, IChatRoom
         _state.State.History.Remove(message);
         await _state.WriteStateAsync();
         await _observers.Notify(o => o.DeletedMessage(message));
-        await Task.Delay(1000);
     }
-    
 
     public Task<Dictionary<Username, DateTimeOffset>> GetLastMessageSentByUsers()
     {

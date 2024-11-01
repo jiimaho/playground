@@ -20,7 +20,7 @@ public static class Report
             await htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
                 var dictionary = new Dictionary<string, object?>
-                    { { "Message", new Orleans.Silo.Primitives.ChatMessage(new Username("Jim"), "Print") } };
+                    { { "Message", new Orleans.Silo.Primitives.ChatMessage(new Username("Jim"), "Print", "all") } };
 
                 var parameters = ParameterView.FromDictionary(dictionary);
                 var html = await htmlRenderer.RenderComponentAsync<ChatMessage>(parameters);

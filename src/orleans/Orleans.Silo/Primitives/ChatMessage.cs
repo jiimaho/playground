@@ -12,12 +12,16 @@ public class ChatMessage : ValueObject
     
     [Id(2)]
     public DateTimeOffset Timestamp { get; } = DateTimeOffset.Now;
-    
+
+    [Id(3)]
+    public string ChatRoomId { get; set; } 
+
     // ReSharper disable once ConvertToPrimaryConstructor
-    public ChatMessage(Username username, string message)
+    public ChatMessage(Username username, string message, string chatRoomId)
     {
         Username = username;
         Message = message;
+        ChatRoomId = chatRoomId;
     }
 
     public override string ToString() => $"{Timestamp:HH:mm:ss} {Username}: {Message}";
@@ -27,5 +31,6 @@ public class ChatMessage : ValueObject
         yield return Username;
         yield return Message;
         yield return Timestamp;
+        yield return ChatRoomId;
     }
 }

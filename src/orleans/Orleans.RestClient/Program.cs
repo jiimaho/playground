@@ -55,7 +55,7 @@ app.MapPost(
             return Results.BadRequest(validationResult.Errors);
         }
         var chatRoom = clusterClient.GetGrain<IChatRoom>(id);
-        var chatMessage = new ChatMessage(new Username("RestClient"), request.Message);
+        var chatMessage = new ChatMessage(new Username("RestClient"), request.Message, id);
         await chatRoom.PostMessage(chatMessage);
         return Results.Ok();
     })
