@@ -15,7 +15,7 @@ public class CacheDisastersServiceDecorator(
     private static readonly TimeSpan ExpirationWindow = TimeSpan.FromMinutes(1);
     private static DateTimeOffset expireAt = DateTimeOffset.MinValue;
 
-    public async Task<IEnumerable<DisasterVm>> GetDisasters(int page, int pageSize)
+    public async Task<DisasterResult> GetDisasters(int? page, int? pageSize)
     {
         using var _ = Trace.DisastersApi.StartActivity(GetType());
         var now = timeProvider.GetLocalNow();
@@ -28,7 +28,7 @@ public class CacheDisastersServiceDecorator(
             }
             _logger.Debug("Reading from cache");
             var result = JsonSerializer.Deserialize<IEnumerable<DisasterVm>>(storedJson!);
-            return result!;
+            return new DisasterResult.Success(result!);
         }
 
         _logger.Debug(
@@ -43,15 +43,15 @@ public class CacheDisastersServiceDecorator(
         throw new NotImplementedException();
     }
 
-    private static string GetKey(int page, int pageSize) => $"disasters:{page}:{pageSize}";
+    private static string GetKey(int? page, int? pageSize) => $"disasters:{page ?? 0}:{pageSize ?? 0}";
     private Task<RedisValue> StringGet(string key) => connectionMultiplexer.GetDatabase().StringGetAsync(key);
     
     private async Task StringSet(string key, RedisValue value) => await connectionMultiplexer.GetDatabase().StringSetAsync(key, value);
 
-    private async Task<IEnumerable<DisasterVm>> StoreInCacheAndGet(int page, int pageSize)
+    private async Task<DisasterResult> StoreInCacheAndGet(int? page, int? pageSize)
     {
         _logger.Debug(nameof(StoreInCacheAndGet));
-        var disasters = (await inner.GetDisasters(page, pageSize)).ToList();
+        var disasters = (await inner.GetDisasters(page, pageSize));
         var json = JsonSerializer.Serialize(disasters);
         await StringSet(GetKey(page, pageSize), json);
         expireAt = timeProvider.GetLocalNow().Add(ExpirationWindow);

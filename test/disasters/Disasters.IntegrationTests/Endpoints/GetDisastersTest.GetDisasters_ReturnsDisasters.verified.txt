@@ -1,14 +1,19 @@
-﻿[
-  {
-    name: Heavy rain,
-    location: Lousiana
-  },
-  {
-    name: Earthquake,
-    location: California
-  },
-  {
-    name: Tornado,
-    location: Kansas
-  }
-]
+﻿{
+  disasters: [
+    {
+      name: Heavy rain,
+      location: Lousiana
+    },
+    {
+      name: Earthquake,
+      location: California
+    },
+    {
+      name: Tornado,
+      location: Kansas
+    }
+  ],
+  totalCount: 3,
+  start: 1,
+  end: 3
+}

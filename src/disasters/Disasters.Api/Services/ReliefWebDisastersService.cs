@@ -8,7 +8,7 @@ public class ReliefWebDisastersService(
 {
     private readonly ILogger _logger = serilog.ForContext<ReliefWebDisastersService>();
     
-    public async Task<IEnumerable<DisasterVm>> GetDisasters(int page, int pageSize)
+    public async Task<DisasterResult> GetDisasters(int? page, int? pageSize)
     {
         using var a = Trace.DisastersApi.StartActivity(GetType());
         if (a is null)
@@ -29,10 +29,11 @@ public class ReliefWebDisastersService(
 
             if (content is null)
             {
-                return new List<DisasterVm>();
+                return new DisasterResult.Empty();
             }
-            
-            return content.data.Select(x => new DisasterVm(x.fields.name, x.fields.country.First().name));   
+
+            var disasterVms = content.data.Select(x => new DisasterVm(x.fields.name, x.fields.country.First().name));
+            return new DisasterResult.Success(disasterVms);
         }
         catch (Exception e)
         {

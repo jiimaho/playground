@@ -8,7 +8,7 @@ public class GetDisastersTest : IClassFixture<MyWebApplicationFactory>
 {
     private readonly MyWebApplicationFactory _factory;
 
-    public GetDisastersTest( 
+    public GetDisastersTest(
         MyWebApplicationFactory factory,
         ITestOutputHelper outputHelper)
     {
@@ -26,12 +26,12 @@ public class GetDisastersTest : IClassFixture<MyWebApplicationFactory>
             new("Earthquake", "California"),
             new("Tornado", "Kansas")
         };
-        
+
         _factory.MockedDisastersService
-            .Setup(m => m.GetDisasters(It.IsAny<int>(), It.IsAny<int>()))
-            .Returns(Task.FromResult(disasterVms.AsEnumerable()));
-        
-       using var client = _factory.CreateClient();
+            .Setup(m => m.GetDisasters(null, null))
+            .Returns(Result(disasterVms));
+
+        using var client = _factory.CreateClient();
 
         // Act
         var response = await client.GetAsync("/disasters");
@@ -41,30 +41,33 @@ public class GetDisastersTest : IClassFixture<MyWebApplicationFactory>
         var content = await response.Content.ReadAsStringAsync();
         await VerifyJson(content);
     }
-    
+
     [Fact]
-     public async Task GetDisasters_Paging_ReturnsDisasters()
-     {
-         // Arrange
-         var disasterVms = new DisasterVm[]
-         {
-             new("Heavy rain", "Lousiana"),
-             new("Earthquake", "California"),
-             new("Tornado", "Kansas")
-         };
-         
-         _factory.MockedDisastersService
-             .Setup(m => m.GetDisasters(It.IsAny<int>(), It.IsAny<int>()))
-             .Returns(Task.FromResult(disasterVms.AsEnumerable()));
-         
+    public async Task GetDisasters_Paging_ReturnsDisasters()
+    {
+        // Arrange
+        var disasterVms = new DisasterVm[]
+        {
+            new("Heavy rain", "Lousiana"),
+            new("Earthquake", "California"),
+            new("Tornado", "Kansas")
+        };
+
+        _factory.MockedDisastersService
+            .Setup(m => m.GetDisasters(It.IsAny<int>(), It.IsAny<int>()))
+            .Returns(Result(disasterVms));
+
         using var client = _factory.CreateClient();
- 
-         // Act
-         var response = await client.GetAsync("/disasters?page=1&pageSize=5");
- 
-         // Assert
-         response.EnsureSuccessStatusCode();
-         var content = await response.Content.ReadAsStringAsync();
-         await VerifyJson(content);
-     }
+
+        // Act
+        var response = await client.GetAsync("/disasters?page=1&pageSize=5");
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        await VerifyJson(content);
+    }
+
+    private Task<DisasterResult> Result(IEnumerable<DisasterVm> disasterVms) =>
+        Task.FromResult<DisasterResult>(new DisasterResult.Success(disasterVms));
 }

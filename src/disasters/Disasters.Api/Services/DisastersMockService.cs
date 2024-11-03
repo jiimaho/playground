@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+
 namespace Disasters.Api.Services;
 
 public class DisastersMockService( 
@@ -5,7 +7,7 @@ public class DisastersMockService(
 {
     private readonly ILogger _logger = logger.ForContext<DisastersMockService>();
     
-    public Task<IEnumerable<DisasterVm>> GetDisasters(int i, int page)
+    public Task<DisasterResult> GetDisasters(int? page, int? pageSize)
     {
         using var activity = Trace.DisastersApi.StartActivity(GetType());
         
@@ -15,8 +17,8 @@ public class DisastersMockService(
             new("Heavy rain", "Louisiana"),
         };
         _logger.Debug("Returning mock disasters");
-        
-        return Task.FromResult(disasterVms);
+
+        return Task.FromResult<DisasterResult>(new DisasterResult.Success(disasterVms));
     }
 
     public Task MarkSafe(MarkSafeVm markSafeVm)

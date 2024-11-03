@@ -2,7 +2,7 @@ namespace Disasters.Api.Services;
 
 public interface IDisastersService
 {
-    Task<IEnumerable<DisasterVm>> GetDisasters(int i, int page);
+    Task<DisasterResult> GetDisasters(int? page, int? pageSize);
     
     Task MarkSafe(MarkSafeVm markSafeVm);
 }

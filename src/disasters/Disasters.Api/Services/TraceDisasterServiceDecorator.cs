@@ -4,7 +4,7 @@ public class TraceDisasterServiceDecorator(IDisastersService inner, ILogger seri
 {
     private readonly ILogger _logger = serilog.ForContext<TraceDisasterServiceDecorator>();
     
-    public async Task<IEnumerable<DisasterVm>> GetDisasters(int page, int pageSize)
+    public async Task<DisasterResult> GetDisasters(int? page, int? pageSize)
     {
         _logger.Debug("Tracing disaster service");
         using var _ = Trace.DisastersApi.StartActivity(GetType());
