@@ -9,6 +9,11 @@
 {
     <h1>Loading messages...</h1>
 }
+else if (Messages.Count  == 0)
+{
+    <h1>No messages yet</h1>
+    <SendMessageForm ChatRoomId="@ChatRoomId"/>
+}
 else
 {
     <h1>Chat @Messages.Count</h1>
@@ -48,7 +53,7 @@ else
 
     private List<Orleans.Silo.Primitives.ChatMessage> Messages { get; } = [];
 
-    private bool NotYetInitialized => Messages.Count == 0;
+    private bool NotYetInitialized = true; 
 
     // Lifecycle
     protected override async Task OnInitializedAsync()
@@ -68,6 +73,7 @@ else
         await chatRoomGrain.Join(_chatRoomObserver);
         var history = await chatRoomGrain.GetHistory();
         Messages.AddRange(history.ToList());
+        NotYetInitialized = false;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
