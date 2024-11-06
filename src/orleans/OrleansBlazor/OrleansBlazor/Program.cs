@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using Orleans.Configuration;
-using Orleans.Silo.Configuration;
+using Orleans.Serialization;
+using Orleans.Silo.Configuration.Serialization;
 using OrleansBlazor.Components;
 using OrleansBlazor.Endpoints;
 
@@ -19,7 +20,7 @@ builder.Host.UseOrleansClient((ctx, clientBuilder) =>
         options.ClusterId = "blazor-cluster";
         options.ServiceId = "blazor-service";
     });
-    clientBuilder.Services.AddCustomSerialization();
+    clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
 });
 
 var app = builder.Build();

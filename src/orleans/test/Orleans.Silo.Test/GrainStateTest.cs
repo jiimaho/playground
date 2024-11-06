@@ -1,4 +1,6 @@
+using System.Text;
 using Orleans.Silo.Configuration;
+using Orleans.Silo.Configuration.Serialization;
 
 namespace Orleans.Silo.Test;
 
@@ -10106,7 +10108,7 @@ public class GrainStateTest
             125
         ];
 
-        var sut = new CustomGrainStorageSerialization();
+        var sut = new NewtonSoftGrainStorageSerialization();
 
         // Act
         var state = sut.Deserialize<ChatRoomState>(new BinaryData(data));

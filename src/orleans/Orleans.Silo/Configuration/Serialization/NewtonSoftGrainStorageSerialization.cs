@@ -1,9 +1,9 @@
 using Newtonsoft.Json;
 using Orleans.Storage;
 
-namespace Orleans.Silo.Configuration;
+namespace Orleans.Silo.Configuration.Serialization;
 
-public class CustomGrainStorageSerialization : IGrainStorageSerializer 
+public class NewtonSoftGrainStorageSerialization : IGrainStorageSerializer 
 {
     private readonly JsonSerializerSettings _jsonSerializerSettings = new();
 

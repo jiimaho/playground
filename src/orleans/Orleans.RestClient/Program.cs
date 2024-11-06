@@ -4,8 +4,10 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Orleans.ChatClient;
 using Orleans.Configuration;
+using Orleans.Serialization;
 using Orleans.Silo;
 using Orleans.Silo.Configuration;
+using Orleans.Silo.Configuration.Serialization;
 using Orleans.Silo.Primitives;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +29,7 @@ builder.Host.UseOrleansClient((context, clientBuilder) =>
         options.ClusterId = "blazor-cluster";
         options.ServiceId = $"service-number-{Environment.GetEnvironmentVariable("SERIVCE_NUMBER")}";
     });
-    clientBuilder.Services.AddCustomSerialization();
+    clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
 
 });
 

@@ -1,3 +1,5 @@
+using NodaTime;
+
 namespace Orleans.Silo.Primitives;
 
 [Alias("ChatMessage")]
@@ -6,17 +8,20 @@ public class ChatMessage : ValueObject
 {
     [Id(0)]
     public Username Username { get; set; }
-    
+
     [Id(1)]
     public string Message { get; set; }
-    
+
     [Id(2)]
     public DateTimeOffset Timestamp { get; } = DateTimeOffset.Now;
 
     [Id(3)]
-    public string ChatRoomId { get; set; } 
+    public string ChatRoomId { get; set; }
 
-    // ReSharper disable once ConvertToPrimaryConstructor
+    [Id(4)]
+    public ZonedDateTime? TimeStampNew { get; } 
+
+// ReSharper disable once ConvertToPrimaryConstructor
     public ChatMessage(Username username, string message, string chatRoomId)
     {
         Username = username;

@@ -4,7 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Orleans.Configuration;
 using Orleans.ConsoleConsumer;
-using Orleans.Silo.Configuration;
+using Orleans.Serialization;
+using Orleans.Silo.Configuration.Serialization;
 
 var host = new HostApplicationBuilder();
 
@@ -21,7 +22,7 @@ host.UseOrleansClient(clientBuilder =>
         options.ClusterId = "blazor-cluster";
         options.ServiceId = "blazor-service";
     });
-    clientBuilder.Services.AddCustomSerialization();
+    clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
 });
 
 host.Services.AddHostedService<ChatBackgroundService>();

@@ -12,6 +12,7 @@
       <PackageReference Include="Microsoft.Orleans.Persistence.DynamoDB" Version="8.2.0" />
       <PackageReference Include="Microsoft.Orleans.Serialization.SystemTextJson" Version="8.2.0" />
       <PackageReference Include="Microsoft.Orleans.Server" Version="8.1.0" />
+      <PackageReference Include="NodaTime" Version="3.2.0" />
     </ItemGroup>
 
 </Project>

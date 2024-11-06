@@ -3,7 +3,7 @@
 using System.Net;
 using Orleans.Configuration;
 using Orleans.Serialization;
-using Orleans.Silo.Configuration;
+using Orleans.Silo.Configuration.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,16 +11,19 @@ builder.Host.UseOrleans((_, siloBuilder) =>
 {
     siloBuilder.UseDynamoDBClustering(options =>
     {
+        // options.TableName = "OrleansBlazorSilos";
+        options.TableName = "OrleansSilos";
         options.CreateIfNotExists = true;
         options.Service = "eu-west-1";
     });
     siloBuilder.AddDynamoDBGrainStorage("blazorStore", options =>
     {
+        // options.TableName = "OrleansBlazorGrainStorage";
+        options.TableName = "OrleansGrainState";
         options.CreateIfNotExists = true;
         options.Service = "eu-west-1";
-        options.GrainStorageSerializer = new CustomGrainStorageSerialization();
+        // options.GrainStorageSerializer = new NewtonSoftGrainStorageSerialization();
     });
-
     siloBuilder.Services.Configure<EndpointOptions>(options => 
     { 
         options.AdvertisedIPAddress = IPAddress.Loopback;
@@ -43,7 +46,7 @@ builder.Host.UseOrleans((_, siloBuilder) =>
         options.DefunctSiloCleanupPeriod = TimeSpan.FromMinutes(1);
         options.DefunctSiloExpiration = TimeSpan.FromMinutes(1);
     });
-    siloBuilder.Services.AddCustomSerialization();
+    siloBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization()); 
     
     siloBuilder.Services.AddLogging();
 }).UseConsoleLifetime();
