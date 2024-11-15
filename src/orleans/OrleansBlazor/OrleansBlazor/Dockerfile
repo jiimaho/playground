@@ -1,24 +1,20 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/orleans/OrleansBlazor/OrleansBlazor/OrleansBlazor.csproj", "src/orleans/OrleansBlazor/OrleansBlazor/"]
-COPY ["src/orleans/OrleansBlazor/OrleansBlazor.Client/OrleansBlazor.Client.csproj", "src/orleans/OrleansBlazor/OrleansBlazor.Client/"]
-RUN dotnet restore "src/orleans/OrleansBlazor/OrleansBlazor/OrleansBlazor.csproj"
+COPY ["OrleansBlazor/OrleansBlazor/OrleansBlazor.csproj", "OrleansBlazor/OrleansBlazor/"]
+COPY ["OrleansBlazor/OrleansBlazor.Client/OrleansBlazor.Client.csproj", "OrleansBlazor/OrleansBlazor.Client/"]
+COPY ["Orleans.Silo/Orleans.Silo.csproj", "Orleans.Silo/"]
+RUN dotnet restore "OrleansBlazor/OrleansBlazor/OrleansBlazor.csproj"
 COPY . .
-WORKDIR "/src/src/orleans/OrleansBlazor/OrleansBlazor"
+WORKDIR "/src/OrleansBlazor/OrleansBlazor"
 RUN dotnet build "OrleansBlazor.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "OrleansBlazor.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 
+USER $APP_UID
 WORKDIR /app
-COPY --from=publish /app/publish .
+EXPOSE 5020 
+COPY --from=build /app/build .
 ENTRYPOINT ["dotnet", "OrleansBlazor.dll"]
+
+
+

@@ -62,6 +62,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileGetter", "src\FileSender\FileGetter\FileGetter.csproj", "{872B1307-A118-401E-8F88-E13197C52A8A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "orleans", "orleans", "{0B0777D4-10F9-4E68-BD18-83ED49E37102}"
+	ProjectSection(SolutionItems) = preProject
+		src\orleans\docker-compose.yml = src\orleans\docker-compose.yml
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.Silo", "src\orleans\Orleans.Silo\Orleans.Silo.csproj", "{7424A42B-28C6-4875-9F4B-A53313054DCB}"
 EndProject
@@ -76,6 +79,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B38828F1-CF70-4A11-B626-1B4F37A88F05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.Silo.Test", "src\orleans\test\Orleans.Silo.Test\Orleans.Silo.Test.csproj", "{0EE3303B-E18A-45B2-B7CE-4B968AB1F063}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{7B49212B-8930-4AAD-8630-921DDC1133A7}"
+	ProjectSection(SolutionItems) = preProject
+		src\orleans\database\Dockerfile = src\orleans\database\Dockerfile
+		src\orleans\database\wait-and-run.sh = src\orleans\database\wait-and-run.sh
+		src\orleans\database\init.sql = src\orleans\database\init.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -223,5 +233,6 @@ Global
 		{897452AA-5B4B-48F2-8C8E-314FA3F605E4} = {0B0777D4-10F9-4E68-BD18-83ED49E37102}
 		{B38828F1-CF70-4A11-B626-1B4F37A88F05} = {0B0777D4-10F9-4E68-BD18-83ED49E37102}
 		{0EE3303B-E18A-45B2-B7CE-4B968AB1F063} = {B38828F1-CF70-4A11-B626-1B4F37A88F05}
+		{7B49212B-8930-4AAD-8630-921DDC1133A7} = {0B0777D4-10F9-4E68-BD18-83ED49E37102}
 	EndGlobalSection
 EndGlobal

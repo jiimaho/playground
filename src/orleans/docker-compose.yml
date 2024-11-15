@@ -1,0 +1,53 @@
+networks:
+  default:
+    name: orleans-network-1
+
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+  silo:
+    image: orleans-silo
+    build:
+      context: .
+      dockerfile: ./Orleans.Silo/Dockerfile
+    ports:
+      - "11111:11111"
+      - "30000:30000"
+    environment:
+      - GATEWAY_PORT=30000
+      - SILO_PORT=11111
+      - SILO_NUMBER=1
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    depends_on:
+      - localstack
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=reallyStrongPwd123
+    ports:
+      - "1433:1433"
+  sqlseed:
+    depends_on: [ sql ]
+    build:
+      context: ./database
+      dockerfile: ./Dockerfile
+    
+#  blazor:
+#    image: orleans-blazor
+#    build: 
+#      context: .
+#      dockerfile: ./OrleansBlazor/OrleansBlazor/Dockerfile
+#    ports:
+#      - "5020:5020"
+#    environment:
+#      - AWS_ENDPOINT_URL=http://localstack:4566
+#      - AWS_ACCESS_KEY_ID=test
+#      - AWS_SECRET_ACCESS_KEY=test
+#    depends_on:
+#      - silo
