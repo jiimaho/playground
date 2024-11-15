@@ -2,7 +2,8 @@
 <div class="chat-message">
     <div class="message-info">
         <span class="username">@Message.Username</span>
-        <span class="timestamp">(@Message.Timestamp.ToString("h:mm tt"))</span>
+        <span class="timestamp">@Message.Timestamp.ToString() || </span>
+        <span class="timestamp">@Message.TimeStampNoda.ToString()</span>
         <button class="delete-button" @onclick="DeleteMessage">Delete</button>
     </div>
     <div class="message-text">@Message.Message</div>

@@ -3,6 +3,7 @@
 @using Orleans.Silo
 @using Orleans.Silo.Primitives
 @using System.ComponentModel.DataAnnotations
+@using NodaTime
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"/>
 
@@ -81,7 +82,15 @@
     {
         await StoreUsernameInSession();
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
-        var chatMessage = new Orleans.Silo.Primitives.ChatMessage(new Username(Model.Username!), Model.Message!, ChatRoomId);
+        var time = DateTimeOffset.UtcNow;
+        var chatMessage = new Orleans.Silo.Primitives.ChatMessage
+        {
+            Username = new Username(Model.Username!),
+            Message = Model.Message!,
+            ChatRoomId = ChatRoomId,
+            Timestamp = time,
+            TimeStampNoda = ZonedDateTime.FromDateTimeOffset(time)
+        };
         await chatRoomGrain.PostMessage(chatMessage);
         Model.Message = null;
     }

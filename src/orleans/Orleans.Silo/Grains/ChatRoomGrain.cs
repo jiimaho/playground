@@ -5,21 +5,21 @@ using Orleans.Runtime;
 using Orleans.Silo.Primitives;
 using Orleans.Utilities;
 
-namespace Orleans.Silo;
+namespace Orleans.Silo.Grains;
 
 [UsedImplicitly]
-public class ChatRoom : Grain, IChatRoom
+public class ChatRoomGrain : Grain, IChatRoom
 {
-    private readonly IPersistentState<ChatRoomState> _state;
+    private readonly IPersistentState<ChatRoomGrainState> _state;
     private readonly ObserverManager<IChatRoomObserver> _observers;
 
     private readonly ChatRoomVolatileState _volatileState = new([]);
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    public ChatRoom(
-        ILogger<ChatRoom> logger,
+    public ChatRoomGrain(
+        ILogger<ChatRoomGrain> logger,
         [PersistentState("chatRoom", "blazorStore")]
-        IPersistentState<ChatRoomState> state)
+        IPersistentState<ChatRoomGrainState> state)
     {
         _state = state;
         _observers = new ObserverManager<IChatRoomObserver>(TimeSpan.FromHours(1), logger);
@@ -27,17 +27,17 @@ public class ChatRoom : Grain, IChatRoom
 
     public async Task PostMessage(ChatMessage chatMessage)
     {
-        _state.State.History.Add(chatMessage);
+        _state.State.History.Add(chatMessage.ToEntity());
         _volatileState.LastMessageSentByUser[chatMessage.Username] = DateTimeOffset.UtcNow;
         await _state.WriteStateAsync();
-        Console.WriteLine($"{nameof(ChatRoom)} is notifying all observers of the message: {chatMessage}");
+        Console.WriteLine($"{nameof(ChatRoomGrain)} is notifying all observers of the message: {chatMessage}");
         await _observers.Notify(x => x.ReceiveMessage(chatMessage));
     }
 
     public Task<ReadOnlyCollection<ChatMessage>> Join(IChatRoomObserver observer)
     {
         _observers.Subscribe(observer, observer);
-        return Task.FromResult(new ReadOnlyCollection<ChatMessage>(_state.State.History));
+        return Task.FromResult(new ReadOnlyCollection<ChatMessage>(_state.State.History.Select(m => m.ToPrimitive()).ToList()));
     }
 
     public Task Leave(IChatRoomObserver observer)
@@ -48,7 +48,7 @@ public class ChatRoom : Grain, IChatRoom
 
     public Task<ImmutableArray<ChatMessage>> GetHistory()
     {
-        var history = ImmutableArray<ChatMessage>.Empty.AddRange(_state.State.History);
+        var history = ImmutableArray<ChatMessage>.Empty.AddRange(_state.State.History.Select(m => m.ToPrimitive()));
         return Task.FromResult(history);
     }
 
@@ -57,13 +57,13 @@ public class ChatRoom : Grain, IChatRoom
         int numOfMessages,
         GrainCancellationToken requestCancellationToken)
     {
-        var result = _state.State.History.Skip(startIndex).Take(numOfMessages).ToImmutableArray();
+        var result = _state.State.History.Skip(startIndex).Take(numOfMessages).Select(m => m.ToPrimitive()).ToImmutableArray();
         return Task.FromResult(result);
     }
 
     public async Task DeleteMessage(ChatMessage message)
     {
-        _state.State.History.Remove(message);
+        _state.State.History.Remove(message.ToEntity());
         await _state.WriteStateAsync();
         await _observers.Notify(o => o.DeletedMessage(message));
     }

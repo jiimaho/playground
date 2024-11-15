@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Playwright;
+using NodaTime;
 using Orleans.Silo.Primitives;
-using ChatMessage = OrleansBlazor.Components.Pages.ChatMessage;
+using ChatMessage = Orleans.Silo.Primitives.ChatMessage;
+using ChatMessageComponent = OrleansBlazor.Components.Pages.ChatMessage;
 
 namespace OrleansBlazor.Endpoints;
 
@@ -16,14 +18,21 @@ public static class Report
             var sp = context.RequestServices;
             var lf = sp.GetRequiredService<ILoggerFactory>();
 
+            var time = DateTimeOffset.UtcNow;
             var htmlRenderer = new HtmlRenderer(sp, lf);
             await htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
                 var dictionary = new Dictionary<string, object?>
-                    { { "Message", new Orleans.Silo.Primitives.ChatMessage(new Username("Jim"), "Print", "all") } };
+                    { { "Message", new  ChatMessage { 
+                        Username = new Username("Alice"), 
+                        Message = "Hello, World!", 
+                        Timestamp = time, 
+                        ChatRoomId = "1", 
+                        TimeStampNoda = ZonedDateTime.FromDateTimeOffset(time) 
+                    }} };
 
                 var parameters = ParameterView.FromDictionary(dictionary);
-                var html = await htmlRenderer.RenderComponentAsync<ChatMessage>(parameters);
+                var html = await htmlRenderer.RenderComponentAsync<ChatMessageComponent>(parameters);
                 Console.WriteLine(html.ToHtmlString());
                 var content = html.ToHtmlString();
 

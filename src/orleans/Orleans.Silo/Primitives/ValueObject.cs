@@ -1,5 +1,6 @@
 namespace Orleans.Silo.Primitives;
 
+[Alias("ValueObject")]
 [GenerateSerializer]
 public abstract class ValueObject
 {

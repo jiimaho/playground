@@ -1,33 +1,28 @@
 using NodaTime;
+using Orleans.Silo.Grains;
 
 namespace Orleans.Silo.Primitives;
 
+// TOOD: Make immutable ❤️
+// Use complex types, and codecs
 [Alias("ChatMessage")]
 [GenerateSerializer]
 public class ChatMessage : ValueObject
 {
     [Id(0)]
-    public Username Username { get; set; }
+    public Username Username { get; init; }
 
     [Id(1)]
-    public string Message { get; set; }
+    public string Message { get; init; }
 
     [Id(2)]
-    public DateTimeOffset Timestamp { get; } = DateTimeOffset.Now;
+    public DateTimeOffset Timestamp { get; init; }
 
     [Id(3)]
-    public string ChatRoomId { get; set; }
+    public string ChatRoomId { get; init; }
 
     [Id(4)]
-    public ZonedDateTime? TimeStampNew { get; } 
-
-// ReSharper disable once ConvertToPrimaryConstructor
-    public ChatMessage(Username username, string message, string chatRoomId)
-    {
-        Username = username;
-        Message = message;
-        ChatRoomId = chatRoomId;
-    }
+    public ZonedDateTime TimeStampNoda { get; init; } 
 
     public override string ToString() => $"{Timestamp:HH:mm:ss} {Username}: {Message}";
     
@@ -36,6 +31,9 @@ public class ChatMessage : ValueObject
         yield return Username;
         yield return Message;
         yield return Timestamp;
+        yield return TimeStampNoda;
         yield return ChatRoomId;
     }
+    
+    public ChatMessageEntity ToEntity() => new(ChatRoomId, Username.Value, Message, Timestamp);
 }

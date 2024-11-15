@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Amazon.Runtime.Documents;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using NodaTime;
 using Orleans.ChatClient;
 using Orleans.Configuration;
 using Orleans.Serialization;
@@ -57,7 +58,16 @@ app.MapPost(
             return Results.BadRequest(validationResult.Errors);
         }
         var chatRoom = clusterClient.GetGrain<IChatRoom>(id);
-        var chatMessage = new ChatMessage(new Username("RestClient"), request.Message, id);
+        // var chatMessage = new ChatMessage(new Username("RestClient"), request.Message, id);
+        var time = DateTimeOffset.UtcNow;
+        var chatMessage = new ChatMessage
+        {
+            Username = new Username("RestClient"),
+            Message = request.Message,
+            ChatRoomId = id,
+            Timestamp = time,
+            TimeStampNoda = ZonedDateTime.FromDateTimeOffset(time)
+        };
         await chatRoom.PostMessage(chatMessage);
         return Results.Ok();
     })

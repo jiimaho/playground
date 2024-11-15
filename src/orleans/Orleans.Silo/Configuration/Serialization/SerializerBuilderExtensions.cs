@@ -1,5 +1,7 @@
+using NodaTime;
 using Orleans.Serialization;
 using Orleans.Serialization.Cloning;
+using Orleans.Serialization.Codecs;
 using Orleans.Serialization.Serializers;
 using Orleans.Silo.Configuration.Serialization.Codecs;
 
@@ -13,7 +15,8 @@ public static class SerializerBuilderExtensions
     {
         var services = builder.Services;  
         services.AddSingleton<ZonedDateTimeCodec>();
-        services.AddSingleton<IGeneralizedCodec, ZonedDateTimeCodec>();
+        // services.AddSingleton<IGeneralizedCodec, ZonedDateTimeCodec>();
+        services.AddSingleton<IFieldCodec<ZonedDateTime>, ZonedDateTimeCodec>();
         services.AddSingleton<IGeneralizedCopier, ZonedDateTimeCodec>();
 
        return builder;
