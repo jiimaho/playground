@@ -1,0 +1,85 @@
+@page "/users-online/{ChatRoomId}"
+@using System.ComponentModel.DataAnnotations
+@using Chatty.Silo
+@using Chatty.Silo.Primitives
+@using System.Timers
+
+<div class="users-online">
+    <h3>Users Online</h3>
+    @if (Users.Count == 0)
+    {
+        <p>No users online</p>
+    }
+    <ul>
+        @foreach (var user in Users)
+        {
+            <li>
+                @if (user.RecentlyWroteMessage)
+                {
+                    <span class="green">@user.Username</span>
+                }
+                else
+                {
+                    <span>@user.Username</span>
+                }
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+
+    // Parameters
+    [Parameter, Required]
+    public string ChatRoomId { get; set; } = null!;
+
+    // DI
+    [Inject]
+    private IClusterClient ClusterClient { get; init; } = null!;
+
+    // State
+    private List<UserData> Users { get; set; } = [];
+
+    private IChatRoomObserver _chatRoomObserver = null!;
+
+    private Timer _updateUsersOnline = null!;
+
+    private const int UsersOnlineIntervalInSeconds = 5;
+    private const int UserOnlineDefinitionInSeconds = -120;
+    private const int RecentlyWroteMessageDefinitionInSeconds = -30;
+
+    protected override Task OnInitializedAsync()
+    {
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
+        var observer = new ChatRoomObserver(_ => UpdateUsersOnline(), _ => UpdateUsersOnline(), _ => UpdateUsersOnline());
+        _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
+        _ = chatRoomGrain.Join(_chatRoomObserver);
+
+        _updateUsersOnline = new Timer(TimeSpan.FromSeconds(UsersOnlineIntervalInSeconds));
+        _updateUsersOnline.Elapsed += async (_, _) => { await UpdateUsersOnline(); };
+        _updateUsersOnline.Start();
+
+        return UpdateUsersOnline();
+    }
+
+    private async Task UpdateUsersOnline()
+    {
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
+        var lastMessageByUser = await chatRoomGrain.GetLastMessageSentByUsers();
+        var userData = lastMessageByUser
+            .Where(x => x.Value > DateTimeOffset.UtcNow.AddSeconds(UserOnlineDefinitionInSeconds))
+            .Select(x => new UserData
+                { Username = x.Key, RecentlyWroteMessage = x.Value > DateTimeOffset.UtcNow.AddSeconds(RecentlyWroteMessageDefinitionInSeconds) })
+            .ToList();
+        Users.Clear();
+        Users.AddRange(userData);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private class UserData
+    {
+        public Username Username { get; set; } = null!;
+        public bool RecentlyWroteMessage { get; set; }
+    }
+
+}

@@ -1,0 +1,32 @@
+@using Chatty.Silo
+<div class="chat-message">
+    <div class="message-info">
+        <span class="username">@Message.Username</span>
+        <span class="timestamp">@Message.Timestamp.ToString() || </span>
+        <span class="timestamp">@Message.TimeStampNoda.ToString()</span>
+        <button class="delete-button" @onclick="DeleteMessage">Delete</button>
+    </div>
+    <div class="message-text">@Message.Message</div>
+
+</div>
+
+@code {
+
+    // Parameters
+    [Parameter]
+    public Chatty.Silo.Primitives.ChatMessage Message { get; set; } = null!;
+
+    // DI
+    [Inject]
+    private IClusterClient ClusterClient { get; init; } = null!;
+
+    // State
+
+    // Methods
+    private async Task DeleteMessage()
+    {
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(Message.ChatRoomId ?? "all");
+        await chatRoomGrain.DeleteMessage(Message);
+    }
+
+}

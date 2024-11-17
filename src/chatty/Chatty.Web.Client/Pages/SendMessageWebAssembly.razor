@@ -1,0 +1,25 @@
+@page "/send-message-webassembly"
+@rendermode InteractiveAuto
+@namespace Chatty.Web.Client.Pages
+
+<span>Jao</span>
+@code {
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine("SendMessageWebAssembly initialized");
+        base.OnInitialized();
+    }
+
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        Console.WriteLine("SendMessageWebAssembly rendered");
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task SendMessage()
+    {
+        Console.WriteLine("Backend or frontend?");
+    }
+}

@@ -1,0 +1,93 @@
+@page "/chat/{ChatRoomId}"
+@rendermode InteractiveAuto
+@using System.ComponentModel.DataAnnotations
+@using Blazored.LocalStorage
+@using Chatty.Silo
+
+<SendMessageWebAssembly/>
+@if (NotYetInitialized)
+{
+    <h1>Loading messages...</h1>
+}
+else if (Messages.Count  == 0)
+{
+    <h1>No messages yet</h1>
+    <SendMessageForm ChatRoomId="@ChatRoomId"/>
+}
+else
+{
+    <h1>Chat @Messages.Count</h1>
+    <button @onclick="Clear">Clear</button>
+    <div id="chat-container" class="chat-container">
+        <ul id="chat-list">
+            @foreach (var message in Messages)
+            {
+                <li>
+                    <ChatMessage Message="@message"></ChatMessage>
+                </li>
+            }
+        </ul>
+    </div>
+    <UsersOnline ChatRoomId="@ChatRoomId"/>
+    <SendMessageForm ChatRoomId="@ChatRoomId"/>
+}
+
+@code {
+
+    // Parameters
+    [Parameter, Required]
+    public string ChatRoomId { get; set; } = null!;
+
+    // DI
+    [Inject]
+    private IClusterClient ClusterClient { get; init; } = null!;
+
+    [Inject]
+    IJSRuntime JsRuntime { get; set; } = null!;
+
+    [Inject]
+    private ILocalStorageService LocalStorage { get; init; } = null!;
+
+    // State
+    private IChatRoomObserver? _chatRoomObserver;
+
+    private List<Chatty.Silo.Primitives.ChatMessage> Messages { get; } = [];
+
+    private bool NotYetInitialized = true; 
+
+    // Lifecycle
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(300);
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
+        var observer = new ChatRoomObserver(async msg =>
+        {
+            Messages.Add(msg);
+            await InvokeAsync(StateHasChanged);
+        }, async msg =>
+        {
+            Messages.Remove(msg);
+            await InvokeAsync(StateHasChanged);
+        }, _ => Task.CompletedTask);
+        _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
+        await chatRoomGrain.Join(_chatRoomObserver);
+        var history = await chatRoomGrain.GetHistory();
+        Messages.AddRange(history.ToList());
+        NotYetInitialized = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await ScrollChatToBottom();
+    }
+
+    // Methods
+    private async Task Clear()
+    {
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
+        await chatRoomGrain.Clear();
+        Messages.Clear();
+    }
+
+    private async Task ScrollChatToBottom() => await JsRuntime.InvokeVoidAsync("scrollToBottom", "chat-container");
+}
