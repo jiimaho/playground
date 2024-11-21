@@ -1,17 +1,13 @@
-networks:
-  default:
-    name: orleans-network-1
-
 services:
   localstack:
     image: localstack/localstack
     ports:
       - "4566:4566"
   silo:
-    image: orleans-silo
+    image: chatty-silo
     build:
       context: .
-      dockerfile: ./Orleans.Silo/Dockerfile
+      dockerfile: ./Chatty.Silo/Dockerfile
     ports:
       - "11111:11111"
       - "30000:30000"

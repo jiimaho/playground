@@ -1,0 +1,2 @@
+docker rm chatty-silo
+docker run -it --name chatty-silo --network chatty-network --dns 172.19.0.2 -e AWS_ENDPOINT_URL=http://localstack-main:4566 -e AWS_PROFILE=localstack -e AWS_ACCESS_KEY_ID=test -e AWS_SECRET_ACCESS_KEY=test -e GATEWAY_PORT=8081 -e SILO_PORT=8082 -e SILO_NUMBER=1 chatty-silo

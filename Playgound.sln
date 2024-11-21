@@ -62,6 +62,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileGetter", "src\FileSender\FileGetter\FileGetter.csproj", "{872B1307-A118-401E-8F88-E13197C52A8A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "chatty", "chatty", "{B728CF00-754D-4660-8D56-92B6C2EBFFB6}"
+	ProjectSection(SolutionItems) = preProject
+		src\chatty\docker-compose.yml = src\chatty\docker-compose.yml
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatty.ConsoleConsumer", "src\chatty\Chatty.ConsoleConsumer\Chatty.ConsoleConsumer.csproj", "{774E0625-B319-4585-AFF7-6ECA749AF420}"
 EndProject
