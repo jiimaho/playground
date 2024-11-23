@@ -3,7 +3,7 @@ services:
     image: localstack/localstack
     ports:
       - "4566:4566"
-  silo:
+  silo-1:
     image: chatty-silo
     build:
       context: .
@@ -15,6 +15,23 @@ services:
       - GATEWAY_PORT=30000
       - SILO_PORT=11111
       - SILO_NUMBER=1
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    depends_on:
+      - localstack
+  silo-2:
+    image: chatty-silo
+    build:
+      context: .
+      dockerfile: ./Chatty.Silo/Dockerfile
+    ports:
+      - "22222:22222"
+      - "40000:40000"
+    environment:
+      - GATEWAY_PORT=30000
+      - SILO_PORT=11111
+      - SILO_NUMBER=2
       - AWS_ENDPOINT_URL=http://localstack:4566
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
@@ -34,16 +51,17 @@ services:
       context: ./database
       dockerfile: ./Dockerfile
     
-#  blazor:
-#    image: orleans-blazor
-#    build: 
-#      context: .
-#      dockerfile: ./OrleansBlazor/OrleansBlazor/Dockerfile
-#    ports:
-#      - "5020:5020"
-#    environment:
-#      - AWS_ENDPOINT_URL=http://localstack:4566
-#      - AWS_ACCESS_KEY_ID=test
-#      - AWS_SECRET_ACCESS_KEY=test
-#    depends_on:
-#      - silo
+  chatty-web:
+    image: chatty-web
+    build: 
+      context: .
+      dockerfile: ./Chatty.Web/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+    depends_on:
+      - silo-1
+      - silo-2

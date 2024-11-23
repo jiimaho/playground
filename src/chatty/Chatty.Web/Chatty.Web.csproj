@@ -16,6 +16,8 @@
       <_ContentIncludedByDefault Remove="Components\Pages\Weather.razor" />
       <_ContentIncludedByDefault Remove="Components\Routes.razor" />
       <_ContentIncludedByDefault Remove="Components\_Imports.razor" />
+      <_ContentIncludedByDefault Remove="Chatty.Web\obj\Chatty.Web.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="Chatty.Web\obj\project.assets.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -40,8 +42,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Chatty.Silo\Chatty.Silo.csproj" />
-      <ProjectReference Include="..\..\Chatty.Web.Client\Chatty.Web.Client.csproj" />
+      <ProjectReference Include="..\Chatty.Silo\Chatty.Silo.csproj" />
+      <ProjectReference Include="..\Chatty.Web.Client\Chatty.Web.Client.csproj" />
     </ItemGroup>
 
     <ItemGroup>

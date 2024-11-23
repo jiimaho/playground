@@ -18,19 +18,17 @@ builder.Host.UseOrleans((_, siloBuilder) =>
     });
     siloBuilder.AddDynamoDBGrainStorage("blazorStore", options =>
     {
-        // options.TableName = "OrleansBlazorGrainStorage";
         options.TableName = "OrleansGrainState";
         options.CreateIfNotExists = true;
         options.Service = "eu-west-1";
-        // options.GrainStorageSerializer = new NewtonSoftGrainStorageSerialization();
     });
-    siloBuilder.Services.Configure<EndpointOptions>(options => 
-    { 
-        options.AdvertisedIPAddress = IPAddress.Loopback;
-        // options.GatewayListeningEndpoint = new IPEndPoint(IPAddress.Any, 8081);
-        options.GatewayPort = int.Parse(Environment.GetEnvironmentVariable("GATEWAY_PORT"));
-        // options.SiloListeningEndpoint = new IPEndPoint(IPAddress.Any, 8082);
-        options.SiloPort = int.Parse(Environment.GetEnvironmentVariable("SILO_PORT"));
+    siloBuilder.Services.Configure<EndpointOptions>(options =>
+    {
+        // if docker compose
+        var dns = $"silo-{Environment.GetEnvironmentVariable("SILO_NUMBER")!}";
+        options.AdvertisedIPAddress = Dns.GetHostEntry(dns).AddressList[0]; 
+        options.GatewayPort = int.Parse(Environment.GetEnvironmentVariable("GATEWAY_PORT")!);
+        options.SiloPort = int.Parse(Environment.GetEnvironmentVariable("SILO_PORT")!);
     });
     siloBuilder.Services.Configure<ClusterOptions>(options =>
     {
