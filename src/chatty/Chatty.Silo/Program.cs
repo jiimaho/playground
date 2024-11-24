@@ -24,9 +24,14 @@ builder.Host.UseOrleans((_, siloBuilder) =>
     });
     siloBuilder.Services.Configure<EndpointOptions>(options =>
     {
-        // if docker compose
-        var dns = $"silo-{Environment.GetEnvironmentVariable("SILO_NUMBER")!}";
-        options.AdvertisedIPAddress = Dns.GetHostEntry(dns).AddressList[0]; 
+        var isDockerCompose = bool.Parse(Environment.GetEnvironmentVariable("IS_DOCKER_COMPOSE") ?? "false");
+        if (isDockerCompose)
+        {
+            var dns = $"silo-{Environment.GetEnvironmentVariable("SILO_NUMBER")!}";
+            options.AdvertisedIPAddress = Dns.GetHostEntry(dns).AddressList[0];
+        }
+
+        options.AdvertisedIPAddress = IPAddress.Loopback;
         options.GatewayPort = int.Parse(Environment.GetEnvironmentVariable("GATEWAY_PORT")!);
         options.SiloPort = int.Parse(Environment.GetEnvironmentVariable("SILO_PORT")!);
     });
@@ -35,17 +40,17 @@ builder.Host.UseOrleans((_, siloBuilder) =>
         options.ClusterId = "blazor-cluster";
         options.ServiceId = "blazor-service";
     });
-    siloBuilder.Services.Configure<SiloOptions>(options => 
+    siloBuilder.Services.Configure<SiloOptions>(options =>
     {
-        options.SiloName = $"silo-number-{Environment.GetEnvironmentVariable("SILO_NUMBER")}"; 
+        options.SiloName = $"silo-number-{Environment.GetEnvironmentVariable("SILO_NUMBER")}";
     });
     siloBuilder.Services.Configure<ClusterMembershipOptions>(options =>
     {
         options.DefunctSiloCleanupPeriod = TimeSpan.FromMinutes(1);
         options.DefunctSiloExpiration = TimeSpan.FromMinutes(1);
     });
-    siloBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization()); 
-    
+    siloBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
+
     siloBuilder.Services.AddLogging();
 }).UseConsoleLifetime();
 

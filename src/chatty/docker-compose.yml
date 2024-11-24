@@ -15,6 +15,7 @@ services:
       - GATEWAY_PORT=30000
       - SILO_PORT=11111
       - SILO_NUMBER=1
+      - IS_DOCKER_COMPOSE=true
       - AWS_ENDPOINT_URL=http://localstack:4566
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
@@ -32,6 +33,7 @@ services:
       - GATEWAY_PORT=30000
       - SILO_PORT=11111
       - SILO_NUMBER=2
+      - IS_DOCKER_COMPOSE=true
       - AWS_ENDPOINT_URL=http://localstack:4566
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
