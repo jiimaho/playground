@@ -24,9 +24,9 @@ public class ChatRoomConsoleWriter : IChatRoomObserver
         return Task.CompletedTask;
     }
     
-    public Task UsersOnlineChanged(ImmutableArray<Username> usersOnline)
+    public Task UserOnline(Username username)
     {
-        Console.WriteLine("People online: " + string.Join(", ", usersOnline)); 
+        Console.WriteLine("People online: " + string.Join(", ", username)); 
         return Task.CompletedTask;
     }
 }

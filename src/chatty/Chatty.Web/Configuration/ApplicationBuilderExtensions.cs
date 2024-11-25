@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Chatty.Silo.Configuration.Serialization;
 using Chatty.Web.Components;
 using Chatty.Web.Endpoints;
+using Chatty.Web.Notifications;
 using Orleans.Configuration;
 using Orleans.Serialization;
 
@@ -11,12 +12,14 @@ public static class ApplicationBuilderExtensions
 {
     public static void AddApplicationServices(this WebApplicationBuilder builder)
     {
+        // Razor
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents()
             .AddInteractiveWebAssemblyComponents();
         builder.Services.AddBlazoredLocalStorage();
-
-        builder.Host.UseOrleansClient((ctx, clientBuilder) =>
+        
+        // Orleans
+        builder.Host.UseOrleansClient((_, clientBuilder) =>
         {
             clientBuilder.UseDynamoDBClustering(options => { options.Service = "eu-west-1"; });
             clientBuilder.Configure<ClusterOptions>(options =>
@@ -30,7 +33,6 @@ public static class ApplicationBuilderExtensions
 
     public static void ConfigureApplicationPipeline(this WebApplication app)
     {
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseWebAssemblyDebugging();

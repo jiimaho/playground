@@ -8,7 +8,7 @@ namespace Chatty.Silo;
 public interface IChatRoom : IGrainWithStringKey
 {
     [Alias("PostMessage")]
-    Task PostMessage(ChatMessage chatMessage);
+    Task PostMessage(ChatMessage message);
 
     [Alias("Join")]
     Task<ReadOnlyCollection<ChatMessage>> Join(IChatRoomObserver observer);

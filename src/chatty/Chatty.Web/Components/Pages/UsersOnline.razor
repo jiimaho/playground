@@ -3,6 +3,9 @@
 @using Chatty.Silo
 @using Chatty.Silo.Primitives
 @using System.Timers
+@inject IClusterClient ClusterClient
+@inject IJSRuntime js
+@implements IAsyncDisposable
 
 <div class="users-online">
     <h3>Users Online</h3>
@@ -33,10 +36,6 @@
     [Parameter, Required]
     public string ChatRoomId { get; set; } = null!;
 
-    // DI
-    [Inject]
-    private IClusterClient ClusterClient { get; init; } = null!;
-
     // State
     private List<UserData> Users { get; set; } = [];
 
@@ -51,7 +50,7 @@
     protected override Task OnInitializedAsync()
     {
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
-        var observer = new ChatRoomObserver(_ => UpdateUsersOnline(), _ => UpdateUsersOnline(), _ => UpdateUsersOnline());
+        var observer = new ChatRoomObserver(_ => UpdateUsersOnline(), _ => UpdateUsersOnline(), NotifyUserOnline);
         _chatRoomObserver = ClusterClient.CreateObjectReference<IChatRoomObserver>(observer);
         _ = chatRoomGrain.Join(_chatRoomObserver);
 
@@ -62,6 +61,9 @@
         return UpdateUsersOnline();
     }
 
+    private Task NotifyUserOnline(Username username) => 
+        js.InvokeVoidAsync("notifyUserOnline", username.ToString()).AsTask(); 
+    
     private async Task UpdateUsersOnline()
     {
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
@@ -74,6 +76,12 @@
         Users.Clear();
         Users.AddRange(userData);
         await InvokeAsync(StateHasChanged);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
+        await chatRoomGrain.Leave(_chatRoomObserver);
     }
 
     private class UserData

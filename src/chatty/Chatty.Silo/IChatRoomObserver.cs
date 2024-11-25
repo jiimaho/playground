@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Chatty.Silo.Primitives;
 using Orleans.Concurrency;
 
@@ -12,5 +11,5 @@ public interface IChatRoomObserver : IGrainObserver
     [OneWay]
     Task DeletedMessage(ChatMessage message);
     
-    Task UsersOnlineChanged(ImmutableArray<Username> usersOnline);
+    Task UserOnline(Username username);
 }

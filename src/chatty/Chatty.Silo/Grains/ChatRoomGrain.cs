@@ -8,7 +8,7 @@ using Orleans.Utilities;
 namespace Chatty.Silo.Grains;
 
 [UsedImplicitly]
-public class ChatRoomGrain : Grain, IChatRoom
+public class ChatRoomGrain : Grain, IChatRoom 
 {
     private readonly IPersistentState<ChatRoomGrainState> _state;
     private readonly ObserverManager<IChatRoomObserver> _observers;
@@ -25,19 +25,32 @@ public class ChatRoomGrain : Grain, IChatRoom
         _observers = new ObserverManager<IChatRoomObserver>(TimeSpan.FromHours(1), logger);
     }
 
-    public async Task PostMessage(ChatMessage chatMessage)
+    public async Task PostMessage(ChatMessage message)
     {
-        _state.State.History.Add(chatMessage.ToEntity());
-        _volatileState.LastMessageSentByUser[chatMessage.Username] = DateTimeOffset.UtcNow;
+        _state.State.History.Add(message.ToEntity());
+        await UpdateUserOnline(message);
         await _state.WriteStateAsync();
-        Console.WriteLine($"{nameof(ChatRoomGrain)} is notifying all observers of the message: {chatMessage}");
-        await _observers.Notify(x => x.ReceiveMessage(chatMessage));
+        Console.WriteLine($"{nameof(ChatRoomGrain)} is notifying all observers of the message: {message}");
+        await _observers.Notify(x => x.ReceiveMessage(message));
+    }
+
+    private async Task UpdateUserOnline(ChatMessage message)
+    {
+        if (!_volatileState.LastMessageSentByUser.ContainsKey(message.Username))
+        {
+            _volatileState.LastMessageSentByUser.Add(message.Username, DateTimeOffset.Now);
+            await _observers.Notify(o => o.UserOnline(message.Username));
+            return;
+        }
+
+        _volatileState.LastMessageSentByUser[message.Username] = DateTimeOffset.Now;
     }
 
     public Task<ReadOnlyCollection<ChatMessage>> Join(IChatRoomObserver observer)
     {
         _observers.Subscribe(observer, observer);
-        return Task.FromResult(new ReadOnlyCollection<ChatMessage>(_state.State.History.Select(m => m.ToPrimitive()).ToList()));
+        return Task.FromResult(
+            new ReadOnlyCollection<ChatMessage>(_state.State.History.Select(m => m.ToPrimitive()).ToList()));
     }
 
     public Task Leave(IChatRoomObserver observer)
@@ -57,7 +70,8 @@ public class ChatRoomGrain : Grain, IChatRoom
         int numOfMessages,
         GrainCancellationToken requestCancellationToken)
     {
-        var result = _state.State.History.Skip(startIndex).Take(numOfMessages).Select(m => m.ToPrimitive()).ToImmutableArray();
+        var result = _state.State.History.Skip(startIndex).Take(numOfMessages).Select(m => m.ToPrimitive())
+            .ToImmutableArray();
         return Task.FromResult(result);
     }
 
