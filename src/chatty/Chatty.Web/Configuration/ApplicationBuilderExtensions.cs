@@ -4,6 +4,7 @@ using Chatty.Web.BackgroundService;
 using Chatty.Web.Components;
 using Chatty.Web.Endpoints;
 using Chatty.Web.Hubs;
+using MudBlazor.Services;
 using Orleans.Configuration;
 using Orleans.Serialization;
 
@@ -18,6 +19,9 @@ public static class ApplicationBuilderExtensions
             .AddInteractiveServerComponents()
             .AddInteractiveWebAssemblyComponents();
         builder.Services.AddBlazoredLocalStorage();
+        
+        // MudBlazor
+        builder.Services.AddMudServices(); 
         
         // SignalR
         builder.Services.AddSignalR();
