@@ -1,4 +1,7 @@
 @using Chatty.Silo
+@inject IClusterClient ClusterClient
+@inject IJSRuntime JsRuntime
+
 <div class="chat-message">
     <div class="message-info">
         <span class="username">@Message.Username</span>
@@ -16,17 +19,18 @@
     [Parameter]
     public Chatty.Silo.Primitives.ChatMessage Message { get; set; } = null!;
 
-    // DI
-    [Inject]
-    private IClusterClient ClusterClient { get; init; } = null!;
-
     // State
 
     // Methods
     private async Task DeleteMessage()
     {
+        var confirmedDelete = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this message?");
+        if (!confirmedDelete)
+        {
+            return;
+        }
+
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(Message.ChatRoomId ?? "all");
         await chatRoomGrain.DeleteMessage(Message);
     }
-
 }
