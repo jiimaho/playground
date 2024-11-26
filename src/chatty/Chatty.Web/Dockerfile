@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Chatty.Web/Chatty.Web.csproj", "Chatty.Web/Chatty.Web.csproj"]
@@ -9,10 +9,10 @@ COPY . .
 WORKDIR "/src/Chatty.Web"
 RUN dotnet publish "Chatty.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 
 USER $APP_UID
 WORKDIR /app
-EXPOSE 5020 
+EXPOSE 8080
 COPY --from=build /app/build .
 ENTRYPOINT ["dotnet", "Chatty.Web.dll"]
 
