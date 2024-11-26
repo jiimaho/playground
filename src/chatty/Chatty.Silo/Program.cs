@@ -30,8 +30,11 @@ builder.Host.UseOrleans((_, siloBuilder) =>
             var dns = $"silo-{Environment.GetEnvironmentVariable("SILO_NUMBER")!}";
             options.AdvertisedIPAddress = Dns.GetHostEntry(dns).AddressList[0];
         }
+        else
+        {
+            options.AdvertisedIPAddress = IPAddress.Loopback;
+        }
 
-        options.AdvertisedIPAddress = IPAddress.Loopback;
         options.GatewayPort = int.Parse(Environment.GetEnvironmentVariable("GATEWAY_PORT")!);
         options.SiloPort = int.Parse(Environment.GetEnvironmentVariable("SILO_PORT")!);
     });
