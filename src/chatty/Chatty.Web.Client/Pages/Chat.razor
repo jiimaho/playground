@@ -1,0 +1,30 @@
+@page "/Chat"
+@using Microsoft.AspNetCore.SignalR.Client
+<h3>Chat</h3>
+<text>TBD</text>
+
+<h3>Users online</h3>
+<text>@LastUserName</text>
+
+@code {
+
+    private HubConnection _hubConnection;
+
+    private string LastUserName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _hubConnection = new HubConnectionBuilder().WithUrl(new Uri("http://localhost:5020/user-online")).Build();
+
+        _hubConnection.On<string>("UserOnline", username =>
+        {
+            Console.WriteLine($"{username} is online");
+            LastUserName = username;
+            InvokeAsync(StateHasChanged);
+        });
+
+        await _hubConnection.StartAsync();
+        await base.OnInitializedAsync();
+    }
+
+}

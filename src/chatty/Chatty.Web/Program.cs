@@ -1,4 +1,3 @@
-using Chatty.Web;
 using Chatty.Web.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,8 +1,9 @@
 using Blazored.LocalStorage;
 using Chatty.Silo.Configuration.Serialization;
+using Chatty.Web.BackgroundService;
 using Chatty.Web.Components;
 using Chatty.Web.Endpoints;
-using Chatty.Web.Notifications;
+using Chatty.Web.Hubs;
 using Orleans.Configuration;
 using Orleans.Serialization;
 
@@ -17,6 +18,14 @@ public static class ApplicationBuilderExtensions
             .AddInteractiveServerComponents()
             .AddInteractiveWebAssemblyComponents();
         builder.Services.AddBlazoredLocalStorage();
+        
+        // SignalR
+        builder.Services.AddSignalR();
+        
+        // CORS
+        builder.Services.AddCors();
+
+        builder.Services.AddHostedService<UserOnlineNotifier>();
         
         // Orleans
         builder.Host.UseOrleansClient((_, clientBuilder) =>
@@ -46,6 +55,9 @@ public static class ApplicationBuilderExtensions
 
         app.UseHttpsRedirection();
 
+        app.UseCors(policyBuilder => policyBuilder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+        app.MapHub<UserOnlineHub>("user-online");
+
         app.UseStaticFiles();
         app.UseRouting();
         app.UseAntiforgery();
@@ -53,7 +65,6 @@ public static class ApplicationBuilderExtensions
 
         app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode()
-            .AddInteractiveWebAssemblyRenderMode()
-            .AddAdditionalAssemblies(typeof(Chatty.Web.Client._Imports).Assembly);
+            .AddInteractiveWebAssemblyRenderMode();
     }
 }

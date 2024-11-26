@@ -1,23 +1,15 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+﻿FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/orleans/OrleansBlazor/OrleansBlazor.Client/OrleansBlazor.Client.csproj", "src/orleans/OrleansBlazor/OrleansBlazor.Client/"]
-RUN dotnet restore "src/orleans/OrleansBlazor/OrleansBlazor.Client/OrleansBlazor.Client.csproj"
+COPY ["Chatty.Web.Client/Chatty.Web.Client.csproj", "Chatty.Web.Client/Chatty.Web.Client.csproj"]
+RUN dotnet restore "Chatty.Web.Client/Chatty.Web.Client.csproj"
 COPY . .
-WORKDIR "/src/src/orleans/OrleansBlazor/OrleansBlazor.Client"
-RUN dotnet build "OrleansBlazor.Client.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR /src/Chatty.Web.Client
+RUN dotnet publish "Chatty.Web.Client.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "OrleansBlazor.Client.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+FROM nginx:alpine 
+WORKDIR /usr/share/nginx/html
+COPY --from=build /app/build/wwwroot .
+COPY ["Chatty.Web.Client/nginx.conf", "/etc/nginx/nginx.conf"]
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "OrleansBlazor.Client.dll"]
+

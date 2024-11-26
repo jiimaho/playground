@@ -43,7 +43,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Chatty.Silo\Chatty.Silo.csproj" />
-      <ProjectReference Include="..\Chatty.Web.Client\Chatty.Web.Client.csproj" />
     </ItemGroup>
 
     <ItemGroup>
