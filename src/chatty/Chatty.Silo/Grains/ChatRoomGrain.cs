@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using Chatty.Silo.Configuration;
 using Chatty.Silo.Primitives;
 using JetBrains.Annotations;
 using Orleans.Runtime;
@@ -14,11 +15,13 @@ public class ChatRoomGrain : Grain, IChatRoom
     private readonly ObserverManager<IChatRoomObserver> _observers;
 
     private readonly ChatRoomVolatileState _volatileState = new([]);
+    
+    private const string PersistentStateName = "chatRoom";
 
     // ReSharper disable once ConvertToPrimaryConstructor
     public ChatRoomGrain(
         ILogger<ChatRoomGrain> logger,
-        [PersistentState("chatRoom", "blazorStore")]
+        [PersistentState(PersistentStateName, GrainStorage.ChatRoomStore)]
         IPersistentState<ChatRoomGrainState> state)
     {
         _state = state;
