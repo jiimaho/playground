@@ -4,12 +4,12 @@ using Xunit.Abstractions;
 
 namespace Disasters.IntegrationTests.Endpoints;
 
-public class GetDisastersTest : IClassFixture<MyWebApplicationFactory>
+public class GetDisastersTest : IClassFixture<DisastersApiFactory>
 {
-    private readonly MyWebApplicationFactory _factory;
+    private readonly DisastersApiFactory _factory;
 
     public GetDisastersTest(
-        MyWebApplicationFactory factory,
+        DisastersApiFactory factory,
         ITestOutputHelper outputHelper)
     {
         _factory = factory;

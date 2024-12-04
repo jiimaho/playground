@@ -4,12 +4,12 @@ using Xunit.Abstractions;
 
 namespace Disasters.IntegrationTests.Endpoints;
 
-public class MarkSafeTest : IClassFixture<MyWebApplicationFactory>
+public class MarkSafeTest : IClassFixture<DisastersApiFactory>
 {
-    private readonly MyWebApplicationFactory _factory;
+    private readonly DisastersApiFactory _factory;
 
     public MarkSafeTest(
-        MyWebApplicationFactory factory,
+        DisastersApiFactory factory,
         ITestOutputHelper outputHelper)
     {
         _factory = factory;

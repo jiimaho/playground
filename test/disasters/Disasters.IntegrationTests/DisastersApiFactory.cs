@@ -1,3 +1,4 @@
+using Disasters.Api;
 using Disasters.Api.Services;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -10,7 +11,7 @@ using Xunit.Abstractions;
 namespace Disasters.IntegrationTests;
 
 [UsedImplicitly]
-public class MyWebApplicationFactory : WebApplicationFactory<Program>
+public class DisastersApiFactory : WebApplicationFactory<IApiMarker>
 {
     private ILogger _testLogger = null!;
     private readonly List<LogEvent> _assertableLogs = [];
