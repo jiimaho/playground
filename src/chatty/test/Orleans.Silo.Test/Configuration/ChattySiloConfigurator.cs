@@ -9,7 +9,7 @@ public class ChattySiloConfigurator : ISiloConfigurator
 {
     public void Configure(ISiloBuilder siloBuilder)
     {
-        siloBuilder.AddMemoryGrainStorage(GrainStorage.ChatRoomStore);
+        siloBuilder.AddMemoryGrainStorage(ChattyOrleansConstants.Storage.Name);
         siloBuilder.Services.AddSerializer(serializerBuilder => serializerBuilder.AddApplicationSpecificSerialization());
     }
 }

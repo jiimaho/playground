@@ -1,4 +1,5 @@
 using Blazored.LocalStorage;
+using Chatty.Silo.Configuration;
 using Chatty.Silo.Configuration.Serialization;
 using Chatty.Web.BackgroundService;
 using Chatty.Web.Components;
@@ -25,16 +26,21 @@ public static class ApplicationBuilderExtensions
         // CORS
         builder.Services.AddCors();
 
-        builder.Services.AddHostedService<UserOnlineNotifier>();
+        // builder.Services.AddHostedService<UserOnlineNotifier>();
         
         // Orleans
         builder.Host.UseOrleansClient((_, clientBuilder) =>
         {
-            clientBuilder.UseDynamoDBClustering(options => { options.Service = "eu-west-1"; });
+            clientBuilder.UseDynamoDBClustering(options => 
+            {
+                options.TableName = ChattyOrleansConstants.Cluster.ClusteringTableName;
+                options.CreateIfNotExists = false;
+                options.Service = ChattyOrleansConstants.Cluster.Region;
+            });
             clientBuilder.Configure<ClusterOptions>(options =>
             {
-                options.ClusterId = "blazor-cluster";
-                options.ServiceId = "blazor-service";
+                options.ClusterId = ChattyOrleansConstants.Cluster.ClusterId;
+                options.ServiceId = ChattyOrleansConstants.Cluster.ServiceId;
             });
             clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
         });

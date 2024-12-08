@@ -16,12 +16,12 @@ public class ChatRoomGrain : Grain, IChatRoom
 
     private readonly ChatRoomVolatileState _volatileState = new([]);
     
-    private const string PersistentStateName = "chatRoom";
+    private const string StateName = "chatRoom";
 
     // ReSharper disable once ConvertToPrimaryConstructor
     public ChatRoomGrain(
         ILogger<ChatRoomGrain> logger,
-        [PersistentState(PersistentStateName, GrainStorage.ChatRoomStore)]
+        [PersistentState(StateName, ChattyOrleansConstants.Storage.Name)]
         IPersistentState<ChatRoomGrainState> state)
     {
         _state = state;

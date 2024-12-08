@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Net;
+using Chatty.Silo.Configuration;
 using Chatty.Silo.Configuration.Serialization;
 using Orleans.Configuration;
 using Orleans.Serialization;
@@ -11,16 +12,15 @@ builder.Host.UseOrleans((_, siloBuilder) =>
 {
     siloBuilder.UseDynamoDBClustering(options =>
     {
-        // options.TableName = "OrleansBlazorSilos";
-        options.TableName = "OrleansSilos";
+        options.TableName = ChattyOrleansConstants.Cluster.ClusteringTableName;
+        options.Service = ChattyOrleansConstants.Cluster.Region;
         options.CreateIfNotExists = true;
-        options.Service = "eu-west-1";
     });
-    siloBuilder.AddDynamoDBGrainStorage("blazorStore", options =>
+    siloBuilder.AddDynamoDBGrainStorage(ChattyOrleansConstants.Storage.Name, options =>
     {
-        options.TableName = "OrleansGrainState";
+        options.TableName = ChattyOrleansConstants.Storage.GrainStateTableName;
+        options.Service = ChattyOrleansConstants.Cluster.Region;
         options.CreateIfNotExists = true;
-        options.Service = "eu-west-1";
     });
     siloBuilder.Services.Configure<EndpointOptions>(options =>
     {
@@ -40,8 +40,8 @@ builder.Host.UseOrleans((_, siloBuilder) =>
     });
     siloBuilder.Services.Configure<ClusterOptions>(options =>
     {
-        options.ClusterId = "blazor-cluster";
-        options.ServiceId = "blazor-service";
+        options.ClusterId = ChattyOrleansConstants.Cluster.ClusterId;
+        options.ServiceId = ChattyOrleansConstants.Cluster.ServiceId;
     });
     siloBuilder.Services.Configure<SiloOptions>(options =>
     {
