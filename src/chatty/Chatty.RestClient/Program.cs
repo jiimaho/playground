@@ -55,16 +55,7 @@ app.MapPost(
             return Results.BadRequest(validationResult.Errors);
         }
         var chatRoom = clusterClient.GetGrain<IChatRoom>(id);
-        // var chatMessage = new ChatMessage(new Username("RestClient"), request.Message, id);
-        var time = DateTimeOffset.UtcNow;
-        var chatMessage = new ChatMessage
-        {
-            Username = new Username("RestClient"),
-            Message = request.Message,
-            ChatRoomId = id,
-            Timestamp = time,
-            TimeStampNoda = ZonedDateTime.FromDateTimeOffset(time)
-        };
+        var chatMessage = ChatMessage.Create(Username.Create("RestClient"), request.Message, id);
         await chatRoom.PostMessage(chatMessage);
         return Results.Ok();
     })

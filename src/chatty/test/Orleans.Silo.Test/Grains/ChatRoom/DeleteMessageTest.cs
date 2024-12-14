@@ -12,7 +12,7 @@ public class DeleteMessageTest(ChattySiloFixture fixture)
     {
         // Arrange
         var chatRoom = fixture.Cluster.GrainFactory.GetGrain<IChatRoom>("all");
-        var message = fixture.ChatMessageFaker.Generate();
+        var message = fixture.ChatMessageAutoFaker.Generate();
         await chatRoom.PostMessage(message);
 
         // Act

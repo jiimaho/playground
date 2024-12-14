@@ -12,7 +12,7 @@ public class PostMessageTes(ChattySiloFixture fixture)
     {
         // Arrange
         var chatRoom = fixture.Cluster.GrainFactory.GetGrain<IChatRoom>("all");
-        var message = fixture.ChatMessageFaker.Generate();
+        var message = fixture.ChatMessageAutoFaker.Generate();
 
         // Act
         await chatRoom.PostMessage(message);
@@ -31,7 +31,7 @@ public class PostMessageTes(ChattySiloFixture fixture)
         var chatRoom = fixture.Cluster.GrainFactory.GetGrain<IChatRoom>("all");
         var observer = fixture.Cluster.GrainFactory.CreateObjectReference<IChatRoomObserver>(testObserver);
         await chatRoom.Join(observer);
-        var message = fixture.ChatMessageFaker.Generate();
+        var message = fixture.ChatMessageAutoFaker.Generate();
 
         // Act
         await chatRoom.PostMessage(message);

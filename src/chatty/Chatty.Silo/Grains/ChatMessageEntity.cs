@@ -1,5 +1,6 @@
 using Chatty.Silo.Primitives;
 using NodaTime;
+using NodaTime.Extensions;
 
 namespace Chatty.Silo.Grains;
 
@@ -9,12 +10,12 @@ public record ChatMessageEntity(
     string Message,
     DateTimeOffset Timestamp)
 {
-    public ChatMessage ToPrimitive() => new()
+    public ChatMessage ToDomain() => new()
     {
-        ChatRoomId = ChatRoomId,
-        Username = new Username(Username),
+        Username = Primitives.Username.Create(Username),
         Message = Message,
         Timestamp = Timestamp,
-        TimeStampNoda = ZonedDateTime.FromDateTimeOffset(Timestamp)
+        ChatRoomId = ChatRoomId,
+        TimeStampNoda = Timestamp.ToInstant().InUtc()
     };
 }

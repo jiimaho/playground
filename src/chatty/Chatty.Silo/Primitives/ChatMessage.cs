@@ -1,31 +1,53 @@
 using Chatty.Silo.Grains;
 using NodaTime;
+using NodaTime.Extensions;
 
 namespace Chatty.Silo.Primitives;
 
-// TOOD: Make immutable ❤️
-// Use complex types, and codecs
 [Alias("ChatMessage")]
 [GenerateSerializer]
-public class ChatMessage : ValueObject
+public sealed class ChatMessage : ValueObject
 {
     [Id(0)]
-    public Username Username { get; init; }
+    public required Username Username { get; init; }
 
     [Id(1)]
-    public string Message { get; init; }
-
+    public required string Message { get; init; }
+    
     [Id(2)]
-    public DateTimeOffset Timestamp { get; init; }
+    public required DateTimeOffset Timestamp { get; init; }
 
     [Id(3)]
-    public string ChatRoomId { get; init; }
+    public required string ChatRoomId { get; init; }
 
     [Id(4)]
-    public ZonedDateTime TimeStampNoda { get; init; } 
+    public required ZonedDateTime TimeStampNoda { get; init; }
 
     public override string ToString() => $"{Timestamp:HH:mm:ss} {Username}: {Message}";
+
+    // For orleans to be able to deserialize
+    // ReSharper disable once EmptyConstructor
+    public ChatMessage(){ }
     
+    public static ChatMessage Create(Username username, string message, string chatRoomId)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+            throw new ArgumentException("Message cannot be empty", nameof(message));
+        if (string.IsNullOrWhiteSpace(chatRoomId))
+            throw new ArgumentException("ChatRoomId cannot be empty", nameof(chatRoomId));
+        
+        var timestamp = DateTimeOffset.UtcNow;
+        var timeStampNoda = timestamp.ToInstant().InUtc();
+        return new ChatMessage
+        {
+            Username = username,
+            Message = message,
+            Timestamp = timestamp,
+            TimeStampNoda = timeStampNoda,
+            ChatRoomId = chatRoomId
+        };
+    }
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Username;
@@ -34,6 +56,5 @@ public class ChatMessage : ValueObject
         yield return TimeStampNoda;
         yield return ChatRoomId;
     }
-    
     public ChatMessageEntity ToEntity() => new(ChatRoomId, Username.Value, Message, Timestamp);
 }

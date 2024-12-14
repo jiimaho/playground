@@ -53,7 +53,7 @@ public class ChatRoomGrain : Grain, IChatRoom
     {
         _observers.Subscribe(observer, observer);
         return Task.FromResult(
-            new ReadOnlyCollection<ChatMessage>(_state.State.History.Select(m => m.ToPrimitive()).ToList()));
+            new ReadOnlyCollection<ChatMessage>(_state.State.History.Select(m => m.ToDomain()).ToList()));
     }
 
     public Task Leave(IChatRoomObserver observer)
@@ -64,7 +64,7 @@ public class ChatRoomGrain : Grain, IChatRoom
 
     public Task<ImmutableArray<ChatMessage>> GetHistory()
     {
-        var history = ImmutableArray<ChatMessage>.Empty.AddRange(_state.State.History.Select(m => m.ToPrimitive()));
+        var history = ImmutableArray<ChatMessage>.Empty.AddRange(_state.State.History.Select(m => m.ToDomain()));
         return Task.FromResult(history);
     }
 
@@ -73,7 +73,7 @@ public class ChatRoomGrain : Grain, IChatRoom
         int numOfMessages,
         GrainCancellationToken requestCancellationToken)
     {
-        var result = _state.State.History.Skip(startIndex).Take(numOfMessages).Select(m => m.ToPrimitive())
+        var result = _state.State.History.Skip(startIndex).Take(numOfMessages).Select(m => m.ToDomain())
             .ToImmutableArray();
         return Task.FromResult(result);
     }

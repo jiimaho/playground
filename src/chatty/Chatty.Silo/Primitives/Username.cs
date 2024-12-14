@@ -2,15 +2,24 @@ namespace Chatty.Silo.Primitives;
 
 [Alias("Username")]
 [GenerateSerializer]
-public class Username : ValueObject
+public sealed class Username : ValueObject
 {
     [Id(0)]
-    public string Value { get; }
+    public required string Value { get; init; }
 
-    public Username(string value)
+    // For orleans to be able to deserialize
+    // ReSharper disable once EmptyConstructor
+    public Username() { }
+    
+    public static Username Create(string username)
     {
-        ArgumentNullException.ThrowIfNull(value);
-        Value = value;
+        if (string.IsNullOrWhiteSpace(username))
+            throw new ArgumentException("Username cannot be empty", nameof(username));
+        
+        return new Username
+        {
+            Value = username
+        };
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

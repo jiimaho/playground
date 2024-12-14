@@ -23,13 +23,7 @@ public static class Report
             await htmlRenderer.Dispatcher.InvokeAsync(async () =>
             {
                 var dictionary = new Dictionary<string, object?>
-                    { { "Message", new  ChatMessage { 
-                        Username = new Username("Alice"), 
-                        Message = "Hello, World!", 
-                        Timestamp = time, 
-                        ChatRoomId = "1", 
-                        TimeStampNoda = ZonedDateTime.FromDateTimeOffset(time) 
-                    }} };
+                { { "Message", ChatMessage.Create(Username.Create("test"), "hejhej", "all")} };
 
                 var parameters = ParameterView.FromDictionary(dictionary);
                 var html = await htmlRenderer.RenderComponentAsync<ChatMessageComponent>(parameters);

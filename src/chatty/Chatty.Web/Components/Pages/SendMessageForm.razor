@@ -82,15 +82,7 @@
     {
         await StoreUsernameInSession();
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(ChatRoomId);
-        var time = DateTimeOffset.UtcNow;
-        var chatMessage = new Chatty.Silo.Primitives.ChatMessage
-        {
-            Username = new Username(Model.Username!),
-            Message = Model.Message!,
-            ChatRoomId = ChatRoomId,
-            Timestamp = time,
-            TimeStampNoda = ZonedDateTime.FromDateTimeOffset(time)
-        };
+        var chatMessage = Silo.Primitives.ChatMessage.Create(Username.Create(Model.Username!), Model.Message!, ChatRoomId);
         await chatRoomGrain.PostMessage(chatMessage);
         Model.Message = null;
     }

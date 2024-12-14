@@ -8,8 +8,8 @@ public class ValueObjectTest
     [Fact]
     public void Username_Is_Equal()
     {
-        var username1 = new Username("Jim");
-        var username2 = new Username("Jim");
+        var username1 = Username.Create("Jim");
+        var username2 = Username.Create("Jim");
         
         Assert.Equal(username1, username2);
     }
@@ -17,8 +17,8 @@ public class ValueObjectTest
     [Fact]
     public void Username_Is_Not_Equal()
     {
-        var username1 = new Username("Jim");
-        var username2 = new Username("Bob");
+        var username1 = Username.Create("Jim");
+        var username2 = Username.Create("Bob");
         
         Assert.NotEqual(username1, username2);
     }
@@ -26,13 +26,13 @@ public class ValueObjectTest
     [Fact]
     public void Username_Throws_Exception_When_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => new Username(null!));
+        Assert.Throws<ArgumentNullException>(() => Username.Create(null));
     }
     
     [Fact]
     public void Username_Is_Not_Equal_When_Different_Types()
     {
-        var username = new Username("Jim");
+        var username = Username.Create("Jim");
         
         Assert.NotEqual(username, new object());
     }
@@ -40,7 +40,7 @@ public class ValueObjectTest
     [Fact]
     public void Username_Is_Not_Equal_When_Other_Is_Null()
     {
-        Username username = new Username("Jim");
+        Username username = Username.Create("Jim");
         Username username2 = null!;
          
         Assert.NotEqual(username2, username);
@@ -50,7 +50,7 @@ public class ValueObjectTest
     public void Cannot_Add_Multiple_Identical_In_Dictionary()
     {
         var dictionary = new Dictionary<Username, DateTimeOffset>();
-        var username1 = new Username("Jim");
+        var username1 = Username.Create("Jim");
         dictionary[username1] = DateTimeOffset.UtcNow;
         dictionary[username1] = DateTimeOffset.UtcNow;
         
@@ -61,8 +61,8 @@ public class ValueObjectTest
     public void Cannot_Add_Multiple_Same_In_Dictionary()
     {
         var dictionary = new Dictionary<Username, DateTimeOffset>();
-        var username1 = new Username("Jim");
-        var username2 = new Username("Jim");
+        var username1 = Username.Create("Jim");
+        var username2 = Username.Create("Jim");
         dictionary[username1] = DateTimeOffset.UtcNow;
         dictionary[username2] = DateTimeOffset.UtcNow;
         
@@ -72,8 +72,8 @@ public class ValueObjectTest
     [Fact]
     public void Tst()
     {
-        var username1 = new Username("Jim");
-        var username2 = new Username("Jim");
+        var username1 = Username.Create("Jim");
+        var username2 = Username.Create("Jim");
 
         var equals = username1.Equals(username2);
         var hashCodeEquals = username1.GetHashCode() == username2.GetHashCode();
