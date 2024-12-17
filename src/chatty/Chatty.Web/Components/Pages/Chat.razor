@@ -4,32 +4,46 @@
 @using Blazored.LocalStorage
 @using Chatty.Silo
 
-@if (NotYetInitialized)
-{
-    <h1>Loading messages...</h1>
-}
-else if (Messages.Count  == 0)
-{
-    <h1>No messages yet</h1>
-    <SendMessageForm ChatRoomId="@ChatRoomId"/>
-}
-else
-{
-    <h1>Chat @Messages.Count</h1>
-    <button @onclick="Clear">Clear</button>
-    <div id="chat-container" class="chat-container">
-        <ul id="chat-list">
-            @foreach (var message in Messages)
-            {
-                <li>
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <MudText Typo="Typo.h1">Welcome to /@ChatRoomId</MudText>
+    <MudText Typo="Typo.h5">@Messages.Count message(s)</MudText>
+
+    @if (_notYetInitialized)
+    {
+        <h1>Loading messages...</h1>
+    }
+    else if (Messages.Count == 0)
+    {
+        <MudText Typo="Typo.h5">Wanna be the first one to send a message?</MudText>
+        <SendMessageForm ChatRoomId="@ChatRoomId"/>
+    }
+    else
+    {
+        <MudGrid>
+            <MudItem xs="12">
+                <MudButton Variant="Variant.Text" Size="Size.Medium" Color="Color.Secondary" OnClick="@Clear">Delete all
+                    messages
+                </MudButton>
+            </MudItem>
+
+            <MudItem xs="12">
+                @foreach (var message in Messages)
+                {
                     <ChatMessage Message="@message"></ChatMessage>
-                </li>
-            }
-        </ul>
-    </div>
-    <UsersOnline ChatRoomId="@ChatRoomId"/>
-    <SendMessageForm ChatRoomId="@ChatRoomId"/>
-}
+                }
+            </MudItem>
+
+            <MudItem xs="12">
+                <UsersOnline ChatRoomId="@ChatRoomId"/>
+            </MudItem>
+
+            <MudItem xs="12">
+                <SendMessageForm ChatRoomId="@ChatRoomId"/>
+            </MudItem>
+
+        </MudGrid>
+    }
+</MudContainer>
 
 @code {
 
@@ -52,7 +66,7 @@ else
 
     private List<Chatty.Silo.Primitives.ChatMessage> Messages { get; } = [];
 
-    private bool NotYetInitialized = true; 
+    private bool _notYetInitialized = true;
 
     // Lifecycle
     protected override async Task OnInitializedAsync()
@@ -72,7 +86,7 @@ else
         await chatRoomGrain.Join(_chatRoomObserver);
         var history = await chatRoomGrain.GetHistory();
         Messages.AddRange(history.ToList());
-        NotYetInitialized = false;
+        _notYetInitialized = false;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

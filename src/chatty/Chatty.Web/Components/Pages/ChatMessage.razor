@@ -1,17 +1,28 @@
 @using Chatty.Silo
+@using Chatty.Silo.Primitives
 @inject IClusterClient ClusterClient
 @inject IJSRuntime JsRuntime
 
-<div class="chat-message">
-    <div class="message-info">
-        <span class="username">@Message.Username</span>
-        <span class="timestamp">@Message.Timestamp.ToString() || </span>
-        <span class="timestamp">@Message.TimeStampNoda.ToString()</span>
-        <button class="delete-button" @onclick="DeleteMessage">Delete</button>
-    </div>
-    <div class="message-text">@Message.Message</div>
-
-</div>
+<MudGrid Class="chat-message-grid">
+    <MudItem xs="1">
+        <MudAvatar Color="Color.Primary">@(FirstCharacter(Message.Username))</MudAvatar>
+    </MudItem>
+    <MudItem xs="2">
+        <MudText>@Message.Username</MudText>
+    </MudItem>
+    <MudItem xs="6">
+        <MudText Typo="Typo.body1">@Message.Timestamp.ToString("yyyy-MM-dd hh:mm:ss")</MudText>
+    </MudItem>
+    <MudItem xs="3">
+        <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="@DeleteMessage">Delete
+        </MudButton>
+    </MudItem>
+    
+    <MudItem xs="12">
+        <MudText>@Message.Message</MudText>
+    </MudItem>
+    <MudSpacer></MudSpacer>
+</MudGrid>
 
 @code {
 
@@ -33,4 +44,6 @@
         var chatRoomGrain = ClusterClient.GetGrain<IChatRoom>(Message.ChatRoomId ?? "all");
         await chatRoomGrain.DeleteMessage(Message);
     }
+    
+    private string FirstCharacter(Username username) => username.Value[..1];
 }

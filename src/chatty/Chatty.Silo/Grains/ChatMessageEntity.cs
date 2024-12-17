@@ -10,12 +10,9 @@ public record ChatMessageEntity(
     string Message,
     DateTimeOffset Timestamp)
 {
-    public ChatMessage ToDomain() => new()
-    {
-        Username = Primitives.Username.Create(Username),
-        Message = Message,
-        Timestamp = Timestamp,
-        ChatRoomId = ChatRoomId,
-        TimeStampNoda = Timestamp.ToInstant().InUtc()
-    };
+    public ChatMessage ToDomain() => ChatMessage.Create(
+        Primitives.Username.Create(Username),
+        Message,
+        ChatRoomId,
+        Timestamp);
 }

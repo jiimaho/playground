@@ -3,17 +3,22 @@
 @using Chatty.Silo
 @using Chatty.Silo.Primitives
 @using System.ComponentModel.DataAnnotations
-@using NodaTime
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"/>
-
-<EditForm Model="@Model" OnSubmit="OnSubmit">
+<EditForm Model="@Model" OnSubmit="@OnSubmit">
     <DataAnnotationsValidator/>
-    <InputText class="form-control" @bind-Value="@Model.Username"/>
-    <ValidationMessage For="@(() => Model.Username)"></ValidationMessage>
-    <InputText class="form-control" @bind-Value="@Model.Message"/>
-    <ValidationMessage For="@(() => Model.Message)"></ValidationMessage>
-    <button class="btn btn-primary mb-3" type="submit">Send to @ChatRoomId</button>
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Username" InputType="InputType.Text" @bind-Value="@Model.Username" HelperText="Minimum 3 characters" For="@(() => Model.Username)" Required="true"
+                          RequiredError="Username is required"/>
+            <MudTextField Label="Message" InputType="InputType.Text" @bind-Value="@Model.Message" For="@(() => Model.Message)" Required="true"
+                          RequiredError="Message is required"/>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Send
+                to @ChatRoomId</MudButton>
+        </MudCardActions>
+    </MudCard>
 </EditForm>
 
 @code {

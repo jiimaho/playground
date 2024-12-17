@@ -25,18 +25,16 @@ public sealed class ChatMessage : ValueObject
 
     public override string ToString() => $"{Timestamp:HH:mm:ss} {Username}: {Message}";
 
-    // For orleans to be able to deserialize
-    // ReSharper disable once EmptyConstructor
-    public ChatMessage(){ }
+    private ChatMessage(){ }
     
-    public static ChatMessage Create(Username username, string message, string chatRoomId)
+    public static ChatMessage Create(Username username, string message, string chatRoomId, DateTimeOffset? time = null)
     {
         if (string.IsNullOrWhiteSpace(message))
             throw new ArgumentException("Message cannot be empty", nameof(message));
         if (string.IsNullOrWhiteSpace(chatRoomId))
             throw new ArgumentException("ChatRoomId cannot be empty", nameof(chatRoomId));
         
-        var timestamp = DateTimeOffset.UtcNow;
+        var timestamp = time ?? DateTimeOffset.UtcNow;
         var timeStampNoda = timestamp.ToInstant().InUtc();
         return new ChatMessage
         {
