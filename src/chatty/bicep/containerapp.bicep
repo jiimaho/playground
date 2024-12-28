@@ -89,7 +89,7 @@ resource siloAppContainer 'Microsoft.App/containerApps@2023-05-01' = {
             ]
             ingress: {
                 external: true
-                targetPort: 30000
+                targetPort: 8080 
             }
         }
         template: {
