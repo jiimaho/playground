@@ -82,6 +82,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D02465D3-B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orleans.Silo.Test", "src\chatty\test\Orleans.Silo.Test\Orleans.Silo.Test.csproj", "{7AF0B773-E900-4583-8885-CF25CA2F08B0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bicep", "bicep", "{07CE48A2-23A7-4E3A-8B89-800F050840C6}"
+	ProjectSection(SolutionItems) = preProject
+		src\chatty\bicep\run.sh = src\chatty\bicep\run.sh
+		src\chatty\bicep\rg-playground-acr.bicep = src\chatty\bicep\rg-playground-acr.bicep
+		src\chatty\bicep\acr.bicep = src\chatty\bicep\acr.bicep
+		src\chatty\bicep\containerapp.bicep = src\chatty\bicep\containerapp.bicep
+		src\chatty\bicep\cosmos.bicep = src\chatty\bicep\cosmos.bicep
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -233,5 +242,6 @@ Global
 		{2C302BAF-ED7D-4FDF-BAE0-8D7676C17D7D} = {B728CF00-754D-4660-8D56-92B6C2EBFFB6}
 		{D02465D3-B60B-4D4B-A5A6-83C7027F1005} = {B728CF00-754D-4660-8D56-92B6C2EBFFB6}
 		{7AF0B773-E900-4583-8885-CF25CA2F08B0} = {D02465D3-B60B-4D4B-A5A6-83C7027F1005}
+		{07CE48A2-23A7-4E3A-8B89-800F050840C6} = {B728CF00-754D-4660-8D56-92B6C2EBFFB6}
 	EndGlobalSection
 EndGlobal
