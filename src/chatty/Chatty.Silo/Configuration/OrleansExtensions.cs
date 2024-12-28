@@ -34,15 +34,16 @@ public static class OrleansExtensions
         // Azure
         if (!context.HostingEnvironment.IsDevelopment())
         {
+            var managedIdentityClientId = context.Configuration.GetValue<string>("MANAGED_IDENTITY_CLIENT_ID")!;
+            var cosmosEndpoint = context.Configuration.GetValue<string>("COSMOS_ENDPOINT")!;
             siloBuilder.UseCosmosClustering(
                 configureOptions: options =>
                 {
                     options.IsResourceCreationEnabled = false;
                     options.DatabaseName = "chatty";
                     options.ContainerName = "silo";
-                    options.ConfigureCosmosClient(
-                        context.Configuration.GetValue<string>("COSMOS_ENDPOINT")!,
-                        new ManagedIdentityCredential(Environment.GetEnvironmentVariable("MANAGED_IDENTITY_CLIENT_ID")!));
+                    options.ConfigureCosmosClient(cosmosEndpoint,
+                        new ManagedIdentityCredential(managedIdentityClientId));
                 });
 
             siloBuilder.AddCosmosGrainStorage(
@@ -52,19 +53,20 @@ public static class OrleansExtensions
                     options.IsResourceCreationEnabled = false;
                     options.DatabaseName = "chatty";
                     options.ContainerName = "state";
-                    options.ConfigureCosmosClient(
-                        context.Configuration.GetValue<string>("COSMOS_ENDPOINT")!,
-                        new ManagedIdentityCredential(Environment.GetEnvironmentVariable("MANAGED_IDENTITY_CLIENT_ID")!));
+                    options.ConfigureCosmosClient(cosmosEndpoint,
+                        new ManagedIdentityCredential(managedIdentityClientId));
                 });
         }
+
+        var isDockerCompose = context.Configuration.GetValue<bool>("IS_DOCKER_COMPOSE");
+        var siloNumber = context.Configuration.GetValue<string>("SILO_NUMBER")!;
 
         // Silo ports & IP
         siloBuilder.Services.Configure<EndpointOptions>(options =>
         {
-            var isDockerCompose = bool.Parse(Environment.GetEnvironmentVariable("IS_DOCKER_COMPOSE") ?? "false");
             if (isDockerCompose)
             {
-                var dns = $"silo-{Environment.GetEnvironmentVariable("SILO_NUMBER")!}";
+                var dns = $"silo-{siloNumber}";
                 options.AdvertisedIPAddress = Dns.GetHostEntry(dns).AddressList[0];
             }
             else if (context.HostingEnvironment.IsDevelopment())
@@ -72,8 +74,8 @@ public static class OrleansExtensions
                 options.AdvertisedIPAddress = IPAddress.Loopback;
             }
 
-            options.GatewayPort = int.Parse(Environment.GetEnvironmentVariable("GATEWAY_PORT")!);
-            options.SiloPort = int.Parse(Environment.GetEnvironmentVariable("SILO_PORT")!);
+            options.GatewayPort = context.Configuration.GetValue<int>("GATEWAY_PORT");
+            options.SiloPort = context.Configuration.GetValue<int>("SILO_PORT");
         });
 
         // Cluster id
@@ -86,7 +88,7 @@ public static class OrleansExtensions
         // Silo name
         siloBuilder.Services.Configure<SiloOptions>(options =>
         {
-            options.SiloName = $"silo-number-{Environment.GetEnvironmentVariable("SILO_NUMBER")}";
+            options.SiloName = $"silo-number-{siloNumber}";
         });
 
         // Silo cleanup

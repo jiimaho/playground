@@ -33,21 +33,21 @@ public static class ApplicationBuilderExtensions
         // builder.Services.AddHostedService<UserOnlineNotifier>();
         
         // Orleans
-        // builder.Host.UseOrleansClient((_, clientBuilder) =>
-        // {
-        //     clientBuilder.UseDynamoDBClustering(options => 
-        //     {
-        //         options.TableName = ChattyOrleansConstants.Cluster.ClusteringTableName;
-        //         options.CreateIfNotExists = false;
-        //         options.Service = ChattyOrleansConstants.Cluster.Region;
-        //     });
-        //     clientBuilder.Configure<ClusterOptions>(options =>
-        //     {
-        //         options.ClusterId = ChattyOrleansConstants.Cluster.ClusterId;
-        //         options.ServiceId = ChattyOrleansConstants.Cluster.ServiceId;
-        //     });
-        //     clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
-        // });
+        builder.Host.UseOrleansClient((_, clientBuilder) =>
+        {
+            clientBuilder.UseDynamoDBClustering(options => 
+            {
+                options.TableName = ChattyOrleansConstants.Cluster.ClusteringTableName;
+                options.CreateIfNotExists = false;
+                options.Service = ChattyOrleansConstants.Cluster.Region;
+            });
+            clientBuilder.Configure<ClusterOptions>(options =>
+            {
+                options.ClusterId = ChattyOrleansConstants.Cluster.ClusterId;
+                options.ServiceId = ChattyOrleansConstants.Cluster.ServiceId;
+            });
+            clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
+        });
     }
 
     public static void ConfigureApplicationPipeline(this WebApplication app)
