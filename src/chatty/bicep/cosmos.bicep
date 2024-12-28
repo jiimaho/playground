@@ -106,6 +106,7 @@ resource stateCosmosContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabase
     }
 }
 
+// NOTE TO SELF: if this is not enough then try add another role definition az cosmosdb sql role assignment create --account-name cosmos-scplayground --resource-group rg-playground-acr --scope "/" --principal-id 8c619f71-3046-4793-9865-98b6212d9271 --role-definition-name "Cosmos DB Built-in Data Contributor"
 // Add role assignment for container app managed identity
 resource dbContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
     name: guid(cosmosAccount.id, existingManagedIdentityPrincipalId, 'scsql-role')
