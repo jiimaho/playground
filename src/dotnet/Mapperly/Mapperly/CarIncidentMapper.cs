@@ -1,4 +1,5 @@
-using Mapperly.Models;
+using Domain;
+using Domain.Models;
 using Riok.Mapperly.Abstractions;
 
 namespace Mapperly;

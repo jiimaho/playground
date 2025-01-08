@@ -1,4 +1,4 @@
-namespace Mapperly.Models;
+namespace Domain.Models;
 
 public class Severity(string value) : DomainPrimitive<string>(value)
 {

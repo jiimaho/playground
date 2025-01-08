@@ -1,4 +1,4 @@
-namespace Mapperly.Models;
+namespace Domain.Models;
 
 public class DomainPrimitive<T> : ValueObject
 {

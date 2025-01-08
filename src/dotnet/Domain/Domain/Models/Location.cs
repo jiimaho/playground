@@ -1,4 +1,4 @@
-namespace Mapperly.Models;
+namespace Domain.Models;
 
 public class Location(Street street, City city) : ValueObject
 {
@@ -13,6 +13,6 @@ public class Location(Street street, City city) : ValueObject
 
     public override string ToString()
     {
-        return $"{Street} {City}";
+        return $"City is {City} and street is {Street}";
     }
 }

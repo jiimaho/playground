@@ -1,12 +1,12 @@
 using System.Text;
-using Mapperly.Models;
+using Domain.Models;
 
-namespace Mapperly;
+namespace Domain;
 
 public class CarIncidentDto
 {
     public string Id { get; set; }
-    public CarId CarId { get; set; }
+    public CarId CarId { get; set; } // A incident for now is simple and always contains only one car
     public LocationDto Place { get; set; }
     public string Description { get; set; }
     
@@ -33,6 +33,6 @@ public class LocationDto
 
     public override string ToString()
     {
-        return $"{Street} {City}";
+        return $"City is {City} and street is {Street}";
     }
 }
