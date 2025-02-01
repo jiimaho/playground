@@ -2,10 +2,12 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseOrleans((context, siloBuilder) =>
+builder.AddKeyedAzureTableClient("clustering");
+builder.AddKeyedAzureBlobClient("grain-state");
+builder.UseOrleans(siloBuilder =>
 {
-    siloBuilder.UseChattyOrleans(context); 
-}).UseConsoleLifetime();
+    siloBuilder.UseChattyOrleans(builder.Configuration, builder.Environment);
+});
 
 var app = builder.Build();
 

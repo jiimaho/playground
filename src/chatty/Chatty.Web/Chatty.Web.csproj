@@ -7,49 +7,54 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Components\App.razor" />
-      <_ContentIncludedByDefault Remove="Components\Layout\MainLayout.razor" />
-      <_ContentIncludedByDefault Remove="Components\Layout\NavMenu.razor" />
-      <_ContentIncludedByDefault Remove="Components\Pages\Counter.razor" />
-      <_ContentIncludedByDefault Remove="Components\Pages\Error.razor" />
-      <_ContentIncludedByDefault Remove="Components\Pages\Home.razor" />
-      <_ContentIncludedByDefault Remove="Components\Pages\Weather.razor" />
-      <_ContentIncludedByDefault Remove="Components\Routes.razor" />
-      <_ContentIncludedByDefault Remove="Components\_Imports.razor" />
-      <_ContentIncludedByDefault Remove="Chatty.Web\obj\Chatty.Web.csproj.nuget.dgspec.json" />
-      <_ContentIncludedByDefault Remove="Chatty.Web\obj\project.assets.json" />
+        <_ContentIncludedByDefault Remove="Components\App.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Layout\MainLayout.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Layout\NavMenu.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Pages\Counter.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Pages\Error.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Pages\Home.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Pages\Weather.razor"/>
+        <_ContentIncludedByDefault Remove="Components\Routes.razor"/>
+        <_ContentIncludedByDefault Remove="Components\_Imports.razor"/>
+        <_ContentIncludedByDefault Remove="Chatty.Web\obj\Chatty.Web.csproj.nuget.dgspec.json"/>
+        <_ContentIncludedByDefault Remove="Chatty.Web\obj\project.assets.json"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Components\App.razor" />
-      <AdditionalFiles Include="Components\Layout\MainLayout.razor" />
-      <AdditionalFiles Include="Components\Layout\NavMenu.razor" />
-      <AdditionalFiles Include="Components\Pages\Chat.razor" />
-      <AdditionalFiles Include="Components\Pages\ChatMessage.razor" />
-      <AdditionalFiles Include="Components\Pages\Error.razor" />
-      <AdditionalFiles Include="Components\Pages\Home.razor" />
-      <AdditionalFiles Include="Components\Pages\SendMessageForm.razor" />
-      <AdditionalFiles Include="Components\Pages\UsersOnline.razor" />
-      <AdditionalFiles Include="Components\Pages\Weather.razor" />
-      <AdditionalFiles Include="Components\Routes.razor" />
-      <AdditionalFiles Include="Components\_Imports.razor" />
+        <AdditionalFiles Include="Components\App.razor"/>
+        <AdditionalFiles Include="Components\Layout\MainLayout.razor"/>
+        <AdditionalFiles Include="Components\Layout\NavMenu.razor"/>
+        <AdditionalFiles Include="Components\Pages\Chat.razor"/>
+        <AdditionalFiles Include="Components\Pages\ChatMessage.razor"/>
+        <AdditionalFiles Include="Components\Pages\Error.razor"/>
+        <AdditionalFiles Include="Components\Pages\Home.razor"/>
+        <AdditionalFiles Include="Components\Pages\SendMessageForm.razor"/>
+        <AdditionalFiles Include="Components\Pages\UsersOnline.razor"/>
+        <AdditionalFiles Include="Components\Pages\Weather.razor"/>
+        <AdditionalFiles Include="Components\Routes.razor"/>
+        <AdditionalFiles Include="Components\_Imports.razor"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\..\..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\..\..\..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Chatty.Silo\Chatty.Silo.csproj" />
+        <ProjectReference Include="..\Chatty.Silo\Chatty.Silo.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.11" />
-      <PackageReference Include="Microsoft.Playwright" Version="1.49.0" />
-      <PackageReference Include="MudBlazor" Version="8.0.0-preview.5" />
+        <PackageReference Include="Aspire.Azure.Data.Tables" Version="9.0.0"/>
+        <PackageReference Include="Aspire.Azure.Storage.Blobs" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.Orleans.Client" Version="9.0.1" />
+        <PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="9.0.1"/>
+        <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" Version="9.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.11"/>
+        <PackageReference Include="Microsoft.Playwright" Version="1.49.0"/>
+        <PackageReference Include="MudBlazor" Version="8.0.0-preview.5"/>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.5.0"/>
     </ItemGroup>
 
 </Project>

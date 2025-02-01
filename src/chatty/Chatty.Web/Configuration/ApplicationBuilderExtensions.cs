@@ -20,34 +20,43 @@ public static class ApplicationBuilderExtensions
             .AddInteractiveServerComponents()
             .AddInteractiveWebAssemblyComponents();
         builder.Services.AddBlazoredLocalStorage();
-        
+
         // MudBlazor
-        builder.Services.AddMudServices(); 
-        
+        builder.Services.AddMudServices();
+
         // SignalR
         builder.Services.AddSignalR();
-        
+
         // CORS
         builder.Services.AddCors();
 
         // builder.Services.AddHostedService<UserOnlineNotifier>();
-        
+
         // Orleans
-        builder.Host.UseOrleansClient((_, clientBuilder) =>
+        builder.AddKeyedAzureTableClient("clustering");
+        builder.UseOrleansClient(clientBuilder =>
         {
-            clientBuilder.UseDynamoDBClustering(options => 
-            {
-                options.TableName = ChattyOrleansConstants.Cluster.ClusteringTableName;
-                options.CreateIfNotExists = false;
-                options.Service = ChattyOrleansConstants.Cluster.Region;
-            });
-            clientBuilder.Configure<ClusterOptions>(options =>
-            {
-                options.ClusterId = ChattyOrleansConstants.Cluster.ClusterId;
-                options.ServiceId = ChattyOrleansConstants.Cluster.ServiceId;
-            });
             clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
         });
+        // builder.Host.UseOrleansClient((context, clientBuilder) =>
+        // {
+        //     // clientBuilder.UseDynamoDBClustering(options => 
+        //     // {
+        //     //     options.TableName = ChattyOrleansConstants.Cluster.ClusteringTableName;
+        //     //     options.CreateIfNotExists = false;
+        //     //     options.Service = ChattyOrleansConstants.Cluster.Region;
+        //     // });
+        //     if (!(context.HostingEnvironment.IsDevelopment() && context.Configuration.GetValue<bool>("IS_ASPIRE")))
+        //     {
+        //         clientBuilder.Configure<ClusterOptions>(options =>
+        //         {
+        //             options.ClusterId = ChattyOrleansConstants.Cluster.ClusterId;
+        //             options.ServiceId = ChattyOrleansConstants.Cluster.ServiceId;
+        //         });
+        //     }
+        //
+        //     clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
+        // });
     }
 
     public static void ConfigureApplicationPipeline(this WebApplication app)

@@ -9,12 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Aspire.Azure.Data.Tables" Version="9.0.0" />
+      <PackageReference Include="Aspire.Azure.Storage.Blobs" Version="9.0.0" />
       <PackageReference Include="Azure.Identity" Version="1.13.1" />
       <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-      <PackageReference Include="Microsoft.Orleans.Clustering.Cosmos" Version="9.0.1" />
-      <PackageReference Include="Microsoft.Orleans.Clustering.DynamoDB" Version="9.0.1" />
-      <PackageReference Include="Microsoft.Orleans.Persistence.Cosmos" Version="9.0.1" />
-      <PackageReference Include="Microsoft.Orleans.Persistence.DynamoDB" Version="9.0.1" />
+      <PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="9.0.1" />
+      <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" Version="9.0.1" />
       <PackageReference Include="Microsoft.Orleans.Serialization.SystemTextJson" Version="9.0.1" />
       <PackageReference Include="Microsoft.Orleans.Server" Version="9.0.1" />
       <PackageReference Include="NodaTime" Version="3.2.0" />
@@ -24,6 +24,10 @@
       <Content Include="..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Chatty.ServiceDefaults\Chatty.ServiceDefaults.csproj" />
     </ItemGroup>
 
 </Project>
