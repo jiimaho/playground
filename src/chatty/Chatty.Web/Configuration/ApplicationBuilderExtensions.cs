@@ -30,33 +30,12 @@ public static class ApplicationBuilderExtensions
         // CORS
         builder.Services.AddCors();
 
-        // builder.Services.AddHostedService<UserOnlineNotifier>();
-
         // Orleans
         builder.AddKeyedAzureTableClient("clustering");
         builder.UseOrleansClient(clientBuilder =>
         {
             clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
         });
-        // builder.Host.UseOrleansClient((context, clientBuilder) =>
-        // {
-        //     // clientBuilder.UseDynamoDBClustering(options => 
-        //     // {
-        //     //     options.TableName = ChattyOrleansConstants.Cluster.ClusteringTableName;
-        //     //     options.CreateIfNotExists = false;
-        //     //     options.Service = ChattyOrleansConstants.Cluster.Region;
-        //     // });
-        //     if (!(context.HostingEnvironment.IsDevelopment() && context.Configuration.GetValue<bool>("IS_ASPIRE")))
-        //     {
-        //         clientBuilder.Configure<ClusterOptions>(options =>
-        //         {
-        //             options.ClusterId = ChattyOrleansConstants.Cluster.ClusterId;
-        //             options.ServiceId = ChattyOrleansConstants.Cluster.ServiceId;
-        //         });
-        //     }
-        //
-        //     clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
-        // });
     }
 
     public static void ConfigureApplicationPipeline(this WebApplication app)
