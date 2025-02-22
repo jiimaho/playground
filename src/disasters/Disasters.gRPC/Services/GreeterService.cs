@@ -1,5 +1,4 @@
 using Grpc.Core;
-using Disasters.gRPC;
 
 namespace Disasters.gRPC.Services;
 

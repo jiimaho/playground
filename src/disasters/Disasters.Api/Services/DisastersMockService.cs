@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
-
 namespace Disasters.Api.Services;
 
 public class DisastersMockService( 

@@ -1,4 +1,5 @@
-using Chatty.Silo;
+using Chatty.Silo.Features.Chatroom.Grains;
+using Chatty.Silo.Features.Chatroom.Observers;
 using Microsoft.Extensions.Hosting;
 
 namespace Chatty.ConsoleConsumer;

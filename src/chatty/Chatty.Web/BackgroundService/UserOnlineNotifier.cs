@@ -1,4 +1,5 @@
-using Chatty.Silo;
+using Chatty.Silo.Features.Chatroom.Grains;
+using Chatty.Silo.Features.Chatroom.Observers;
 using Chatty.Web.Components;
 using Chatty.Web.Hubs;
 using Microsoft.AspNetCore.SignalR;

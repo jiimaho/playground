@@ -1,13 +1,15 @@
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using Chatty.Silo.Configuration;
+using Chatty.Silo.Features.Chatroom.Observers;
+using Chatty.Silo.Features.SensitiveKeywords.Grains;
 using Chatty.Silo.Primitives;
 using JetBrains.Annotations;
-using Orleans.Runtime;
 using Orleans.Utilities;
 
-namespace Chatty.Silo.Grains;
+namespace Chatty.Silo.Features.Chatroom.Grains;
 
+[GrainType("ChatRoomGrain")]
 [UsedImplicitly]
 public class ChatRoomGrain : Grain, IChatRoom 
 {
@@ -22,7 +24,8 @@ public class ChatRoomGrain : Grain, IChatRoom
     public ChatRoomGrain(
         ILogger<ChatRoomGrain> logger,
         [PersistentState(StateName, ChattyOrleansConstants.Storage.Name)]
-        IPersistentState<ChatRoomGrainState> state)
+        IPersistentState<ChatRoomGrainState> state
+        )
     {
         _state = state;
         _observers = new ObserverManager<IChatRoomObserver>(TimeSpan.FromHours(1), logger);
@@ -33,7 +36,19 @@ public class ChatRoomGrain : Grain, IChatRoom
         _state.State.History.Add(message.ToEntity());
         await UpdateUserOnline(message);
         await _state.WriteStateAsync();
-        Console.WriteLine($"{nameof(ChatRoomGrain)} is notifying all observers of the message: {message}");
+        await NotifyObservers(message);
+        await PublishToStream(message);
+    }
+
+    private async Task PublishToStream(ChatMessage message)
+    {
+        var provider = this.GetStreamProvider("default");
+        var stream = provider.GetStream<ChatMessage>(StreamId.Create("chat", this.GetPrimaryKeyString()));
+        await stream.OnNextAsync(message);
+    }
+
+    private async Task NotifyObservers(ChatMessage message)
+    {
         await _observers.Notify(x => x.ReceiveMessage(message));
     }
 

@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Disasters.Api.Db;

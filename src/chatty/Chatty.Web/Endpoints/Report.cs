@@ -2,7 +2,6 @@ using Chatty.Silo.Primitives;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Playwright;
-using NodaTime;
 using ChatMessage = Chatty.Silo.Primitives.ChatMessage;
 using ChatMessageComponent = Chatty.Web.Components.Pages.ChatMessage;
 

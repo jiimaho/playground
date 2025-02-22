@@ -1,5 +1,4 @@
-using System.Collections.Immutable;
-using Chatty.Silo;
+using Chatty.Silo.Features.Chatroom.Observers;
 using Chatty.Silo.Primitives;
 
 namespace Chatty.ConsoleConsumer;

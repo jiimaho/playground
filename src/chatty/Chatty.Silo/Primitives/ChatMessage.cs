@@ -1,4 +1,4 @@
-using Chatty.Silo.Grains;
+using Chatty.Silo.Features.Chatroom.Grains;
 using NodaTime;
 using NodaTime.Extensions;
 

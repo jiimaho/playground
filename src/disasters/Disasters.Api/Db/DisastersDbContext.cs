@@ -1,6 +1,5 @@
 using Disasters.Api.Db.Seed;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Disasters.Api.Db;
 

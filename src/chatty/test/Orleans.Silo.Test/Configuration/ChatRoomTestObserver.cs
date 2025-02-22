@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using Chatty.Silo;
+using Chatty.Silo.Features.Chatroom.Observers;
 using Chatty.Silo.Primitives;
 
 namespace Orleans.Silo.Test.Configuration;

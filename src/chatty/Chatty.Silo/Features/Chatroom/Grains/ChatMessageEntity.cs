@@ -1,8 +1,6 @@
 using Chatty.Silo.Primitives;
-using NodaTime;
-using NodaTime.Extensions;
 
-namespace Chatty.Silo.Grains;
+namespace Chatty.Silo.Features.Chatroom.Grains;
 
 public record ChatMessageEntity(
     string ChatRoomId,

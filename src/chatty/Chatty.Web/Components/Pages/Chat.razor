@@ -2,11 +2,11 @@
 @rendermode InteractiveAuto
 @using System.ComponentModel.DataAnnotations
 @using Blazored.LocalStorage
-@using Chatty.Silo
+@using Chatty.Silo.Features.Chatroom.Grains
+@using Chatty.Silo.Features.Chatroom.Observers
 
 <MudContainer MaxWidth="MaxWidth.Medium">
-    <MudText Typo="Typo.h1">Welcome to /@ChatRoomId</MudText>
-    <MudText Typo="Typo.h5">@Messages.Count message(s)</MudText>
+    <MudText Typo="Typo.h5">Welcome to /@ChatRoomId (@Messages.Count message(s))</MudText>
 
     @if (_notYetInitialized)
     {
@@ -21,7 +21,7 @@
     {
         <MudGrid>
             <MudItem xs="12">
-                <MudButton Variant="Variant.Text" Size="Size.Medium" Color="Color.Secondary" OnClick="@Clear">Delete all
+                <MudButton Size="Size.Small" Color="Color.Secondary" OnClick="@Clear">Delete all
                     messages
                 </MudButton>
             </MudItem>

@@ -1,6 +1,5 @@
 using Disasters.Api.Configuration;
 using JetBrains.Annotations;
-using Serilog;
 
 var logger = LogHelper.CreateStartupLogger();
 

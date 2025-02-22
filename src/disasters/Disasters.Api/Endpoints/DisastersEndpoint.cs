@@ -1,5 +1,4 @@
 using Disasters.Api.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Disasters.Api.Endpoints;

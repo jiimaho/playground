@@ -1,12 +1,9 @@
 using Blazored.LocalStorage;
-using Chatty.Silo.Configuration;
 using Chatty.Silo.Configuration.Serialization;
-using Chatty.Web.BackgroundService;
 using Chatty.Web.Components;
 using Chatty.Web.Endpoints;
 using Chatty.Web.Hubs;
 using MudBlazor.Services;
-using Orleans.Configuration;
 using Orleans.Serialization;
 
 namespace Chatty.Web.Configuration;

@@ -1,8 +1,9 @@
 @page "/users-online/{ChatRoomId}"
 @using System.ComponentModel.DataAnnotations
-@using Chatty.Silo
 @using Chatty.Silo.Primitives
 @using System.Timers
+@using Chatty.Silo.Features.Chatroom.Grains
+@using Chatty.Silo.Features.Chatroom.Observers
 @inject IClusterClient ClusterClient
 @inject IJSRuntime js
 @implements IAsyncDisposable

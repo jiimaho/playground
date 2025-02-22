@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Chatty.Silo.Grains;
+namespace Chatty.Silo.Features.Chatroom.Grains;
 
 // Keep free from complex types. Serialization must be easy.
 [UsedImplicitly]

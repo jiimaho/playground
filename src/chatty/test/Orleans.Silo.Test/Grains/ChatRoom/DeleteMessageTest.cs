@@ -1,4 +1,4 @@
-using Chatty.Silo;
+using Chatty.Silo.Features.Chatroom.Grains;
 using FluentAssertions;
 using Orleans.Silo.Test.Configuration;
 

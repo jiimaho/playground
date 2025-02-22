@@ -1,8 +1,9 @@
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using Chatty.Silo.Features.Chatroom.Observers;
 using Chatty.Silo.Primitives;
 
-namespace Chatty.Silo;
+namespace Chatty.Silo.Features.Chatroom.Grains;
 
 [Alias("IChatRoom")]
 public interface IChatRoom : IGrainWithStringKey

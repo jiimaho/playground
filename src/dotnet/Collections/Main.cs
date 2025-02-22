@@ -1,5 +1,4 @@
-﻿using Collections;
-using Terminal.Gui;
+﻿using Terminal.Gui;
 
 Application.Run<MainWindow>();
 

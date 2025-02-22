@@ -1,8 +1,8 @@
 @page "/chat/{ChatRoomId}/send-message"
 @using Blazored.LocalStorage
-@using Chatty.Silo
 @using Chatty.Silo.Primitives
 @using System.ComponentModel.DataAnnotations
+@using Chatty.Silo.Features.Chatroom.Grains
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"/>
 <EditForm Model="@Model" OnSubmit="@OnSubmit">
