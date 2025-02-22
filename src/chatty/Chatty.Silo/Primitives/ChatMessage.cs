@@ -13,7 +13,7 @@ public sealed class ChatMessage : ValueObject
 
     [Id(1)]
     public required string Message { get; init; }
-    
+
     [Id(2)]
     public required DateTimeOffset Timestamp { get; init; }
 
@@ -23,17 +23,22 @@ public sealed class ChatMessage : ValueObject
     [Id(4)]
     public required ZonedDateTime TimeStampNoda { get; init; }
 
+    [Id(5)]
+    public required Guid Id { get; init; }
+
     public override string ToString() => $"{Timestamp:HH:mm:ss} {Username}: {Message}";
 
-    private ChatMessage(){ }
-    
+    private ChatMessage()
+    {
+    }
+
     public static ChatMessage Create(Username username, string message, string chatRoomId, DateTimeOffset? time = null)
     {
         if (string.IsNullOrWhiteSpace(message))
             throw new ArgumentException("Message cannot be empty", nameof(message));
         if (string.IsNullOrWhiteSpace(chatRoomId))
             throw new ArgumentException("ChatRoomId cannot be empty", nameof(chatRoomId));
-        
+
         var timestamp = time ?? DateTimeOffset.UtcNow;
         var timeStampNoda = timestamp.ToInstant().InUtc();
         return new ChatMessage
@@ -42,7 +47,8 @@ public sealed class ChatMessage : ValueObject
             Message = message,
             Timestamp = timestamp,
             TimeStampNoda = timeStampNoda,
-            ChatRoomId = chatRoomId
+            ChatRoomId = chatRoomId,
+            Id = Guid.CreateVersion7()
         };
     }
 
@@ -54,5 +60,6 @@ public sealed class ChatMessage : ValueObject
         yield return TimeStampNoda;
         yield return ChatRoomId;
     }
+
     public ChatMessageEntity ToEntity() => new(ChatRoomId, Username.Value, Message, Timestamp);
 }

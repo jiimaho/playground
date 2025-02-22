@@ -55,7 +55,7 @@ public class SensitiveKeywordsMonitorGrain(
         var cts = new CancellationTokenSource();
         var entity = new SensitiveKeywordEntity
         {
-            PartitionKey = msg.GetHashCode().ToString(),
+            PartitionKey = $"chatmessage#{msg.ChatRoomId}#{msg.Id}",
             RowKey = msg.ChatRoomId,
             Timestamp = DateTimeOffset.Now,
             ETag = ETag.All,
