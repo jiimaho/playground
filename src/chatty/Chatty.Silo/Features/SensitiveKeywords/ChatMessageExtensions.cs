@@ -3,7 +3,7 @@ using Chatty.Silo.Primitives;
 
 namespace Chatty.Silo.Features.SensitiveKeywords;
 
-public static class ChatMessageValidation
+public static class ChatMessageExtensions
 {
     public static ChatMessageValidationResult Validate(this ChatMessage message, SensitiveKeywordsOptions options)
     {

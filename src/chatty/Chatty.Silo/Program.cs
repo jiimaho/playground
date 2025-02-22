@@ -1,5 +1,4 @@
 ﻿using Chatty.Silo.Configuration;
-using Chatty.Silo.Features.SensitiveKeywords.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
