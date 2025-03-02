@@ -15,19 +15,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IValidator<ChatMessageRequest>, ChatMessageValidator>();
 
+builder.AddServiceDefaults();
+
+builder.AddKeyedAzureTableClient("clustering");
+
 builder.Host.UseOrleansClient((context, clientBuilder) =>
 {
-    clientBuilder.UseDynamoDBClustering(options =>
-    {
-        options.Service = "eu-west-1";
-    });
-    clientBuilder.Configure<ClusterOptions>(options =>
-    {
-        options.ClusterId = "blazor-cluster";
-        options.ServiceId = $"service-number-{Environment.GetEnvironmentVariable("SERIVCE_NUMBER")}";
-    });
     clientBuilder.Services.AddSerializer(sb => sb.AddApplicationSpecificSerialization());
-
 });
 
 var app = builder.Build();

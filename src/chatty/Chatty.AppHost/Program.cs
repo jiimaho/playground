@@ -25,6 +25,12 @@ var silo = builder.AddProject<Chatty_Silo>(name: "silo")
     .WithReference(orleans)
     .WithReference(sensitiveTable);
 
+var api = builder.AddProject<Chatty_MinimalApi>("api")
+    .WithReference(silo)
+    .WaitFor(silo)
+    .WithReference(orleans.AsClient())
+    .WithExternalHttpEndpoints();
+
 var web = builder.AddProject<Chatty_Web>(name: "web")
     .WithReference(silo)
     .WaitFor(silo)

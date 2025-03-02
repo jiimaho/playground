@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Chatty.MinimalApi\Chatty.MinimalApi.csproj" />
       <ProjectReference Include="..\Chatty.Silo\Chatty.Silo.csproj" />
       <ProjectReference Include="..\Chatty.Web\Chatty.Web.csproj" />
     </ItemGroup>
