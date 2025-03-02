@@ -10,9 +10,12 @@ var storage = builder.AddAzureStorage("storage")
             .WithQueuePort(10001)
             .WithTablePort(10002));
 
-var sensitiveTable = storage.AddTables("sensitive");
-var clusterTable = storage.AddTables("clustering");
-var stateBlob = storage.AddBlobs("grain-state");
+var sensitiveTable = storage.AddTables("sensitive")
+    .WithParentRelationship(storage);
+var clusterTable = storage.AddTables("clustering")
+    .WithParentRelationship(storage);
+var stateBlob = storage.AddBlobs("grain-state")
+    .WithParentRelationship(storage);
 
 var orleans = builder.AddOrleans("default")
     .WithClustering(clusterTable)
