@@ -1,7 +1,7 @@
 @Orleans.ChatClient_HostAddress = http://localhost:60329
 
 ### Post message Hello world
-POST http://localhost:60329/rooms/all/messages
+POST http://localhost:61833/rooms/all/messages
 Accept: application/json
 Content-Type: application/json
 
