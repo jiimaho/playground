@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IValidator<ChatMessageRequest>, ChatMessageValidator>();
+builder.Services.AddScoped<IValidator<GetMessagesRequest>, GetMessagesRequestValidator>();
 
 builder.AddServiceDefaults();
 
@@ -29,6 +30,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.AddPostMessage();
+app.MapPostMessageEndpoint();
+app.MapGetMessagesEndpoint();
 
 await app.RunAsync();

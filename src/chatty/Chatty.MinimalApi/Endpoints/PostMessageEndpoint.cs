@@ -7,7 +7,7 @@ namespace Chatty.MinimalApi.Endpoints;
 
 public static partial class EndpointExtensions
 {
-    public static WebApplication AddPostMessage(this WebApplication app)
+    public static WebApplication MapPostMessageEndpoint(this WebApplication app)
     {
         app.MapPost(
                 "rooms/{id}/messages",

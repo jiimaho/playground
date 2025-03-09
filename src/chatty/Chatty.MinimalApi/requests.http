@@ -27,4 +27,7 @@ Content-Type: application/json
   "message": "Moderator here"
 }
 
-###
+### Get messages
+GET http://localhost:5084/rooms/all/messages?page=1&pageSize=10
+Accept: application/json
+Content-Type: application/json
