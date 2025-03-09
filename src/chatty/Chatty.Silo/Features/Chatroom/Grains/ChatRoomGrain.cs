@@ -83,14 +83,32 @@ public class ChatRoomGrain : Grain, IChatRoom
         return Task.FromResult(history);
     }
 
-    public Task<ImmutableArray<ChatMessage>> GetHistoryPaging(
-        int startIndex,
-        int numOfMessages,
+    public Task<PagingResult<ChatMessage>> GetHistoryPaging(
+        int page,
+        int pageSize,
         GrainCancellationToken requestCancellationToken)
     {
-        var result = _state.State.History.Skip(startIndex).Take(numOfMessages).Select(m => m.ToDomain())
-            .ToImmutableArray();
-        return Task.FromResult(result);
+        if (page < 1)
+            throw new ArgumentException("Page must be greater than 0", nameof(page));
+        if (pageSize < 1)
+            throw new ArgumentException("PageSize must be greater than 0", nameof(pageSize));
+        if (pageSize > 10)
+            throw new ArgumentException("PageSize must be less than or equal to 10", nameof(pageSize));
+        
+        var total = _state.State.History.Count;
+        
+        var result = _state.State.History.Skip((page - 1) * pageSize).Take(pageSize).Select(m => m.ToDomain())
+            .ToList();
+
+        return Task.FromResult(new PagingResult<ChatMessage>
+        {
+            Page = page,
+            PageSize = pageSize,
+            HasNextPage = total > page * pageSize,
+            NumberOfPages = (int) Math.Ceiling((double) total / pageSize),
+            Total = total,
+            Items = result
+        });
     }
 
     public async Task DeleteMessage(ChatMessage message)

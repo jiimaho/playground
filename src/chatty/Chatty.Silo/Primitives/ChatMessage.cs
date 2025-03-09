@@ -4,8 +4,8 @@ using NodaTime.Extensions;
 
 namespace Chatty.Silo.Primitives;
 
-[Alias("ChatMessage")]
 [GenerateSerializer]
+[Alias("Chatty.Silo.Primitives.ChatMessage")]
 public sealed class ChatMessage : ValueObject
 {
     [Id(0)]

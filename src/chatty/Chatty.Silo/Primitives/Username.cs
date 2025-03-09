@@ -1,7 +1,7 @@
 namespace Chatty.Silo.Primitives;
 
-[Alias("Username")]
 [GenerateSerializer]
+[Alias("Chatty.Silo.Primitives.Username")]
 public sealed class Username : ValueObject
 {
     [Id(0)]

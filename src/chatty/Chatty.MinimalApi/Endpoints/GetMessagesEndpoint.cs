@@ -23,8 +23,16 @@ public static partial class EndpointExtensions
 
                     var chatRoom = clusterClient.GetGrain<IChatRoom>(id);
                     var src = new GrainCancellationTokenSource();
-                    var messages = await chatRoom.GetHistoryPaging(request.Page, request.PageSize, src.Token);
-                    return Results.Ok(messages.Select(m => new { m.Username, m.Message }));
+                    var pagingResult= await chatRoom.GetHistoryPaging(request.Page, request.PageSize, src.Token);
+                    return Results.Ok(new 
+                    {
+                        request.Page,
+                        request.PageSize,
+                        pagingResult.NumberOfPages,
+                        pagingResult.HasNextPage,
+                        pagingResult.Total,
+                        Messages = pagingResult.Items.Select(m => new { m.Username, m.Message, m.ChatRoomId, m.Timestamp })
+                    });
                 })
             .WithName("GetMessages")
             .WithOpenApi();

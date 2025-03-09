@@ -1,7 +1,7 @@
 namespace Chatty.Silo.Primitives;
 
-[Alias("ValueObject")]
 [GenerateSerializer]
+[Alias("Chatty.Silo.Primitives.ValueObject")]
 public abstract class ValueObject
 {
     public static bool operator ==(ValueObject obj1, ValueObject obj2)

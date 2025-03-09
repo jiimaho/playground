@@ -27,9 +27,9 @@ public interface IChatRoom : IGrainWithStringKey
     Task Clear();
 
     [Alias("GetHistoryPaging")]
-    Task<ImmutableArray<ChatMessage>> GetHistoryPaging(
-        int startIndex,
-        int numOfMessages,
+    Task<PagingResult<ChatMessage>> GetHistoryPaging(
+        int page,
+        int pageSize,
         GrainCancellationToken requestCancellationToken);
 
     [Alias("DeleteMessage")]
