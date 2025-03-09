@@ -32,5 +32,6 @@ app.UseHttpsRedirection();
 
 app.MapPostMessageEndpoint();
 app.MapGetMessagesEndpoint();
+app.MapPostRandomMessageEndpoint();
 
 await app.RunAsync();
