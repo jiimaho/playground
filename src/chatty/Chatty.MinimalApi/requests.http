@@ -9,6 +9,11 @@ Content-Type: application/json
   "message": "Hello, World!"
 }
 
+### Post random message
+POST http://localhost:5084/rooms/all/randommessage
+Accept: application/json
+Content-Type: application/json
+
 ### Post empty
 POST http://localhost:5084/rooms/all/messages
 Accept: application/json

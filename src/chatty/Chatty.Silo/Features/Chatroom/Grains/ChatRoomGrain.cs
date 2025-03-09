@@ -83,14 +83,21 @@ public class ChatRoomGrain : Grain, IChatRoom
         return Task.FromResult(history);
     }
 
-    public Task<ImmutableArray<ChatMessage>> GetHistoryPaging(
+    public Task<PagingResult<ChatMessage>> GetHistoryPaging(
         int startIndex,
         int numOfMessages,
         GrainCancellationToken requestCancellationToken)
     {
         var result = _state.State.History.Skip(startIndex).Take(numOfMessages).Select(m => m.ToDomain())
-            .ToImmutableArray();
-        return Task.FromResult(result);
+            .ToList();
+        
+        return Task.FromResult(new PagingResult<ChatMessage>
+        {
+            Page = startIndex,
+            PageSize = numOfMessages,
+            Total = _state.State.History.Count,
+            Items = result 
+        });
     }
 
     public async Task DeleteMessage(ChatMessage message)

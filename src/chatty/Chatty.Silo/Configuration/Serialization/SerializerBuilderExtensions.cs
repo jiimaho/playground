@@ -1,8 +1,11 @@
 using Chatty.Silo.Configuration.Serialization.Codecs;
+using Chatty.Silo.Features.Chatroom.Grains;
+using Chatty.Silo.Primitives;
 using NodaTime;
 using Orleans.Serialization;
 using Orleans.Serialization.Cloning;
 using Orleans.Serialization.Codecs;
+using Orleans.Serialization.Configuration;
 
 namespace Chatty.Silo.Configuration.Serialization;
 
@@ -17,6 +20,10 @@ public static class SerializerBuilderExtensions
         // services.AddSingleton<IGeneralizedCodec, ZonedDateTimeCodec>();
         services.AddSingleton<IFieldCodec<ZonedDateTime>, ZonedDateTimeCodec>();
         services.AddSingleton<IGeneralizedCopier, ZonedDateTimeCodec>();
+        services.Configure<TypeManifestOptions>(options =>
+        {
+            options.WellKnownTypeAliases.Add("PagingResult<T>[[ChatMessage]]", typeof(PagingResult<ChatMessage>));
+        });
 
        return builder;
    }    
