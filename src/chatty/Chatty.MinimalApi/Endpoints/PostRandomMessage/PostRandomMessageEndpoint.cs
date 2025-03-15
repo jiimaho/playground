@@ -1,9 +1,8 @@
 using Chatty.Silo.Features.Chatroom.Grains;
 using Chatty.Silo.Primitives;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Chatty.MinimalApi.Endpoints;
+namespace Chatty.MinimalApi.Endpoints.PostRandomMessage;
 
 public static partial class EndpointExtensions
 {

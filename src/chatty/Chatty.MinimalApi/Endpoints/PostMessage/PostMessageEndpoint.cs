@@ -3,7 +3,7 @@ using Chatty.Silo.Primitives;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Chatty.MinimalApi.Endpoints;
+namespace Chatty.MinimalApi.Endpoints.PostMessage;
 
 public static partial class EndpointExtensions
 {

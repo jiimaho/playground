@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Chatty.MinimalApi.Endpoints
+namespace Chatty.MinimalApi.Endpoints.PostMessage
 {
     public class ChatMessageValidator : AbstractValidator<ChatMessageRequest>
     {

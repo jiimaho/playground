@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Chatty.MinimalApi.Endpoints;
+namespace Chatty.MinimalApi.Endpoints.GetMessages;
 
 public class GetMessagesRequestValidator : AbstractValidator<GetMessagesRequest>
 {

@@ -1,4 +1,7 @@
 using Chatty.MinimalApi.Endpoints;
+using Chatty.MinimalApi.Endpoints.GetMessages;
+using Chatty.MinimalApi.Endpoints.PostMessage;
+using Chatty.MinimalApi.Endpoints.PostRandomMessage;
 using Chatty.Silo.Configuration.Serialization;
 using FluentValidation;
 using Orleans.Serialization;
