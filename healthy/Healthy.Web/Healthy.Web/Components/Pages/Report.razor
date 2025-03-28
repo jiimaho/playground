@@ -1,0 +1,23 @@
+@page "/Report"
+
+<MudTextField Label="Hur känns det?" @bind-Value="InputText"></MudTextField>
+<MudRadioGroup @bind-Value="Choice">
+    <MudRadio Value="@(Mood.VeryBad)" Color="Color.Primary">Väldigt dåligt</MudRadio>
+    <MudRadio Value="@(Mood.Bad)" Color="Color.Primary">Dåligt</MudRadio>
+    <MudRadio Value="@(Mood.Good)" Color="Color.Primary">Bra</MudRadio>
+    <MudRadio Value="@(Mood.VeryGood)" Color="Color.Primary">Väldigt bra</MudRadio>
+</MudRadioGroup>
+
+@code {
+   
+    private string InputText { get; set; } = string.Empty;
+    private Mood Choice { get; set; } = Mood.Good;
+    
+    private enum Mood
+    {
+        VeryBad,
+        Bad,
+        Good,
+        VeryGood
+    }
+}
