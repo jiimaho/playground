@@ -7,10 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.3" />
         <PackageReference Include="MudBlazor" Version="8.3.0" />
         <ProjectReference Include="..\..\Healthy.ServiceDefaults\Healthy.ServiceDefaults.csproj" />
-        <ProjectReference Include="..\Healthy.Web.Client\Healthy.Web.Client.csproj"/>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.3"/>
+        <ProjectReference Include="..\Healthy.Web.Client\Healthy.Web.Client.csproj" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.3" />
     </ItemGroup>
 
     <ItemGroup>

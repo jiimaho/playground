@@ -1,5 +1,6 @@
-using Healthy.Web.Client.Pages;
+using Healthy.Web;
 using Healthy.Web.Components;
+using Healthy.Web.Services;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddScoped<IReportService, ReportService>();
+
+builder.Services.AddDbContext<HealthyDbContext>();
 
 var app = builder.Build();
 

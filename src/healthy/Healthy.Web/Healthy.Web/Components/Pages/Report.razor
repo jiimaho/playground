@@ -1,36 +1,27 @@
 @page "/Report"
+@using Healthy.Web.Services
+@inject IReportService ReportService
 
 <MudContainer MaxWidth="MaxWidth.Small">
     <MudText Typo="Typo.h5" Align="Align.Center">You're everything ❤️</MudText>
     <MudTextField Label="How do you feel?" @bind-Value="InputText"></MudTextField>
     <MudField Label="Rate your feeling" Variant="Variant.Outlined" InnerPadding="false">
         <MudRadioGroup @bind-Value="Choice">
-            <MudRadio Value="@(Mood.VeryBad)" Color="Color.Primary">Very bad</MudRadio>
-            <MudRadio Value="@(Mood.Bad)" Color="Color.Primary">Bad</MudRadio>
-            <MudRadio Value="@(Mood.Good)" Color="Color.Primary">Good</MudRadio>
-            <MudRadio Value="@(Mood.VeryGood)" Color="Color.Primary">Very good</MudRadio>
+            <MudRadio Value="@(MoodDto.VeryBad)" Color="Color.Primary">Very bad</MudRadio>
+            <MudRadio Value="@(MoodDto.Bad)" Color="Color.Primary">Bad</MudRadio>
+            <MudRadio Value="@(MoodDto.Good)" Color="Color.Primary">Good</MudRadio>
+            <MudRadio Value="@(MoodDto.VeryGood)" Color="Color.Primary">Very good</MudRadio>
         </MudRadioGroup>
     </MudField>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="Send"></MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@Send">Send</MudButton>
 </MudContainer>
 
 @code {
-
     private string InputText { get; set; } = string.Empty;
-    private Mood Choice { get; set; } = Mood.Good;
+    private MoodDto Choice { get; set; } = MoodDto.Good;
     
     private async Task Send()
     {
-        // Sent
-        return;
+        await ReportService.Report(new ReportDto(InputText, Choice));
     }
-
-    private enum Mood
-    {
-        VeryBad,
-        Bad,
-        Good,
-        VeryGood
-    }
-
 }
