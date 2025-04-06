@@ -12,10 +12,11 @@
 
     <ItemGroup>
         <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.0"/>
+        <PackageReference Include="CommunityToolkit.Aspire.Hosting.Sqlite" Version="9.3.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Healthy.Web\Healthy.Web\Healthy.Web.csproj" />
+      <ProjectReference Include="..\Healthy.Web\Healthy.Web.csproj" />
     </ItemGroup>
 
 </Project>

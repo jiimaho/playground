@@ -1,18 +1,14 @@
-using Healthy.Web.Client.Pages;
 using Healthy.Web.Components;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
-
+// Add MudBlazor services
 builder.Services.AddMudServices();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
-
 
 var app = builder.Build();
 
@@ -35,7 +31,6 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Healthy.Web.Client._Imports).Assembly);
 

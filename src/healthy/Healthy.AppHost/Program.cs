@@ -1,5 +1,8 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.Healthy_Web>("Web");
+var sqllite = builder.AddSqlite("healthydb");
+
+var web = builder.AddProject<Projects.Healthy_Web>("web")
+    .WithReference(sqllite);
 
 builder.Build().Run();
