@@ -1,0 +1,29 @@
+@page "/Report"
+
+<MudContainer>
+    <h3>You're good as you are ❤️</h3>
+    <MudTextField Variant="Variant.Text" Label="Enter activity..." @bind-Value="Activity"></MudTextField>
+     
+    <MudRadioGroup @bind-Value="@Type">
+        <MudRadio Value="@ActivityType.Plus">Plus</MudRadio>
+        <MudRadio Value="@ActivityType.Minus">Minus</MudRadio>
+        <MudRadio Value="@ActivityType.NotSure">Not sure</MudRadio>
+    </MudRadioGroup>
+</MudContainer>
+
+@code {
+    private string Activity { get; set; } = string.Empty;
+    private ActivityType Type { get; set; } = ActivityType.NotSure;
+
+    private Task Send()
+    {
+        return Task.CompletedTask;
+    }
+
+    private enum ActivityType
+    {
+        Plus,
+        Minus,
+        NotSure
+    }
+}
