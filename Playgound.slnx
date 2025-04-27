@@ -1,0 +1,67 @@
+<Solution>
+  <Folder Name="/shared/" />
+  <Folder Name="/src/" />
+  <Folder Name="/src/aws/">
+    <Project Path="src/aws/SimpleDocumentDbQuery/SimpleDocumentDbQuery.csproj" />
+    <Project Path="src/aws/SimpleDynamoDbQuery/SimpleDynamoDbQuery.csproj" />
+  </Folder>
+  <Folder Name="/src/chatty/">
+    <File Path="src/chatty/docker-compose.yml" />
+    <Project Path="src/chatty/Chatty.AppHost/Chatty.AppHost.csproj" />
+    <Project Path="src/chatty/Chatty.ConsoleConsumer/Chatty.ConsoleConsumer.csproj" />
+    <Project Path="src/chatty/Chatty.MinimalApi/Chatty.MinimalApi.csproj" />
+    <Project Path="src/chatty/Chatty.ServiceDefaults/Chatty.ServiceDefaults.csproj" />
+    <Project Path="src/chatty/Chatty.Silo/Chatty.Silo.csproj" />
+    <Project Path="src/chatty/Chatty.Web.Client/Chatty.Web.Client.csproj" />
+    <Project Path="src/chatty/Chatty.Web/Chatty.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/chatty/bicep/">
+    <File Path="src/chatty/bicep/acr.bicep" />
+    <File Path="src/chatty/bicep/containerapp.bicep" />
+    <File Path="src/chatty/bicep/cosmos.bicep" />
+    <File Path="src/chatty/bicep/rg-playground-acr.bicep" />
+    <File Path="src/chatty/bicep/run.sh" />
+  </Folder>
+  <Folder Name="/src/chatty/test/">
+    <Project Path="src/chatty/test/Orleans.Silo.Test/Orleans.Silo.Test.csproj" />
+  </Folder>
+  <Folder Name="/src/csharp-grpc-course/">
+    <File Path="src/csharp-grpc-course/Calculator.proto" />
+    <File Path="src/csharp-grpc-course/compose.yml" />
+    <Project Path="src/csharp-grpc-course/BlogClient/BlogClient.csproj" />
+    <Project Path="src/csharp-grpc-course/BlogServer/BlogServer.csproj" />
+    <Project Path="src/csharp-grpc-course/GrpcConsoleClient/GrpcConsoleClient.csproj" />
+    <Project Path="src/csharp-grpc-course/GrpcServer/GrpcServer.csproj" />
+  </Folder>
+  <Folder Name="/src/disasters/">
+    <Project Path="src/disasters/Disasters.Api/Disasters.Api.csproj" />
+    <Project Path="src/disasters/Disasters.AppHost/Disasters.AppHost.csproj" />
+    <Project Path="src/disasters/Disasters.GraphQL/Disasters.GraphQL.csproj" />
+    <Project Path="src/disasters/Disasters.gRPC/Disasters.gRPC.csproj" />
+    <Project Path="src/disasters/Disasters.Lambda/Disasters.Lambda.csproj" />
+    <Project Path="src/disasters/Disasters.ServiceDefaults/Disasters.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/src/disasters/Tests/">
+    <Project Path="test/disasters/Disasters.IntegrationTests/Disasters.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/src/dotnet/">
+    <Project Path="src/dotnet/Auto.mapper/Auto.mapper.csproj" />
+    <Project Path="src/dotnet/Collections/Collections.csproj" />
+    <Project Path="src/dotnet/Diagnostics/Diagnostics.csproj" />
+    <Project Path="src/dotnet/Domain/Domain/Domain.csproj" />
+    <Project Path="src/dotnet/Equals/Equals.csproj" />
+    <Project Path="src/dotnet/Mapperly/Mapperly/Mapperly.csproj" />
+    <Project Path="src/dotnet/Operators/Operators.csproj" />
+    <Project Path="src/dotnet/Tuples/Tuples.csproj" />
+  </Folder>
+  <Folder Name="/src/FileSender/">
+    <Project Path="src/FileSender/FileGetter/FileGetter.csproj" />
+    <Project Path="src/FileSender/FileServer/FileServer.csproj" />
+  </Folder>
+  <Folder Name="/src/healthy/">
+    <Project Path="src/healthy/Healthy.AppHost/Healthy.AppHost.csproj" />
+    <Project Path="src/healthy/Healthy.ServiceDefaults/Healthy.ServiceDefaults.csproj" />
+    <Project Path="src/healthy/Healthy.Web.Client/Healthy.Web.Client.csproj" />
+    <Project Path="src/healthy/Healthy.Web/Healthy.Web.csproj" />
+  </Folder>
+</Solution>
