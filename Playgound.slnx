@@ -6,7 +6,6 @@
     <Project Path="src/aws/SimpleDynamoDbQuery/SimpleDynamoDbQuery.csproj" />
   </Folder>
   <Folder Name="/src/chatty/">
-    <File Path="src/chatty/docker-compose.yml" />
     <Project Path="src/chatty/Chatty.AppHost/Chatty.AppHost.csproj" />
     <Project Path="src/chatty/Chatty.ConsoleConsumer/Chatty.ConsoleConsumer.csproj" />
     <Project Path="src/chatty/Chatty.MinimalApi/Chatty.MinimalApi.csproj" />
@@ -14,6 +13,7 @@
     <Project Path="src/chatty/Chatty.Silo/Chatty.Silo.csproj" />
     <Project Path="src/chatty/Chatty.Web.Client/Chatty.Web.Client.csproj" />
     <Project Path="src/chatty/Chatty.Web/Chatty.Web.csproj" />
+    <File Path="src/chatty/docker-compose.yml" />
   </Folder>
   <Folder Name="/src/chatty/bicep/">
     <File Path="src/chatty/bicep/acr.bicep" />
@@ -26,12 +26,12 @@
     <Project Path="src/chatty/test/Orleans.Silo.Test/Orleans.Silo.Test.csproj" />
   </Folder>
   <Folder Name="/src/csharp-grpc-course/">
-    <File Path="src/csharp-grpc-course/Calculator.proto" />
-    <File Path="src/csharp-grpc-course/compose.yml" />
     <Project Path="src/csharp-grpc-course/BlogClient/BlogClient.csproj" />
     <Project Path="src/csharp-grpc-course/BlogServer/BlogServer.csproj" />
     <Project Path="src/csharp-grpc-course/GrpcConsoleClient/GrpcConsoleClient.csproj" />
     <Project Path="src/csharp-grpc-course/GrpcServer/GrpcServer.csproj" />
+    <File Path="src/csharp-grpc-course/Calculator.proto" />
+    <File Path="src/csharp-grpc-course/compose.yml" />
   </Folder>
   <Folder Name="/src/disasters/">
     <Project Path="src/disasters/Disasters.Api/Disasters.Api.csproj" />
@@ -61,7 +61,5 @@
   <Folder Name="/src/healthy/">
     <Project Path="src/healthy/Healthy.AppHost/Healthy.AppHost.csproj" />
     <Project Path="src/healthy/Healthy.ServiceDefaults/Healthy.ServiceDefaults.csproj" />
-    <Project Path="src/healthy/Healthy.Web.Client/Healthy.Web.Client.csproj" />
-    <Project Path="src/healthy/Healthy.Web/Healthy.Web.csproj" />
   </Folder>
 </Solution>
