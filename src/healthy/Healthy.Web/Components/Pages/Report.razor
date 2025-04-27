@@ -1,0 +1,34 @@
+@page "/Report"
+@rendermode InteractiveServer
+<h3>Report</h3>
+
+<MudContainer MaxWidth="MaxWidth.Small">
+    <MudForm>
+        <MudTextField @bind-Value="Activity" Label="Enter your activity" Variant="Variant.Outlined">
+
+        </MudTextField>
+        <MudRadioGroup @bind-Value="SelectedFeeling">
+            <MudRadio Value="Feeling.VeryGood">@Feeling.VeryGood.ToString()</MudRadio>
+            <MudRadio Value="Feeling.Good">@Feeling.Good.ToString()</MudRadio>
+            <MudRadio Value="Feeling.Neutral">@Feeling.Neutral.ToString()</MudRadio>
+            <MudRadio Value="Feeling.Bad">@Feeling.Bad.ToString()</MudRadio>
+            <MudRadio Value="Feeling.VeryBad">@Feeling.VeryBad.ToString()</MudRadio>
+        </MudRadioGroup>
+        <MudButton Variant="Variant.Filled" OnClick="@DoSubmit">Submit</MudButton>
+    </MudForm>
+</MudContainer>
+
+@code {
+
+    public string Activity { get; set; }
+    public Feeling SelectedFeeling { get; set; }
+
+    public Task DoSubmit()
+    {
+        Console.WriteLine($"Activity: {Activity}");
+        Console.WriteLine($"Feeling: {SelectedFeeling}");
+        
+        return Task.CompletedTask;
+    }
+
+}
