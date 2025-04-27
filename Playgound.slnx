@@ -61,5 +61,6 @@
   <Folder Name="/src/healthy/">
     <Project Path="src/healthy/Healthy.AppHost/Healthy.AppHost.csproj" />
     <Project Path="src/healthy/Healthy.ServiceDefaults/Healthy.ServiceDefaults.csproj" />
+    <Project Path="src\healthy\Healthy.Web\Healthy.Web.csproj" Type="Classic C#" />
   </Folder>
 </Solution>
