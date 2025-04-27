@@ -1,8 +1,8 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var sqllite = builder.AddSqlite("healthydb");
+var postgres = builder.AddPostgres("postgres");
 
 var web = builder.AddProject<Projects.Healthy_Web>("web")
-    .WithReference(sqllite);
+    .WithReference(postgres);
 
 builder.Build().Run();
