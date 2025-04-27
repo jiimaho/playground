@@ -12,6 +12,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.AddMudServices();
 
         builder.Services.AddRazorComponents()
+            .AddInteractiveServerComponents()
             .AddInteractiveWebAssemblyComponents();
 
         builder.Services.AddScoped<IReportService, ReportService>();

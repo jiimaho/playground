@@ -24,6 +24,7 @@ public static class WebApplicationExtensions
 
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
+            .AddInteractiveServerRenderMode()
             .AddInteractiveWebAssemblyRenderMode()
             .AddAdditionalAssemblies(typeof(Healthy.Web.Client._Imports).Assembly);
         return app;
